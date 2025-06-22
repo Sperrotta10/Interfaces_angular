@@ -71,4 +71,23 @@ export class ControllerAuth {
         }
     }
 
+    static async update(req, res) {
+
+        const { id } = req.params;
+        
+        const result = validationCreate(req.body);
+
+        if (!result.success)
+        return res.status(400).json({ message: "Error de validación", error: result.error.errors });
+
+        try {
+
+            const update = await ModelAuth.update(id, result.data);
+            return res.status(update.status).json({message : update.message, data: update.data ?? null});
+
+        } catch (error) {
+            return res.status(500).json({ message: "Error interno", error: error.message });
+        }
+    };
+
 }
