@@ -70,4 +70,23 @@ export class ModelAuth {
         }
     }
 
+    static async update(user_id, data) {
+        
+        try {
+
+            const exist = await User.findByPk(user_id);
+
+            if(!exist) return {message : "User no encontrado", status : 404};
+
+            await User.update(data, {where : { user_id }});
+
+            return {message : "User modificado", status : 200};
+            
+
+        } catch (error) {
+            console.error("Error al modificar user");
+            throw error;
+        }
+    }
+
 }
