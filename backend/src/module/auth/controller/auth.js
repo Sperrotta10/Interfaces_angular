@@ -1,5 +1,6 @@
 import { ModelAuth } from "../model/auth.js";
 import { validationCreate } from "../validation/createAuth.js";
+import { updateValidation } from "../validation/updateAuth.js";
 import { validationLogin } from "../validation/login.js";
 import { enviroment } from "../../../config/enviroment.js";
 import dotenv from "dotenv"
@@ -88,7 +89,7 @@ export class ControllerAuth {
         const { id } = req.params;
         const { role } = req.user;
         
-        const result = validationCreate(req.body);
+        const result = updateValidation(req.body);
 
         if (!result.success)
         return res.status(400).json({ message: "Error de validación", error: result.error.errors });
