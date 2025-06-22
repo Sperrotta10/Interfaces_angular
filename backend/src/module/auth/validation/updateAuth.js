@@ -12,8 +12,7 @@ const validateUpdateAuth = z.object({
 
     age: z.number({
         invalid_type_error: 'La edad debe ser un número',
-    })
-        .int('La edad debe ser un número entero')
+    }).int('La edad debe ser un número entero')
         .nonnegative('La edad no puede ser negativa')
         .optional(),
 
@@ -49,70 +48,60 @@ const validateUpdateAuth = z.object({
 
     eyeColor: z.string({ invalid_type_error: 'El color de ojos debe ser una cadena' }).optional(),
 
-    hair: z.object({
-        color: z.string({ invalid_type_error: 'El color del cabello debe ser texto' }).optional(),
-        type: z.string({ invalid_type_error: 'El tipo de cabello debe ser texto' }).optional(),
-    }).optional(),
+    // Hair planos
+    hair_color: z.string({ invalid_type_error: 'El color del cabello debe ser texto' }).optional(),
+    hair_type: z.string({ invalid_type_error: 'El tipo de cabello debe ser texto' }).optional(),
 
     ip: z.string({ invalid_type_error: 'La IP debe ser una cadena de texto' }).optional(),
 
-    address: z.object({
-        address: z.string({ invalid_type_error: 'La dirección debe ser una cadena' }).optional(),
-        city: z.string({ invalid_type_error: 'La ciudad debe ser una cadena' }).optional(),
-        state: z.string({ invalid_type_error: 'El estado debe ser una cadena' }).optional(),
-        stateCode: z.string({ invalid_type_error: 'El código del estado debe ser una cadena' }).optional(),
-        postalCode: z.string({ invalid_type_error: 'El código postal debe ser una cadena' }).optional(),
-        coordinates: z.object({
-        lat: z.number({ invalid_type_error: 'La latitud debe ser numérica' }).optional(),
-        lng: z.number({ invalid_type_error: 'La longitud debe ser numérica' }).optional(),
-        }).optional(),
-        country: z.string({ invalid_type_error: 'El país debe ser una cadena' }).optional(),
-    }).optional(),
+    // Address planos
+    address_address: z.string({ invalid_type_error: 'La dirección debe ser una cadena' }).optional(),
+    address_city: z.string({ invalid_type_error: 'La ciudad debe ser una cadena' }).optional(),
+    address_state: z.string({ invalid_type_error: 'El estado debe ser una cadena' }).optional(),
+    address_stateCode: z.string({ invalid_type_error: 'El código del estado debe ser una cadena' }).optional(),
+    address_postalCode: z.string({ invalid_type_error: 'El código postal debe ser una cadena' }).optional(),
+    address_coordinates_lat: z.number({ invalid_type_error: 'La latitud debe ser numérica' }).optional(),
+    address_coordinates_lng: z.number({ invalid_type_error: 'La longitud debe ser numérica' }).optional(),
+    address_country: z.string({ invalid_type_error: 'El país debe ser una cadena' }).optional(),
 
     macAddress: z.string({ invalid_type_error: 'La MAC Address debe ser una cadena' }).optional(),
-
     university: z.string({ invalid_type_error: 'La universidad debe ser una cadena' }).optional(),
 
-    bank: z.object({
-        cardExpire: z.string({ invalid_type_error: 'La fecha de expiración debe ser una cadena' }).optional(),
-        cardNumber: z.string({ invalid_type_error: 'El número de tarjeta debe ser una cadena' }).optional(),
-        cardType: z.string({ invalid_type_error: 'El tipo de tarjeta debe ser una cadena' }).optional(),
-        currency: z.string({ invalid_type_error: 'La moneda debe ser una cadena' }).optional(),
-        iban: z.string({ invalid_type_error: 'El IBAN debe ser una cadena' }).optional(),
-    }).optional(),
+    // Bank planos
+    bank_cardExpire: z.string({ invalid_type_error: 'La fecha de expiración debe ser una cadena' }).optional(),
+    bank_cardNumber: z.string({ invalid_type_error: 'El número de tarjeta debe ser una cadena' }).optional(),
+    bank_cardType: z.string({ invalid_type_error: 'El tipo de tarjeta debe ser una cadena' }).optional(),
+    bank_currency: z.string({ invalid_type_error: 'La moneda debe ser una cadena' }).optional(),
+    bank_iban: z.string({ invalid_type_error: 'El IBAN debe ser una cadena' }).optional(),
 
-    company: z.object({
-        departament: z.string({ invalid_type_error: 'El departamento debe ser una cadena' }).optional(),
-        name: z.string({ invalid_type_error: 'El nombre de la empresa debe ser una cadena' }).optional(),
-        title: z.string({ invalid_type_error: 'El título del cargo debe ser una cadena' }).optional(),
-        address: z.object({
-        address: z.string({ invalid_type_error: 'La dirección debe ser una cadena' }).optional(),
-        city: z.string({ invalid_type_error: 'La ciudad debe ser una cadena' }).optional(),
-        state: z.string({ invalid_type_error: 'El estado debe ser una cadena' }).optional(),
-        stateCode: z.string({ invalid_type_error: 'El código del estado debe ser una cadena' }).optional(),
-        postalCode: z.string({ invalid_type_error: 'El código postal debe ser una cadena' }).optional(),
-        coordinates: z.object({
-            lat: z.number({ invalid_type_error: 'La latitud debe ser numérica' }).optional(),
-            lng: z.number({ invalid_type_error: 'La longitud debe ser numérica' }).optional(),
-        }).optional(),
-        country: z.string({ invalid_type_error: 'El país debe ser una cadena' }).optional(),
-        }).optional(),
-    }).optional(),
+    // Company planos
+    company_department: z.string({ invalid_type_error: 'El departamento debe ser una cadena' }).optional(),
+    company_name: z.string({ invalid_type_error: 'El nombre de la empresa debe ser una cadena' }).optional(),
+    company_title: z.string({ invalid_type_error: 'El título del cargo debe ser una cadena' }).optional(),
+
+    company_address_address: z.string({ invalid_type_error: 'La dirección debe ser una cadena' }).optional(),
+    company_address_city: z.string({ invalid_type_error: 'La ciudad debe ser una cadena' }).optional(),
+    company_address_state: z.string({ invalid_type_error: 'El estado debe ser una cadena' }).optional(),
+    company_address_stateCode: z.string({ invalid_type_error: 'El código del estado debe ser una cadena' }).optional(),
+    company_address_postalCode: z.string({ invalid_type_error: 'El código postal debe ser una cadena' }).optional(),
+    company_address_coordinates_lat: z.number({ invalid_type_error: 'La latitud debe ser numérica' }).optional(),
+    company_address_coordinates_lng: z.number({ invalid_type_error: 'La longitud debe ser numérica' }).optional(),
+    company_address_country: z.string({ invalid_type_error: 'El país debe ser una cadena' }).optional(),
 
     ein: z.string({ invalid_type_error: 'El EIN debe ser una cadena' }).optional(),
     ssn: z.string({ invalid_type_error: 'El SSN debe ser una cadena' }).optional(),
     userAgent: z.string({ invalid_type_error: 'El userAgent debe ser una cadena' }).optional(),
 
-    crypto: z.object({
-        coin: z.string({ invalid_type_error: 'La moneda debe ser una cadena' }).optional(),
-        wallet: z.string({ invalid_type_error: 'La wallet debe ser una cadena' }).optional(),
-        network: z.string({ invalid_type_error: 'La red debe ser una cadena' }).optional(),
-    }).optional(),
+    // Crypto planos
+    crypto_coin: z.string({ invalid_type_error: 'La moneda debe ser una cadena' }).optional(),
+    crypto_wallet: z.string({ invalid_type_error: 'La wallet debe ser una cadena' }).optional(),
+    crypto_network: z.string({ invalid_type_error: 'La red debe ser una cadena' }).optional(),
+
 }).partial().refine((data) => Object.keys(data).length > 0, {
     message: 'Al menos un campo debe ser actualizado',
 });
 
 
 export function updateValidation(data) {
-    return validateUpdateAuth.safeParse(data);
+  return validateUpdateAuth.safeParse(data);
 }
