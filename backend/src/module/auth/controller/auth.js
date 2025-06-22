@@ -71,9 +71,22 @@ export class ControllerAuth {
         }
     }
 
+    static async getAll(req, res) {
+
+        try {
+
+            const data = await ModelAuth.getAll();
+            return res.status(data.status).json({ message: data.message, data: data.data });
+
+        } catch (error) {
+            return res.status(500).json({ message: "Error interno", error: error.message });
+        }
+    };
+
     static async update(req, res) {
 
         const { id } = req.params;
+        const { role } = req.user;
         
         const result = validationCreate(req.body);
 
@@ -82,8 +95,20 @@ export class ControllerAuth {
 
         try {
 
-            const update = await ModelAuth.update(id, result.data);
-            return res.status(update.status).json({message : update.message, data: update.data ?? null});
+            if (role === 'admin') {
+                
+                const filtered = { status: result.data.status };
+                const updated = await ModelAuth.update(id, filtered);
+                return res.status(updated.status).json({ message: updated.message, data: updated.data });
+
+            } else if (role === 'user') {
+
+                const update = await ModelAuth.update(id, result.data);
+                return res.status(update.status).json({message : update.message, data: update.data ?? null});
+
+            } else {
+                return res.status(403).json({ message: "No autorizado para actualizar" });
+            }
 
         } catch (error) {
             return res.status(500).json({ message: "Error interno", error: error.message });
