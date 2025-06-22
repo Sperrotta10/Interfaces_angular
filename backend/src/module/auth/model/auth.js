@@ -70,6 +70,24 @@ export class ModelAuth {
         }
     }
 
+    static async getAll() {
+
+        try {
+            
+            const users = await User.findAll({
+                attributes: { exclude: ['password'] } 
+            });
+
+            if(!users) return {message : "Users no encontrados", status : 404};
+
+            return {message : "Users obtenidos", data : users, status : 200};
+
+        } catch (error) {
+            console.error("Error al obtener los usuarios");
+            throw error;
+        }
+    }
+
     static async update(user_id, data) {
         
         try {
