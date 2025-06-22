@@ -1,0 +1,26 @@
+<section id="testimonials" class="section-bg">
+      <div class="container">
+        <header class="section-header">
+          <h3>Carousel</h3>
+        </header>
+
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <owl-carousel-o class="testimonials-carousel owl-theme" [options]="customOptions">
+              @for (img of testimonialImages; track img; let i = $index) {
+                <ng-template carouselSlide>
+                  <div class="testimonial-item">
+                    <img
+                      [src]="img"
+                      class="testimonial-img"
+                      [alt]="'Carousel Image ' + (i + 1)"
+                      style="width: 100%; border-radius: 8px"
+                    />
+                  </div>
+                </ng-template>
+              }
+            </owl-carousel-o>
+          </div>
+        </div>
+      </div>
+    </section>

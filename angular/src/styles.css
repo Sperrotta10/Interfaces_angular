@@ -6,6 +6,9 @@
 @import './lib/animate/animate.min.css';
 @import './lib/ionicons/css/ionicons.min.css';
 @import './lib/owlcarousel/assets/owl.carousel.min.css';
+@import './lib/owlcarousel/assets/owl.theme.default.min.css';
+@import '../node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.carousel.min.css';
+@import '../node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.theme.default.min.css';
 @import './lib/lightbox/css/lightbox.min.css';
 
 :root{

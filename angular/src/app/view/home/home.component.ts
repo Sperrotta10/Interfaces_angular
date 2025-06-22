@@ -4,11 +4,12 @@ import { AboutSectionComponent } from '../../components/about-section/about-sect
 import { ServicesSectionComponent } from '../../components/services-section/services-section.component';
 import { PortfolioComponent } from '../../components/portfolio/portfolio.component';
 import { ContactSectionComponent } from '../../components/contact-section/contact-section.component';
+import { CarouselComponent } from '../../components/carousel/carousel.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [BannerComponent, AboutSectionComponent, ServicesSectionComponent, PortfolioComponent, ContactSectionComponent],
+  imports: [BannerComponent, AboutSectionComponent, ServicesSectionComponent, PortfolioComponent, ContactSectionComponent,CarouselComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
