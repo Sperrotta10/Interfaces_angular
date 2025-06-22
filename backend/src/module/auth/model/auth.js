@@ -50,6 +50,8 @@ export class ModelAuth {
 
             if(!user) return {message : "El email no existe", status : 401};
 
+            if(!user.status) return {message : "El usuario no esta activo", status : 401};
+
             const verifyPassword = await bcrypt.compare(data.password, user.password);
 
             if(!verifyPassword) return {message : "Error al loguearse", status : 401};
@@ -75,6 +77,7 @@ export class ModelAuth {
         try {
             
             const users = await User.findAll({
+                where : { status : true },
                 attributes: { exclude: ['password'] } 
             });
 
