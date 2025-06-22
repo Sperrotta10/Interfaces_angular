@@ -60,7 +60,7 @@ export function defineUser(sequelize, DataTypes) {
             allowNull : false,
         },
         birthDate : {
-            type : DataTypes.DATE,
+            type : DataTypes.STRING,
             allowNull : true,
         },
         image : {
@@ -164,7 +164,7 @@ export function defineUser(sequelize, DataTypes) {
             },
         },
         company : {
-            departament : {
+            department : {
                 type : DataTypes.STRING,
                 allowNull : true,
             },
