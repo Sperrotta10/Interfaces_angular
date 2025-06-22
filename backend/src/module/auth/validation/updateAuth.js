@@ -21,19 +21,19 @@ const validateUpdateAuth = z.object({
     email: z.string({
         required_error: 'El correo electrónico es obligatorio',
         invalid_type_error: 'Debe ser una cadena de texto',
-    }).email('Debe ser un correo válido'),
+    }).email('Debe ser un correo válido').optional(),
 
     phone: z.string({ invalid_type_error: 'El teléfono debe ser una cadena' }).optional(),
 
     user_name: z.string({
         required_error: 'El nombre de usuario es obligatorio',
         invalid_type_error: 'Debe ser una cadena de texto',
-    }),
+    }).optional(),
 
     password: z.string({
         required_error: 'La contraseña es obligatoria',
         invalid_type_error: 'Debe ser una cadena de texto',
-    }).min(6, { message: 'Debe tener al menos 6 caracteres' }),
+    }).min(6, { message: 'Debe tener al menos 6 caracteres' }).optional(),
 
     birthDate: z.string({ invalid_type_error: 'La fecha de nacimiento debe ser una cadena' }).optional(),
 
