@@ -1,15 +1,15 @@
 <div class="admin-panel">
 
     <div class="tab-nav">
-        <button class="tab active">
+        <button (click)="vista_modo = 'colores'" class="tab" [class.active]="vista_modo === 'colores'">
             🎨 Colores
         </button>
-        <button class="tab active">
+        <button (click)="vista_modo = 'letras'" class="tab" [class.active]="vista_modo === 'letras'">
             🔤 Tipografía
         </button>
     </div>
 
-    <div class="row color-section">
+    <div class="row color-section" *ngIf="vista_modo === 'colores'">
         <div class="control-panel">
             <div class="control-group">
                 <h2>🎨 Colores</h2>
@@ -92,8 +92,14 @@
                 <p>Footer © MJS</p>
             </footer>
         </div>
+    </div>
 
+    <div class="row font-section" *ngIf="vista_modo === 'letras'">
 
+        <div class="control_boton">
+                <label for="titleFontSize">Tamaño de letras para Título (px):</label>
+                <input type="number" id="titleFontSize" [(ngModel)]="titleFontSize" min="10" max="50">
+            </div>
     </div>
 
 </div>

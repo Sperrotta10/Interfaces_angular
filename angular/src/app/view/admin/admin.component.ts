@@ -19,4 +19,7 @@ export class AdminComponent {
 
   titleFontSize = 36;
   
+
+  //cambia modo de vista
+  vista_modo: 'colores' | 'letras' = 'colores';
 }
