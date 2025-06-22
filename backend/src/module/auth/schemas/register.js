@@ -1,263 +1,254 @@
 
 export function defineUser(sequelize, DataTypes) {
- 
-    const User = sequelize.define('User', {
-        user_id : {
-            type : DataTypes.INTEGER,
-            autoIncrement : true,
-            primaryKey : true,
-        },
-        role_id : {
-            type : DataTypes.INTEGER,
-            allowNull : false,
-            references : {
-                model : 'Role',
-                key : 'role_id',
-            }
-        },
-        status : {
-            type : DataTypes.BOOLEAN,
-            allowNull : false,
-            defaultValue : true,
-        },
-        firstName : {
-            type : DataTypes.STRING,
-            allowNull : true,
-        },
-        lastName : {
-            type : DataTypes.STRING,
-            allowNull : true,
-        },
-        maidenName : {
-            type : DataTypes.STRING,
-            allowNull : true,
-        },
-        age : {
-            type : DataTypes.INTEGER,
-            allowNull : true,
-        },
-        gender : {
-            type : DataTypes.STRING,
-            allowNull : true,
-        },
-        email : {
-            type : DataTypes.STRING,
-            allowNull : false,
-            unique : false
-        },
-        phone : {
-            type : DataTypes.STRING,
-            allowNull : true,
-            unique : false,
-        },
-        user_name : {
-            type : DataTypes.STRING,
-            allowNull : false,
-            unique : false,
-        },
-        password : {
-            type : DataTypes.STRING,
-            allowNull : false,
-        },
-        birthDate : {
-            type : DataTypes.STRING,
-            allowNull : true,
-        },
-        image : {
-            type : DataTypes.STRING,
-            allowNull : true,
-        },
-        bloodGroup : {
-            type : DataTypes.STRING,
-            allowNull : true,
-        },
-        height : {
-            type : DataTypes.FLOAT,
-            allowNull : true,
-        },
-        weight : {
-            type : DataTypes.FLOAT,
-            allowNull : true,
-        },
-        eyeColor : {
-            type : DataTypes.STRING,
-            allowNull : true,
-        },
-        hair : {
-            color : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-            type : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            }
-        },
-        ip : {
-            type : DataTypes.STRING,
-            allowNull : true,
-        },
-        address : {
-            address : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-            city : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-            state : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-            stateCode : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-            postalCode : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-            coordinates : {
-                lat : {
-                    type : DataTypes.FLOAT,
-                    allowNull : true,
-                },
-                lng : {
-                    type : DataTypes.FLOAT,
-                    allowNull : true,
-                }
-            },
-            country : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-        },
-        macAddress : {
-            type : DataTypes.STRING,
-            allowNull : true,
-        },
-        university : {
-            type : DataTypes.STRING,
-            allowNull : true,
-        },
-        bank : {
-            cardExpire : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-            cardNumber : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-            cardType : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-            currency : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-            iban : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-        },
-        company : {
-            department : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-            name : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-            title : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-            address : {
-                address : {
-                    type : DataTypes.STRING,
-                    allowNull : true,
-                },
-                city : {
-                    type : DataTypes.STRING,
-                    allowNull : true,
-                },
-                state : {
-                    type : DataTypes.STRING,
-                    allowNull : true,
-                },
-                stateCode : {
-                    type : DataTypes.STRING,
-                    allowNull : true,
-                },
-                postalCode : {
-                    type : DataTypes.STRING,
-                    allowNull : true,
-                },
-                coordinates : {
-                    lat : {
-                        type : DataTypes.FLOAT,
-                        allowNull : true,
-                    },
-                    lng : {
-                        type : DataTypes.FLOAT,
-                        allowNull : true,
-                    }
-                },
-                country : {
-                    type : DataTypes.STRING,
-                    allowNull : true,
-                },
-            }
-        },
-        ein : {
-            type : DataTypes.STRING,
-            allowNull : true,
-        },
-        ssn : {
-            type : DataTypes.STRING,
-            allowNull : true,
-        },
-        userAgent : {
-            type : DataTypes.STRING,
-            allowNull : true,
-        },
-        crypto : {
-            coin : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-            wallet : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            },
-            network : {
-                type : DataTypes.STRING,
-                allowNull : true,
-            }
-        }
+  const User = sequelize.define('User', {
+    user_id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    role_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Role',
+        key: 'role_id',
+      }
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    maidenName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    age: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    gender: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: false,
+    },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: false,
+    },
+    user_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    birthDate: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    bloodGroup: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    height: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    weight: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    eyeColor: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
 
-    }, {
-        tableName : 'User',
-        hooks: {
-            afterCreate: (user, options) => {
-                user.password = undefined;
-                user.role_id = undefined;
-            }
-        },
-        indexes: [
-            {
-                fields: ['user_name']
-            },
-            {
-                fields: ['email']
-            }
-        ]
+    // Campos del objeto "hair"
+    hair_color: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    hair_type: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
 
-    })
+    ip: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
 
-    return User;
+    // Campos del objeto "address"
+    address_address: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    address_city: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    address_state: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    address_stateCode: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    address_postalCode: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    address_coordinates_lat: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    address_coordinates_lng: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    address_country: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    macAddress: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    university: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    // Campos del objeto "bank"
+    bank_cardExpire: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    bank_cardNumber: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    bank_cardType: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    bank_currency: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    bank_iban: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    // Campos del objeto "company"
+    company_department: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    company_name: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    company_title: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    company_address_address: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    company_address_city: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    company_address_state: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    company_address_stateCode: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    company_address_postalCode: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    company_address_coordinates_lat: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    company_address_coordinates_lng: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    company_address_country: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    ein: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    ssn: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    userAgent: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    // Campos del objeto "crypto"
+    crypto_coin: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    crypto_wallet: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    crypto_network: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    }
+  }, {
+    tableName: 'User',
+    hooks: {
+      afterCreate: (user, options) => {
+        user.password = undefined;
+        user.role_id = undefined;
+      }
+    },
+    indexes: [
+      { fields: ['user_name'] },
+      { fields: ['email'] }
+    ]
+  });
+
+  return User;
 }
