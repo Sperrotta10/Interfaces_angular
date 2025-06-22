@@ -1,1 +1,99 @@
-<p>admin works!</p>
+<div class="admin-panel">
+
+    <div class="tab-nav">
+        <button class="tab active">
+            🎨 Colores
+        </button>
+        <button class="tab active">
+            🔤 Tipografía
+        </button>
+    </div>
+
+    <div class="row color-section">
+        <div class="control-panel">
+            <div class="control-group">
+                <h2>🎨 Colores</h2>
+            </div>
+
+            <div class="control-group">
+                <label htmlFor="primary_color">Color Primario:</label>
+                <input type="color" id="primary_color" name="primary_color" [(ngModel)]="headerBgColor" />
+                <span class="color-hex">{{headerBgColor}}</span>
+            </div>
+
+            <div class="control-group">
+                <label htmlFor="secondary_colorColor">Color Secundario:</label>
+                <input type="color" id="secondary_colorColor" name="secondary_color" [(ngModel)]="titleColor" />
+                <span class="color-hex">{{titleColor}}</span>
+            </div>
+
+            <div class="control-group">
+                <label htmlFor="tertiary_colorColor">Color Terciario:</label>
+                <input type="color" id="tertiary_colorColor" name="tertiary_color" [(ngModel)]="divBorderColor" />
+                <span class="color-hex">{{divBorderColor}}</span>
+            </div>
+
+            <div class="control-group">
+                <label htmlFor="ligth_colorColor">Color Neutro 1:</label>
+                <input type="color" id="ligth_colorColor" name="ligth_color" [(ngModel)]="cardBgColor" />
+                <span class="color-hex">{{cardBgColor}}</span>
+            </div>
+            <div class="control-group">
+                <label htmlFor="dark_color">Color Neutro 2:</label>
+                <input type="color" id="dark_color" name="dark_color" [(ngModel)]="footerBgColor" />
+                <span class="color-hex">{{footerBgColor}}</span>
+            </div>
+
+            <div class="control_boton">
+                <label for="titleFontSize">Tamaño de letras para Título (px):</label>
+                <input type="number" id="titleFontSize" [(ngModel)]="titleFontSize" min="10" max="50">
+            </div>
+
+            <div class="save-section">
+                <button id="saveBtn">
+                    Guardar
+                </button>
+                <button class='saveBtn'>Restablecer paleta</button>
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <fieldset class="control-panel">
+                <div class="saved-styles">
+                    <h3>Estilos guardados</h3>
+                    <div id="savedStylesList">
+                        <span>
+                            EUs
+                        </span>
+
+
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="playground">
+            <header [style.background-color]="headerBgColor" id='playground-header'>
+                <h1 [style.color]="titleColor" id="mainTitle" [style.font-size.px]="titleFontSize">Título</h1>
+            </header>
+
+            <div [style.border-color]="divBorderColor" class="div-with-border">
+                Hola Mundo
+            </div>
+
+            <div class="card" [style.background-color]="cardBgColor">
+                <h2>Título de Carta</h2>
+                <p class="content">Hola, aquí donde hace las pruebas para cambio de letras.</p>
+            </div>
+
+            <footer id='playground-footer' [style.background-color]="footerBgColor">
+                <p>Footer © MJS</p>
+            </footer>
+        </div>
+
+
+    </div>
+
+</div>
