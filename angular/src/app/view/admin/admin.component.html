@@ -44,11 +44,6 @@
                 <span class="color-hex">{{footerBgColor}}</span>
             </div>
 
-            <div class="control_boton">
-                <label for="titleFontSize">Tamaño de letras para Título (px):</label>
-                <input type="number" id="titleFontSize" [(ngModel)]="titleFontSize" min="10" max="50">
-            </div>
-
             <div class="save-section">
                 <button id="saveBtn">
                     Guardar
@@ -94,12 +89,121 @@
         </div>
     </div>
 
+
+
     <div class="row font-section" *ngIf="vista_modo === 'letras'">
 
-        <div class="control_boton">
-                <label for="titleFontSize">Tamaño de letras para Título (px):</label>
+        <div class="multi-font-uploader-container">
+            <div class="multi-font-uploader-left">
+                <fieldset class=controlPanel>
+                    <legend>🔠 Tamaños de fuente (px)</legend>
+                    <div>
+                        <label htmlFor="titulo">Títulos:</label>
+                        <input type="number" id="titulo-input" name="titulo" value={fontStyles.titulo} min="10" max="50"
+                            onChange={handleSizeChange} />
+                    </div>
+
+                    <div>
+                        <label htmlFor="subtitulo">Subtítulos:</label>
+                        <input type="number" id="subtitulo-input" name="subtitulo" value={fontStyles.subtitulo} min="10"
+                            max="40" onChange={handleSizeChange} />
+                    </div>
+
+                    <div>
+                        <label htmlFor="parrafo">Párrafo:</label>
+                        <input type="number" id="parrafo-input" name="parrafo" value={fontStyles.parrafo} min="10"
+                            max="30" onChange={handleSizeChange} />
+                    </div>
+                </fieldset>
+
+                <h2>Tipografías</h2>
+
+                <div class="uploaderBox">
+                    <div>
+                        <h3>Fuente para Primer Nivel</h3>
+                        <input type="file" accept=".ttf" />
+
+                    </div>
+                </div>
+
+                <div>
+                    <div>
+                        <h3>Fuente para Segundo Nivel</h3>
+                        <input type="file" accept=".ttf" />
+                        Fuente actual:
+                    </div>
+                </div>
+                <button id="saveBtn">
+
+                </button>
+            </div>
+
+            <div class="multi-font-uploader-center">
+
+                <div id="savedStylesList">
+                    No hay estilos guardados
+                </div>
+
+            </div>
+
+
+            <div class="multi-font-uploader-right">
+                <div class="multi-font-uploader-previewBox">
+                    <h3>Previsualización</h3>
+
+                    <p id="titulo">
+                        OMG, nuevo estilo bang bang bang!
+                    </p>
+                    <p id="subtitulo">
+                        OMG, nuevo estilo bang bang bang!
+                    </p>
+                    <p id="parrafo">
+                        OMG, nuevo estilo bang bang bang!
+                    </p>
+
+                    <div></div>
+
+                    <p>Fuente Principal: </p>
+                    <p>Fuente Secundaria: </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Ejemplo para ver como se cambia las letras-->
+<div>
+<div class="font-upload-container">
+  <h2>Subir Fuentes de letras</h2>
+  
+  <div class="upload-section">
+    <input #fileInput type="file" accept=".ttf, font/ttf" (change)="onFileSelected($event)" hidden>
+    <button class="upload-btn" (click)="fileInput.click()">Elige .TTF Archivos</button>
+    <span *ngIf="fontName">{{ fontName }} </span>
+  </div>
+  
+  <div class="preview-controls" *ngIf="isFontLoaded">
+    <div class="form-group">
+      <label for="previewText">Preview:</label>
+      <input id="previewText" type="text" [(ngModel)]="customPreviewText" (input)="updatePreview()">
+    </div>
+    
+    <div class="button-group">
+      <button class="apply-btn" (click)="applyFont()">Aplica</button>
+      <button class="reset-btn" (click)="resetFont()">Resetear</button>
+    </div>
+  </div>
+  
+  <div #fontPreview class="font-preview" [style.fontFamily]="fontName">
+    {{ previewText }}
+  </div>
+
+  <div class="control_boton">
+    <!--(Ver la etiqueta arriba, para ver como se cambia) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+                <label for="titleFontSize">Tamaño de letras para Título (px): </label>
                 <input type="number" id="titleFontSize" [(ngModel)]="titleFontSize" min="10" max="50">
             </div>
-    </div>
+</div>
 
 </div>
