@@ -15,6 +15,11 @@ export function defineUser(sequelize, DataTypes) {
                 key : 'role_id',
             }
         },
+        status : {
+            type : DataTypes.BOOLEAN,
+            allowNull : false,
+            defaultValue : true,
+        },
         firstName : {
             type : DataTypes.STRING,
             allowNull : true,
