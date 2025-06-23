@@ -47,7 +47,7 @@ export class TestApiComponent implements OnInit {
     this.result = await this.apiService.createStyles(data);
   }
 
-  async testCreateFontStyles() {
+  async testCreateFontStyles() { //✅
     const data = {
       moduleFont: {
         title : 100,
