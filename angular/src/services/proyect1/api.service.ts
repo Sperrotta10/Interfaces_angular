@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class ApiService {
+export class ApiService1 {
   private baseURL = 'http://localhost:3000/api/v1';
 
   constructor(private http: HttpClient) {}
@@ -34,7 +34,7 @@ export class ApiService {
     } catch (error) {
         console.error('Error al obtener la configuración por defecto:', error);
     }
-    return null;
+    return false;
   }
 
   async getFontStyles() {
@@ -56,7 +56,7 @@ export class ApiService {
     } catch (error) {
         console.error('Error al obtener fuentes:', error);
     }
-    return null;
+    return false;
   }
 
   async createStyles(data: any) {
@@ -126,7 +126,7 @@ export class ApiService {
     } catch (error) {
         console.error("Error al eliminar color:", error);
     }
-    return null;
+    return false;
   }
 
   async deleteFonts(id: string) {
@@ -146,7 +146,7 @@ export class ApiService {
     } catch (error) {
         console.error("Error al eliminar fuente:", error);
     }
-    return null;
+    return false;
   }
 
   async updateColor(id: string, data: any) {
@@ -166,7 +166,7 @@ export class ApiService {
     } catch (error) {
         console.error("Error al actualizar color:", error);
     }
-    return null;
+    return false;
   }
 
   async updateFont(id: string, data: any) {
@@ -186,7 +186,7 @@ export class ApiService {
     } catch (error) {
       console.error("Error al actualizar fuente:", error);
     }
-    return null;
+    return false;
   }
 
   async login(data: { email: string; password: string }) {
