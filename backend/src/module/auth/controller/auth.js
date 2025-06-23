@@ -43,7 +43,8 @@ export class ControllerAuth {
             res.cookie('access_token', login.access_token, {
                 httpOnly : true, // la cookie solo se puede acceder en el servidor
                 secure : enviroment.SECURE_COOKIE === 'production', // la cookie solo se puede acceder en https
-                maxAge : 1000 * 60 * 60 // duracion de una hora
+                sameSite: 'lax',
+                maxAge : 1000 * 60 * 60 // duracion de una hora,
             });
 
             return res.status(200).json({message : login.message, data : login.data});

@@ -23,10 +23,20 @@ const allowedOrigins = [
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin : allowedOrigins,
-    methods : ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
-    credentials : true,
+  origin: function (origin, callback) {
+    // Permite solicitudes sin origin (como Postman o curl)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('No permitido por CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
+  credentials: true,
 }));
+
 
 // api
 app.use('/api/v1/', routerApi);
