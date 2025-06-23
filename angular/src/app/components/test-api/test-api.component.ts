@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../../../services/proyect1/api.service';
+import { ApiService1 } from '../../../services/proyect1/api.service';
+import { ApiService2 } from '../../../services/proyect2/api.service';
+import { stat } from 'fs';
 
 @Component({
   selector: 'app-test-api',
@@ -13,13 +15,13 @@ export class TestApiComponent implements OnInit {
 
   result: any;
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService1, private apiService2 : ApiService2) {}
 
   ngOnInit(): void {
     console.log('Componente TestApiComponent inicializado');
   }
 
-  // testing de apis
+  // testing de apis Proyect1
 
   async testGetStyles() { //✅
     this.result = await this.apiService.getStyles();
@@ -102,4 +104,29 @@ export class TestApiComponent implements OnInit {
     this.result = await this.apiService.login(credentials);
   }
 
+
+  // Testing de apis Proyect2
+
+  async testGetUsers() { //✅
+    this.result = await this.apiService2.getUsers();
+  }
+
+  async testCreateUser() { //✅
+    const data = {
+      user_name : "Santiago777",
+      email : "santiago2@gmail.com",
+      password : "S123456789@2" 
+    };
+    this.result = await this.apiService2.createUser(data);
+  }
+
+  async testUpdateUser() { //✅
+    const id = prompt('ID del usuario a actualizar');
+    const edad = prompt('ingrese su nuevo edad (ej: 25)');
+    const status = prompt('ingrese su nuevo estado (ej: true o false)');
+    if (id && edad && status) {
+      const data = { age : Number(edad), status : status === 'true' };
+      this.result = await this.apiService2.updateUser(id, data);
+    }
+  }
 }
