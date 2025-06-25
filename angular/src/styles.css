@@ -24,8 +24,9 @@
 
 body {
   background: var(--ligth-color);
-  color: var(--dark-color);
+  color: var(--dark-color); 
   font-family: "Open Sans", sans-serif;
+  padding-top: 5em;
 }
 
 a {
@@ -1252,3 +1253,5 @@ input[type="email"] {
 .lb-image{
   border: 4px solid var(--ligth-color);
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
