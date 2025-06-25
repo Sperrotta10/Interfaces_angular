@@ -9,7 +9,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 2em;
-    padding: 6em 2em 2em;
+    padding:  2em 2em;
 }
 
 .control-panel,

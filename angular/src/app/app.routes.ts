@@ -22,6 +22,14 @@ export const routes: Routes = [
         }
     },
     {
+        path: 'user',
+        loadComponent: () => {
+            return import('./view/user/user.component').then(
+                m => m.UserComponent //la palabra m se refiere module
+            )
+        },
+    },
+    {
         path: 'test-api',
         component: TestApiComponent
     }

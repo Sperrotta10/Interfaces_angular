@@ -1,0 +1,113 @@
+<mat-horizontal-stepper [linear]="true" #stepper>
+  <!-- Paso 1: Datos personales -->
+  <mat-step [stepControl]="paso1Form">
+    <form [formGroup]="paso1Form">
+      <ng-template matStepLabel>Datos personales</ng-template>
+      <mat-form-field><input matInput placeholder="Nombre" formControlName="firstName"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Apellido" formControlName="lastName"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Segundo apellido" formControlName="maidenName"></mat-form-field>
+      <mat-form-field><input matInput type="number" placeholder="Edad" formControlName="age"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Género" formControlName="gender"></mat-form-field>
+      <mat-form-field><input matInput type="date" placeholder="Fecha de nacimiento" formControlName="birthDate"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Grupo sanguíneo" formControlName="bloodGroup"></mat-form-field>
+      <mat-form-field><input matInput type="number" placeholder="Altura" formControlName="height"></mat-form-field>
+      <mat-form-field><input matInput type="number" placeholder="Peso" formControlName="weight"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Color de ojos" formControlName="eyeColor"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Color de cabello" formControlName="hair_color"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Tipo de cabello" formControlName="hair_type"></mat-form-field>
+      <mat-form-field><input matInput placeholder="URL de imagen" formControlName="image"></mat-form-field>
+      <div><button mat-button matStepperNext>Siguiente</button></div>
+    </form>
+  </mat-step>
+
+  <!-- Paso 2: Contacto y acceso -->
+  <mat-step [stepControl]="paso2Form">
+    <form [formGroup]="paso2Form">
+      <ng-template matStepLabel>Contacto</ng-template>
+      <mat-form-field><input matInput placeholder="Correo electrónico" formControlName="email"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Teléfono" formControlName="phone"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Usuario" formControlName="user_name"></mat-form-field>
+      <mat-form-field><input matInput type="password" placeholder="Contraseña" formControlName="password"></mat-form-field>
+      <mat-form-field><input matInput placeholder="IP" formControlName="ip"></mat-form-field>
+      <mat-form-field><input matInput placeholder="MAC Address" formControlName="macAddress"></mat-form-field>
+      <mat-form-field><input matInput placeholder="User Agent" formControlName="userAgent"></mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Anterior</button>
+        <button mat-button matStepperNext>Siguiente</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- Paso 3: Dirección y universidad -->
+  <mat-step [stepControl]="paso3Form">
+    <form [formGroup]="paso3Form">
+      <ng-template matStepLabel>Dirección</ng-template>
+      <mat-form-field><input matInput placeholder="Dirección" formControlName="address_address"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Ciudad" formControlName="address_city"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Estado" formControlName="address_state"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Código de estado" formControlName="address_stateCode"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Código postal" formControlName="address_postalCode"></mat-form-field>
+      <mat-form-field><input matInput type="number" placeholder="Latitud" formControlName="address_coordinates_lat"></mat-form-field>
+      <mat-form-field><input matInput type="number" placeholder="Longitud" formControlName="address_coordinates_lng"></mat-form-field>
+      <mat-form-field><input matInput placeholder="País" formControlName="address_country"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Universidad" formControlName="university"></mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Anterior</button>
+        <button mat-button matStepperNext>Siguiente</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- Paso 4: Información bancaria y cripto -->
+  <mat-step [stepControl]="paso4Form">
+    <form [formGroup]="paso4Form">
+      <ng-template matStepLabel>Banco y Cripto</ng-template>
+      <mat-form-field><input matInput placeholder="Vencimiento tarjeta" formControlName="bank_cardExpire"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Número de tarjeta" formControlName="bank_cardNumber"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Tipo de tarjeta" formControlName="bank_cardType"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Moneda" formControlName="bank_currency"></mat-form-field>
+      <mat-form-field><input matInput placeholder="IBAN" formControlName="bank_iban"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Criptomoneda" formControlName="crypto_coin"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Wallet" formControlName="crypto_wallet"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Red cripto" formControlName="crypto_network"></mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Anterior</button>
+        <button mat-button matStepperNext>Siguiente</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- Paso 5: Empresa y documentos -->
+  <mat-step [stepControl]="paso5Form">
+    <form [formGroup]="paso5Form">
+      <ng-template matStepLabel>Datos Empresariales</ng-template>
+      <mat-form-field><input matInput placeholder="Departamento" formControlName="company_department"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Empresa" formControlName="company_name"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Cargo" formControlName="company_title"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Dirección empresa" formControlName="company_address_address"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Ciudad empresa" formControlName="company_address_city"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Estado empresa" formControlName="company_address_state"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Código estado empresa" formControlName="company_address_stateCode"></mat-form-field>
+      <mat-form-field><input matInput placeholder="Código postal empresa" formControlName="company_address_postalCode"></mat-form-field>
+      <mat-form-field><input matInput type="number" placeholder="Latitud empresa" formControlName="company_address_coordinates_lat"></mat-form-field>
+      <mat-form-field><input matInput type="number" placeholder="Longitud empresa" formControlName="company_address_coordinates_lng"></mat-form-field>
+      <mat-form-field><input matInput placeholder="País empresa" formControlName="company_address_country"></mat-form-field>
+      <mat-form-field><input matInput placeholder="EIN" formControlName="ein"></mat-form-field>
+      <mat-form-field><input matInput placeholder="SSN" formControlName="ssn"></mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Anterior</button>
+        <button mat-button matStepperNext>Siguiente</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- Confirmación -->
+  <mat-step>
+    <ng-template matStepLabel>Confirmación</ng-template>
+    <pre>{{ formGrupo.value | json }}</pre>
+    <div>
+      <button mat-button matStepperPrevious>Anterior</button>
+      <button mat-button (click)="onSubmit()">Enviar</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
