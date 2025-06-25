@@ -1,15 +1,21 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy,Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {provideNativeDateAdapter} from '@angular/material/core';
+import {MatNativeDateModule} from '@angular/material/core';
+
 
 @Component({
   selector: 'app-user',
   standalone: true,
   imports: [
+    MatNativeDateModule,
+    MatDatepickerModule,
     CommonModule,
     ReactiveFormsModule,
     MatStepperModule,
@@ -24,7 +30,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 export class UserComponent {
   formGrupo: FormGroup;
 
+  // Set the minimum to January 1st 20 years in the past and December 31st a year in the future.
+  private readonly _currentYear = new Date().getFullYear();
+  private readonly _today = new Date();
+  readonly maxDate = new Date(this._today.getFullYear(), this._today.getMonth(), this._today.getDate());
+
   constructor(private fb: FormBuilder) {
+    
     this.formGrupo = this.fb.group({
       paso1: this.fb.group({
         firstName: [''],

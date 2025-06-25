@@ -1255,3 +1255,89 @@ input[type="email"] {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.user-panel{
+    display: flex;
+    flex-direction: column;
+    padding: 0 2em 2em;
+}
+
+/* Centrar el stepper y limitar el ancho */
+mat-horizontal-stepper {
+  max-width: 100%;
+  margin: auto;
+  background: var(--ligth-color);
+  border-radius: 12px;
+  box-shadow: 0 2px 16px var(--dark-color);
+  padding: 24px 16px;
+}
+
+/* Formularios más compactos */
+form {
+  font-family: var(--text-font);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  max-height: 100vh;
+  justify-content: space-between;
+}
+
+/* Campos de formulario ocupan 48% en pantallas grandes, 100% en móviles */
+mat-form-field {
+  flex: 1 1 20%;
+  min-width: 180px;
+}
+
+
+/* Botones alineados a la derecha y con espacio */
+div[mat-dialog-actions], form > div, .step-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* Botones Material personalizados */
+button[mat-button] {
+  background: var(--ligth-color);
+  color: var(--ligth-color);
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background 0.2s;
+  min-width: 100px;
+}
+button[mat-button]:hover {
+  background: var(--light-color);
+}
+
+/* Responsive para móviles */
+@media (max-width: 600px) {
+  mat-horizontal-stepper {
+    padding: 8px 0;
+  }
+  mat-form-field {
+    flex: 1 1 100%;
+    min-width: 120px;
+  }
+}
+
+::ng-deep .mat-horizontal-stepper-header-container{
+    margin-bottom: 1em;
+}
+
+/* Inputs de Angular Material más pequeños */
+::ng-deep .mat-mcd-text-field-wrapper {
+  padding: 0px 0 ;
+  min-height: 32px !important;
+}
+
+::ng-deep input.mat-input-element, 
+::ng-deep textarea.mat-input-element {
+  font-size: 13px !important;
+  padding: 4px 0 !important;
+  height: 28px !important;
+  line-height: 1.2 !important;
+}
+
+
