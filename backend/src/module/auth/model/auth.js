@@ -128,6 +128,25 @@ export class ModelAuth {
 
         } catch (error) {
             console.error("Error al eliminar user");
+        }
+    }
+
+
+    static async getbyID(user_id) {
+        
+        try {
+
+            const user = await User.findByPk(user_id, {
+                attributes: { exclude: ['password'] }
+            });
+
+            if(!user) return {message : "User no encontrado", status : 404};
+
+            return {message : "User encontrado", data: user, status : 200};
+            
+
+        } catch (error) {
+            console.error("Error al obtener user");
             throw error;
         }
     }

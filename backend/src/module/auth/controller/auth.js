@@ -85,6 +85,16 @@ export class ControllerAuth {
         }
     };
 
+    static async getById(req, res) {
+    const { id } = req.params;
+    try {
+        const result = await ModelAuth.getbyID(id);
+        return res.status(result.status).json({ message: result.message, data: result.data ?? null });
+    } catch (error) {
+        return res.status(500).json({ message: "Error interno", error: error.message });
+    }
+}
+
     static async update(req, res) {
 
         const { id } = req.params;

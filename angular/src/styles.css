@@ -1340,4 +1340,48 @@ button[mat-button]:hover {
   line-height: 1.2 !important;
 }
 
+.map-btn {
+  margin: 16px 0;
+  padding: 12px 24px;
+  font-size: var(--text-font);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--primary-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.container-map{
+    position: relative;
+    width: 100%;
+    background-color: var(--ligth-color);
+    height: 80vh;
+    margin: 0 auto;
+    border: 1px solid var(--ligth-color);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#map{
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+
+
+::ng-deep .mat-dialog-container.full-screen-modal {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: 90vh !important;
+  max-height: 100vh !important;
+  border-radius: 0 !important;
+}
 
