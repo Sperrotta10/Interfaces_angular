@@ -7,6 +7,9 @@
         <button (click)="vista_modo = 'letras'" class="tab" [class.active]="vista_modo === 'letras'">
             🔤 Tipografía
         </button>
+        <button (click)="vista_modo = 'usuarios'" class="tab" [class.active]="vista_modo === 'usuarios'">
+            👤 Usuarios
+        </button>
     </div>
 
     <div class="row color-section" *ngIf="vista_modo === 'colores'">
@@ -170,40 +173,184 @@
         </div>
     </div>
 
+    <div class="usuario-section" *ngIf="vista_modo === 'usuarios'">
+        <h2 class="section-title">👤 Gestión de Usuarios</h2>
+
+        <div class="tab-nav-container">
+            <button (click)="changeView('activos')" class="tab-button" [class.active]="vista_modo2 === 'activos'">
+            <span class="emoji">👤✅</span> Usuarios Activos
+            </button>
+            <button (click)="changeView('deshabilitados')" class="tab-button" [class.active]="vista_modo2 === 'deshabilitados'">
+            <span class="emoji">👤❌</span> Usuarios Deshabilitados
+            </button>
+        </div>
+
+        <!-- Contenedor para las tablas -->
+        <div class="table-card">
+            <!-- Tabla de Usuarios Activos -->
+            <div *ngIf="vista_modo2 === 'activos'">
+            <div class="card-header-custom card-header-success">
+                <h4 class="card-title-custom">Usuarios Activos</h4>
+            </div>
+            <div class="card-body-custom">
+                <div class="table-responsive">
+                <table #activeTable id="activeUserTable" class="display nowrap data-table-custom" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- DataTables llenará este tbody dinámicamente -->
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            </div>
+
+            <!-- Tabla de Usuarios Deshabilitados -->
+            <div *ngIf="vista_modo2 === 'deshabilitados'">
+            <div class="card-header-custom card-header-danger">
+                <h4 class="card-title-custom">Usuarios Deshabilitados</h4>
+            </div>
+            <div class="card-body-custom">
+                <div class="table-responsive">
+                <table #disabledTable id="disabledUserTable" class="display nowrap data-table-custom" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- DataTables llenará este tbody dinámicamente -->
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Modal para Detalles del Usuario (sin Bootstrap JS) -->
+        <div class="custom-modal-overlay" *ngIf="showUserDetailsModal">
+            <div class="custom-modal-dialog custom-modal-large">
+            <div class="custom-modal-content">
+                <div class="custom-modal-header custom-bg-primary">
+                <h5 class="custom-modal-title">Detalles del Usuario</h5>
+                <button type="button" class="custom-modal-close-btn" (click)="closeUserDetailsModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="custom-modal-body" *ngIf="usuarioSeleccionado">
+                <div class="custom-row">
+                    <div class="custom-col-half">
+                    <p><strong>Nombre:</strong> {{ usuarioSeleccionado.firstName }} {{ usuarioSeleccionado.lastName }}</p>
+                    <p><strong>Email:</strong> {{ usuarioSeleccionado.email }}</p>
+                    <p><strong>Teléfono:</strong> {{ usuarioSeleccionado.phone }}</p>
+                    </div>
+                    <div class="custom-col-half">
+                    <p><strong>Dirección:</strong> {{ usuarioSeleccionado.address_address }}</p>
+                    <p><strong>Rol:</strong> {{ usuarioSeleccionado.role_id }}</p>
+                    <p><strong>Fecha de Registro:</strong> {{ usuarioSeleccionado.createdAt | date:'mediumDate' }}</p>
+                    <p><strong>Fecha de Actualizacion:</strong> {{ usuarioSeleccionado.updatedAt | date:'mediumDate' }}</p>
+                    </div>
+                </div>
+                <!-- Puedes añadir más detalles aquí según la estructura de tu objeto de usuario -->
+                </div>
+                <div class="custom-modal-footer">
+                <button type="button" class="custom-btn custom-btn-secondary" (click)="closeUserDetailsModal()">Cerrar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Modal de Confirmación Personalizado (sin Bootstrap JS) -->
+        <div class="custom-modal-overlay" *ngIf="showConfirmModal">
+            <div class="custom-modal-dialog custom-modal-small">
+            <div class="custom-modal-content">
+                <div class="custom-modal-header custom-bg-warning">
+                <h5 class="custom-modal-title">Confirmación</h5>
+                <button type="button" class="custom-modal-close-btn" (click)="closeConfirmModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="custom-modal-body">
+                <p>{{ confirmMessage }}</p>
+                </div>
+                <div class="custom-modal-footer">
+                <button type="button" class="custom-btn custom-btn-secondary" (click)="closeConfirmModal()">Cancelar</button>
+                <button type="button" class="custom-btn custom-btn-warning" (click)="executeConfirmAction()">Confirmar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Modal de Alerta/Notificación Personalizado (sin Bootstrap JS) -->
+        <div class="custom-modal-overlay" *ngIf="showAlertModal">
+            <div class="custom-modal-dialog custom-modal-small">
+            <div class="custom-modal-content">
+                <div class="custom-modal-header" [ngClass]="{
+                'custom-bg-success': alertType === 'success',
+                'custom-bg-danger': alertType === 'error',
+                'custom-bg-info': alertType === 'info'
+                }">
+                <h5 class="custom-modal-title">Mensaje</h5>
+                <button type="button" class="custom-modal-close-btn" (click)="closeAlertModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="custom-modal-body">
+                <p>{{ alertMessage }}</p>
+                </div>
+                <div class="custom-modal-footer">
+                <button type="button" class="custom-btn custom-btn-secondary" (click)="closeAlertModal()">Cerrar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 
 <!-- Ejemplo para ver como se cambia las letras-->
 <div>
-<div class="font-upload-container">
-  <h2>Subir Fuentes de letras</h2>
-  
-  <div class="upload-section">
-    <input #fileInput type="file" accept=".ttf, font/ttf" (change)="onFileSelected($event)" hidden>
-    <button class="upload-btn" (click)="fileInput.click()">Elige .TTF Archivos</button>
-    <span *ngIf="fontName">{{ fontName }} </span>
-  </div>
-  
-  <div class="preview-controls" *ngIf="isFontLoaded">
-    <div class="form-group">
-      <label for="previewText">Preview:</label>
-      <input id="previewText" type="text" [(ngModel)]="customPreviewText" (input)="updatePreview()">
-    </div>
+    <div class="font-upload-container">
+        <h2>Subir Fuentes de letras</h2>
+        
+        <div class="upload-section">
+            <input #fileInput type="file" accept=".ttf, font/ttf" (change)="onFileSelected($event)" hidden>
+            <button class="upload-btn" (click)="fileInput.click()">Elige .TTF Archivos</button>
+            <span *ngIf="fontName">{{ fontName }} </span>
+        </div>
     
-    <div class="button-group">
-      <button class="apply-btn" (click)="applyFont()">Aplica</button>
-      <button class="reset-btn" (click)="resetFont()">Resetear</button>
-    </div>
-  </div>
-  
-  <div #fontPreview class="font-preview" [style.fontFamily]="fontName">
-    {{ previewText }}
-  </div>
-
-  <div class="control_boton">
-    <!--(Ver la etiqueta arriba, para ver como se cambia) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
-                <label for="titleFontSize">Tamaño de letras para Título (px): </label>
-                <input type="number" id="titleFontSize" [(ngModel)]="titleFontSize" min="10" max="50">
+        <div class="preview-controls" *ngIf="isFontLoaded">
+            <div class="form-group">
+            <label for="previewText">Preview:</label>
+            <input id="previewText" type="text" [(ngModel)]="customPreviewText" (input)="updatePreview()">
             </div>
-</div>
+            
+            <div class="button-group">
+            <button class="apply-btn" (click)="applyFont()">Aplica</button>
+            <button class="reset-btn" (click)="resetFont()">Resetear</button>
+            </div>
+        </div>
+    
+        <div #fontPreview class="font-preview" [style.fontFamily]="fontName">
+            {{ previewText }}
+        </div>
+
+        <div class="control_boton">
+            <!--(Ver la etiqueta arriba, para ver como se cambia) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+                        <label for="titleFontSize">Tamaño de letras para Título (px): </label>
+                        <input type="number" id="titleFontSize" [(ngModel)]="titleFontSize" min="10" max="50">
+        </div>
+    </div>
 
 </div>
