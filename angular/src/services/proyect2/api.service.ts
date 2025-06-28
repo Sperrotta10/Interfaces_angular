@@ -26,7 +26,7 @@ export class ApiService2 {
         const user = await firstValueFrom(this.http.get<any>(`${this.baseURL}/auth/`, { withCredentials: true }));
 
         console.log(user.message);
-        return user.data;
+        return {active : user.data.active, desactive : user.data.desactive};
 
     } catch (error) {
         console.error('Error al obtener la configuración por defecto:', error);
