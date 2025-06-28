@@ -100,6 +100,7 @@ export class ControllerAuth {
             if (role === 'admin') {
                 
                 const filtered = { status: result.data.status };
+                if(filtered.status === undefined) return res.status(422).json({ message: "El campo status es obligatorio" });
                 const updated = await ModelAuth.update(id, filtered);
                 return res.status(updated.status).json({ message: updated.message, data: updated.data });
 
@@ -111,6 +112,20 @@ export class ControllerAuth {
             } else {
                 return res.status(403).json({ message: "No autorizado para actualizar" });
             }
+
+        } catch (error) {
+            return res.status(500).json({ message: "Error interno", error: error.message });
+        }
+    };
+
+    static async delete(req, res) {
+
+        const { id } = req.params;
+
+        try {
+
+            const data = await ModelAuth.delete(id);
+            return res.status(data.status).json({ message: data.message, data: data.data });
 
         } catch (error) {
             return res.status(500).json({ message: "Error interno", error: error.message });

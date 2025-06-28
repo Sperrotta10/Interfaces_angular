@@ -76,14 +76,19 @@ export class ModelAuth {
 
         try {
             
-            const users = await User.findAll({
+            const users1 = await User.findAll({
                 where : { status : true },
                 attributes: { exclude: ['password'] } 
             });
 
-            if(!users) return {message : "Users no encontrados", status : 404};
+            const users2 = await User.findAll({
+                where : { status : false },
+                attributes: { exclude: ['password'] }
+            });
 
-            return {message : "Users obtenidos", data : users, status : 200};
+            if(!users1 && !users2) return {message : "Users no encontrados", status : 404};
+
+            return {message : "Users obtenidos", data : {active : users1, desactive : users2}, status : 200};
 
         } catch (error) {
             console.error("Error al obtener los usuarios");
@@ -94,7 +99,6 @@ export class ModelAuth {
     static async update(user_id, data) {
         
         try {
-
             const exist = await User.findByPk(user_id);
 
             if(!exist) return {message : "User no encontrado", status : 404};
@@ -106,6 +110,24 @@ export class ModelAuth {
 
         } catch (error) {
             console.error("Error al modificar user");
+            throw error;
+        }
+    }
+
+    static async delete(user_id) {
+        
+        try {
+            const exist = await User.findByPk(user_id);
+
+            if(!exist) return {message : "User no encontrado", status : 404};
+
+            await User.destroy({where : { user_id }});
+
+            return {message : "User eliminado", status : 200};
+            
+
+        } catch (error) {
+            console.error("Error al eliminar user");
             throw error;
         }
     }
