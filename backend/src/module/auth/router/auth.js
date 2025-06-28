@@ -9,4 +9,5 @@ routerAuth.post("/register", ControllerAuth.create);
 routerAuth.post("/login", ControllerAuth.login);
 routerAuth.post("/logout", authMiddleware, ControllerAuth.logout);
 routerAuth.get("/", authMiddleware, authorizeRole("admin"), ControllerAuth.getAll);
+routerAuth.get("/:id", authMiddleware,authorizeRole("user","admin"), ControllerAuth.getById);
 routerAuth.patch("/:id", authMiddleware, authorizeRole("user", "admin"), ControllerAuth.update);
