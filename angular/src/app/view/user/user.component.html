@@ -1,4 +1,4 @@
-<mat-horizontal-stepper [linear]="true" #stepper>
+<mat-horizontal-stepper [linear]="false" #stepper>
   <!-- Paso 1: Datos personales -->
   <mat-step [stepControl]="paso1Form">
     <form [formGroup]="paso1Form">
@@ -53,6 +53,10 @@
   <mat-step [stepControl]="paso3Form">
     <form [formGroup]="paso3Form">
       <ng-template matStepLabel>Dirección</ng-template>
+      <button mat-raised-button color="primary" (click)="openMapModal()">
+        <mat-icon>place</mat-icon>
+        Seleccionar ubicación en mapa
+      </button>
       <mat-form-field appearance="outline"><input matInput placeholder="Dirección" formControlName="address_address"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Ciudad" formControlName="address_city"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Estado" formControlName="address_state"></mat-form-field>
@@ -95,6 +99,10 @@
       <mat-form-field appearance="outline"><input matInput placeholder="Departamento" formControlName="company_department"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Empresa" formControlName="company_name"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Cargo" formControlName="company_title"></mat-form-field>
+      <button mat-raised-button color="accent" class="map-btn" (click)="openCompanyMapModal()">
+        <mat-icon>map</mat-icon>
+        Seleccionar ubicación en mapa
+      </button>
       <mat-form-field appearance="outline"><input matInput placeholder="Dirección empresa" formControlName="company_address_address"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Ciudad empresa" formControlName="company_address_city"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Estado empresa" formControlName="company_address_state"></mat-form-field>
@@ -118,7 +126,12 @@
     <pre>{{ formGrupo.value | json }}</pre>
     <div>
       <button mat-button matStepperPrevious>Anterior</button>
-      <button mat-button (click)="onSubmit()">Enviar</button>
+      <button mat-button (click)="confirmAndSubmit()"
+      >
+        Enviar
+      
+      </button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>
+
