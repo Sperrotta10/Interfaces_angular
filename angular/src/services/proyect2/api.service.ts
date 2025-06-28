@@ -96,4 +96,26 @@ export class ApiService2 {
     }
     return false;
   }
+
+    async getUserById(id: string) {
+    try {
+        const islogin = await this.login({
+            email: 'santiago@gmail.com',
+            password: 'S123456789@'
+        });
+
+        if (!islogin || !islogin.status) {
+            console.error('No se pudo iniciar sesión. Verifique sus credenciales.');
+            return null;
+        }
+        const res = await firstValueFrom(this.http.get<any>(`${this.baseURL}/auth/${id}`, { withCredentials: true }));
+        if (res) {
+            return { status: true, data: res.data };
+        }
+    } catch (error) {
+        console.error("Error al obtener usuario por ID:", error);
+    }
+    return false;
+    }
+
 }

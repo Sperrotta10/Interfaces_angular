@@ -98,7 +98,7 @@ export class TestApiComponent implements OnInit {
 
   async testLogin() { //✅
     const credentials = {
-      email: 'santiago@gmail.com',
+      email: 'santiago777@gmail.com',
       password: 'S123456789@'
     };
     this.result = await this.apiService.login(credentials);
@@ -108,14 +108,14 @@ export class TestApiComponent implements OnInit {
   // Testing de apis Proyect2
 
   async testGetUsers() { //✅
-    this.result = await this.apiService2.getUsers();
+    this.result = await this.apiService2.getUsers();  
   }
 
   async testCreateUser() { //✅
     const data = {
       user_name : "Santiago777",
-      email : "santiago2@gmail.com",
-      password : "S123456789@2" 
+      email : "santiago@gmail.com",
+      password : "S123456789@" 
     };
     this.result = await this.apiService2.createUser(data);
   }
