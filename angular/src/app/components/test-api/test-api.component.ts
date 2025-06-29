@@ -98,10 +98,14 @@ export class TestApiComponent implements OnInit {
 
   async testLogin() { //✅
     const credentials = {
-      email: 'santiago777@gmail.com',
+      email: 'santiago@gmail.com',
       password: 'S123456789@'
     };
     this.result = await this.apiService.login(credentials);
+  }
+
+  async testLogout() { //✅
+    this.result = await this.apiService2.logout();
   }
 
 
