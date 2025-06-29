@@ -33,7 +33,8 @@
               "node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.theme.default.min.css",
               "node_modules/datatables.net-buttons-dt/css/buttons.dataTables.css",
               "node_modules/datatables.net-dt/css/dataTables.dataTables.css",
-              "node_modules/datatables.net-responsive-dt/css/responsive.dataTables.css"
+              "node_modules/datatables.net-responsive-dt/css/responsive.dataTables.css",
+              "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": [
               
@@ -46,9 +47,7 @@
               "node_modules/pdfmake/build/vfs_fonts.js",
               "node_modules/datatables.net-buttons/js/buttons.html5.min.js",
               "node_modules/datatables.net-buttons/js/buttons.print.min.js",
-              "/node_modules/leaflet/dist/leaflet.js",
-              "src/styles.css",
-              "node_modules/leaflet/dist/leaflet.css"
+              "/node_modules/leaflet/dist/leaflet.js"
             ],
             "server": "src/main.server.ts",
             "prerender": true,
