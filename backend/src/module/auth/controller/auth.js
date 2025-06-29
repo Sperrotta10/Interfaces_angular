@@ -65,7 +65,7 @@ export class ControllerAuth {
                 sameSite: 'strict' 
             });
 
-            return res.status(200).json({message: "Logout exitoso"});
+            return res.status(200).json({message: "Logout exitoso", status: 200, data: true});
 
         } catch (error) {
 
