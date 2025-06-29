@@ -1,6 +1,9 @@
 import { Component, HostListener, AfterViewInit, Renderer2, ElementRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService, User } from '../../../services/auth.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -11,8 +14,23 @@ import { CommonModule } from '@angular/common';
 })
 export class HeaderComponent implements AfterViewInit{
   mobileNavActive = false;
+  isAuthenticated$: Observable<boolean>;
+  isAdmin$: Observable<boolean>;
+  currentUser$: Observable<User | null>;
 
-  constructor(private renderer: Renderer2, private el: ElementRef) {}
+  constructor(private renderer: Renderer2, private el: ElementRef, private authService: AuthService) {
+    this.isAuthenticated$ = this.authService.currentUser.pipe(
+      map(user => !!user) // Emite true si hay usuario, false si es null
+    );
+    this.isAdmin$ = this.authService.currentUser.pipe(
+      map(user => user?.role === 'admin') // Emite true si el rol es 'admin'
+    );
+    this.currentUser$ = this.authService.currentUser;
+  }
+
+  async logout(): Promise<void> {
+    this.authService.logout();
+  }
 
   ngAfterViewInit(): void {
     this.setupDropdowns();
