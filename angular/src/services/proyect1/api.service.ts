@@ -13,16 +13,6 @@ export class ApiService1 {
   async getStyles() {
     try {
 
-        const islogin = await this.login({
-            email: 'santiago@gmail.com',
-            password: 'S123456789@'
-        });
-
-        if (!islogin || !islogin.status) {
-            console.error('No se pudo iniciar sesión. Verifique sus credenciales.');
-            return null;
-        }
-
         const colors = await firstValueFrom(this.http.get<any>(`${this.baseURL}/color/`, { withCredentials: true }));
         const fonts = await firstValueFrom(this.http.get<any>(`${this.baseURL}/font/`, { withCredentials: true }));
 
@@ -40,16 +30,6 @@ export class ApiService1 {
   async getFontStyles() {
     try {
 
-        const islogin = await this.login({
-            email: 'santiago@gmail.com',
-            password: 'S123456789@'
-        });
-
-        if (!islogin || !islogin.status) {
-            console.error('No se pudo iniciar sesión. Verifique sus credenciales.');
-            return null;
-        }
-
         const fonts = await firstValueFrom(this.http.get<any>(`${this.baseURL}/font/`, { withCredentials: true }));
         console.log(fonts.message);
         return { fonts: fonts.data };
@@ -61,16 +41,6 @@ export class ApiService1 {
 
   async createStyles(data: any) {
     try {
-
-        const islogin = await this.login({
-            email: 'santiago@gmail.com',
-            password: 'S123456789@'
-        });
-
-        if (!islogin || !islogin.status) {
-            console.error('No se pudo iniciar sesión. Verifique sus credenciales.');
-            return null;
-        }
 
         const color = data.moduleColor;
         const res = await firstValueFrom(this.http.post<any>(`${this.baseURL}/color/`, color, { withCredentials: true }));
@@ -87,16 +57,6 @@ export class ApiService1 {
   async createFontStyles(data: any) {
     try {
 
-        const islogin = await this.login({
-            email: 'santiago@gmail.com',
-            password: 'S123456789@'
-        });
-
-        if (!islogin || !islogin.status) {
-            console.error('No se pudo iniciar sesión. Verifique sus credenciales.');
-            return null;
-        }
-
         const font = data.moduleFont;
         const res = await firstValueFrom(this.http.post<any>(`${this.baseURL}/font/`, font, { withCredentials: true }));
         if (res) {
@@ -112,16 +72,6 @@ export class ApiService1 {
   async deleteColors(id: string) {
     try {
 
-        const islogin = await this.login({
-            email: 'santiago@gmail.com',
-            password: 'S123456789@'
-        });
-
-        if (!islogin || !islogin.status) {
-            console.error('No se pudo iniciar sesión. Verifique sus credenciales.');
-            return null;
-        }
-
         await firstValueFrom(this.http.delete(`${this.baseURL}/color/${id}`, { withCredentials: true }));
     } catch (error) {
         console.error("Error al eliminar color:", error);
@@ -131,16 +81,6 @@ export class ApiService1 {
 
   async deleteFonts(id: string) {
     try {
-
-        const islogin = await this.login({
-            email: 'santiago@gmail.com',
-            password: 'S123456789@'
-        });
-
-        if (!islogin || !islogin.status) {
-            console.error('No se pudo iniciar sesión. Verifique sus credenciales.');
-            return null;
-        }
 
         await firstValueFrom(this.http.delete(`${this.baseURL}/font/${id}`, { withCredentials: true }));
     } catch (error) {
@@ -152,16 +92,6 @@ export class ApiService1 {
   async updateColor(id: string, data: any) {
     try {
 
-        const islogin = await this.login({
-            email: 'santiago@gmail.com',
-            password: 'S123456789@'
-        });
-
-        if (!islogin || !islogin.status) {
-            console.error('No se pudo iniciar sesión. Verifique sus credenciales.');
-            return null;
-        }
-
         await firstValueFrom(this.http.patch(`${this.baseURL}/color/${id}`, data, { withCredentials: true }));
     } catch (error) {
         console.error("Error al actualizar color:", error);
@@ -171,16 +101,6 @@ export class ApiService1 {
 
   async updateFont(id: string, data: any) {
     try {
-
-        const islogin = await this.login({
-            email: 'santiago@gmail.com',
-            password: 'S123456789@'
-        });
-
-        if (!islogin || !islogin.status) {
-            console.error('No se pudo iniciar sesión. Verifique sus credenciales.');
-            return null;
-        }
 
         await firstValueFrom(this.http.patch(`${this.baseURL}/font/${id}`, data, { withCredentials: true }));
     } catch (error) {

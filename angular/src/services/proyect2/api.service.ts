@@ -6,108 +6,80 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root',
 })
 export class ApiService2 {
-  private baseURL = 'http://localhost:3000/api/v1';
+    private baseURL = 'http://localhost:3000/api/v1';
 
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {}
 
-  async getUsers() {
-    try {
+    async getUsers() {
+        try {
 
-        const islogin = await this.login({
-            email: 'santiago@gmail.com',
-            password: 'S123456789@'
-        });
+            const user = await firstValueFrom(this.http.get<any>(`${this.baseURL}/auth/`, { withCredentials: true }));
 
-        if (!islogin || !islogin.status) {
-            console.error('No se pudo iniciar sesión. Verifique sus credenciales.');
-            return null;
+            console.log(user.message);
+            return {active : user.data.active, desactive : user.data.desactive};
+
+        } catch (error) {
+            console.error('Error al obtener la configuración por defecto:', error);
         }
-
-        const user = await firstValueFrom(this.http.get<any>(`${this.baseURL}/auth/`, { withCredentials: true }));
-
-        console.log(user.message);
-        return {active : user.data.active, desactive : user.data.desactive};
-
-    } catch (error) {
-        console.error('Error al obtener la configuración por defecto:', error);
+        return false;
     }
-    return false;
-  }
 
-  async createUser(data: any) {
-    try {
+    async createUser(data: any) {
+        try {
 
-        const res = await firstValueFrom(this.http.post<any>(`${this.baseURL}/auth/register`, data, { withCredentials: true }));
-        if (res) {
-            console.log("Usuario creado:", res);
-            return true;
+            const res = await firstValueFrom(this.http.post<any>(`${this.baseURL}/auth/register`, data, { withCredentials: true }));
+            if (res) {
+                console.log("Usuario creado:", res);
+                return true;
+            }
+        } catch (error) {
+            console.error("Error al crear usuario:", error);
         }
-    } catch (error) {
-        console.error("Error al crear usuario:", error);
+        return false;
     }
-    return false;
-  }
 
 
-  async updateUser(id: string, data: any) {
-    try {
+    async updateUser(id: string, data: any) {
+        try {
 
-        const islogin = await this.login({
-            email: 'santiago@gmail.com',
-            password: 'S123456789@'
-        });
-
-        if (!islogin || !islogin.status) {
-            console.error('No se pudo iniciar sesión. Verifique sus credenciales.');
-            return null;
+            await firstValueFrom(this.http.patch(`${this.baseURL}/auth/${id}`, data, { withCredentials: true }));
+        } catch (error) {
+            console.error("Error al actualizar usuario:", error);
         }
-
-        await firstValueFrom(this.http.patch(`${this.baseURL}/auth/${id}`, data, { withCredentials: true }));
-    } catch (error) {
-        console.error("Error al actualizar usuario:", error);
+        return false;
     }
-    return false;
-  }
 
 
-  async login(data: { email: string; password: string }) {
-    try {
-        const res = await firstValueFrom(this.http.post<any>(`${this.baseURL}/auth/login`, data, { withCredentials: true }));
-        if (res) {
-            console.log(res.message);
-            return { status: true, data: res.data };
+    async login(data: { email: string; password: string }) {
+        try {
+            const res = await firstValueFrom(this.http.post<any>(`${this.baseURL}/auth/login`, data, { withCredentials: true }));
+            if (res) {
+                console.log(res.message);
+                return { status: true, data: res.data };
+            }
+        } catch (error) {
+            console.error("Error al iniciar sesión:", error);
         }
-    } catch (error) {
-        console.error("Error al iniciar sesión:", error);
+        return false;
     }
-    return false;
-  }
 
-  async logout() {
-    try {
-        const res = await firstValueFrom(this.http.post<any>(`${this.baseURL}/auth/logout`, { withCredentials: true }));
+    async logout() {
+        try {
+            const res = await firstValueFrom(this.http.post<any>(`${this.baseURL}/auth/logout`, {}, { withCredentials: true }));
 
-        if (res) {
-            console.log(res.message);
-            return { status: true, data: res.data };
+            if (res.status === 200) {
+                return true;
+            }
+
+        } catch (error) {
+            console.error("Error al cerrar sesión:", error);
         }
-    } catch (error) {
-        console.error("Error al cerrar sesión:", error);
+        return false;
     }
-    return false;
-  }
 
     async getUserById(id: string) {
     try {
-        const islogin = await this.login({
-            email: 'santiago@gmail.com',
-            password: 'S123456789@'
-        });
-
-        if (!islogin || !islogin.status) {
-            console.error('No se pudo iniciar sesión. Verifique sus credenciales.');
-            return null;
-        }
+        
         const res = await firstValueFrom(this.http.get<any>(`${this.baseURL}/auth/${id}`, { withCredentials: true }));
         if (res) {
             return { status: true, data: res.data };
