@@ -884,14 +884,42 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async handleDeleteFontStyle(font_id: string): Promise<void> {
-    if (!window.confirm('¿Estás seguro de eliminar esta fuente?')) return;
-    try {
-      await this.colorFontService.deleteFonts(font_id);
-      this.fontStyleCounter--;
-      this.fetchSavedStylesFont();
-    } catch (error) {
-      console.error("Error al eliminar:", error);
-    }
+
+    Swal.fire({
+      title: "¿Estás seguro de eliminar esta fuente?",
+      text: "¡No podrás revertir esto!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "No, cancelar",
+      reverseButtons: true
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await this.colorFontService.deleteFonts(font_id);
+          this.fontStyleCounter--;
+          this.fetchSavedStylesFont();
+          Swal.fire({
+            title: "¡Eliminado!",
+            text: "La fuente ha sido eliminada.",
+            icon: "success"
+          });
+        } catch (error) {
+          console.error("Error al eliminar:", error);
+          Swal.fire({
+            title: "Error",
+            text: "No se pudo eliminar la fuente.",
+            icon: "error"
+          });
+        }
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire({
+          title: "Cancelado",
+          text: "Tu fuente está a salvo :)",
+          icon: "error"
+        });
+      }
+    });
   }
 
   handleEdit(item: any, type: string): void {
