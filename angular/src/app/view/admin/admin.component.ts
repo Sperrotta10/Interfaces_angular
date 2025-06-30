@@ -562,10 +562,71 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   applyFontStyle(font: any): void {
-    // Implementa la lógica para aplicar el estilo de fuente
-    this.fontName = font.name;
-    this.previewText = this.customPreviewText;
-    this.isFontLoaded = true;
+    // Aplicar los tamaños de fuente
+    this.titleFontSize = font.title;
+    this.subtitleFontSize = font.sub_title;
+    this.textFontSize = font.paragraph;
+    
+    // Aplicar los estilos al documento
+    this.applyCurrentFontStyles();
+    
+    // Mostrar confirmación
+    Swal.fire({
+        title: "¡Fuente aplicada!",
+        icon: "success",
+        timer: 1200,
+        showConfirmButton: false
+    });
+  }
+
+  applyCurrentFontStyles(): void {
+    // Enviar los estilos al servicio que maneja los estilos
+    const fontStyles = {
+        titleSize: this.titleFontSize,
+        subtitleSize: this.subtitleFontSize,
+        textSize: this.textFontSize
+    };
+    this.styleManager.applyFontStyles(fontStyles);
+  }
+
+  saveCurrentFontStyle(): void {
+    Swal.fire({
+        title: "¿Guardar configuración de fuentes?",
+        text: "¿Quieres guardar esta configuración en la base de datos?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Sí, guardar",
+        cancelButtonText: "No, cancelar"
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            const newFontStyle = {
+                name: `Configuración ${this.fontStyleCounter}`,
+                title: this.titleFontSize,
+                sub_title: this.subtitleFontSize,
+                paragraph: this.textFontSize
+            };
+
+            try {
+                await this.colorFontService.createFontStyles(newFontStyle);
+                this.fontStyleCounter++;
+                
+                Swal.fire({
+                    title: "¡Guardado!",
+                    text: "La configuración de fuentes ha sido guardada.",
+                    icon: "success",
+                    timer: 1200,
+                    showConfirmButton: false
+                });
+                this.fetchSavedStylesFont();
+            } catch (error) {
+                Swal.fire({
+                    title: "Error",
+                    text: "No se pudo guardar la configuración.",
+                    icon: "error"
+                });
+            }
+        }
+    });
   }
 
   onFileSelected(event: Event): void {
@@ -598,12 +659,32 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  resetFont(): void {
-    this.fontName = '';
-    this.fontURL = '';
-    this.isFontLoaded = false;
-    this.customPreviewText = 'Texto de prueba';
-    this.previewText = this.customPreviewText;
+  resetFontStyles(): void {
+    Swal.fire({
+        title: "¿Restablecer fuentes?",
+        text: "¿Quieres restablecer los tamaños de fuente a los valores por defecto?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sí, restablecer",
+        cancelButtonText: "No, cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Resetear los valores locales
+            this.titleFontSize = this.defaultStyles.titleSize;
+            this.subtitleFontSize = this.defaultStyles.subtitleSize;
+            this.textFontSize = this.defaultStyles.textSize;
+            
+            // Aplicar los estilos reseteados
+            this.applyCurrentFontStyles();
+            
+            Swal.fire({
+                title: "¡Fuentes restablecidas!",
+                icon: "success",
+                timer: 1200,
+                showConfirmButton: false
+            });
+        }
+    });
   }
 
 

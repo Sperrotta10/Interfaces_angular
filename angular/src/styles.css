@@ -1241,7 +1241,7 @@ strong{
 input[type="email"] {
   background-color: var(--ligth-color);
   color: var(--dark-color);
-  border: 3px solid var(--primary-color);
+  border: 1px solid var(--primary-color);
 }
 
 .lb-outerContainer{

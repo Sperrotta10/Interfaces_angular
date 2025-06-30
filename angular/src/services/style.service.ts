@@ -10,11 +10,11 @@ export class StyleManagerService {
   styles$ = this.currentStyles.asObservable();
   
   private defaultStyles = {
-    color_one: '#3498db',
-    color_two: '#ffffff',
-    color_three: '#95a5a6',
-    color_four: '#ecf0f1',
-    color_five: '#2c3e50',
+    color_one: '#092db0',
+    color_two: '#4B97F5',
+    color_three: '#AED6F5',
+    color_four: '#FFFFFF',
+    color_five: '#0D0D2E',
     titleSize: 32,
     subtitleSize: 24,
     textSize: 16
@@ -25,7 +25,6 @@ export class StyleManagerService {
   }
 
   private initializeStyles(): void {
-    // Solo en el navegador
     if (isPlatformBrowser(this.platformId)) {
       try {
         const savedStyles = localStorage.getItem('CurrentStyles');
@@ -36,7 +35,6 @@ export class StyleManagerService {
         this.applyStyles(this.defaultStyles, false);
       }
     } else {
-      // En SSR, usa los estilos por defecto
       this.currentStyles.next(this.defaultStyles);
     }
   }
@@ -51,6 +49,7 @@ export class StyleManagerService {
 
     if (isPlatformBrowser(this.platformId)) {
       this.setCssVariables(completeStyles);
+      this.setFontStyles(completeStyles); // Añadido para manejar fuentes
       if (saveToStorage) {
         try {
           localStorage.setItem('CurrentStyles', JSON.stringify(completeStyles));
@@ -61,6 +60,16 @@ export class StyleManagerService {
     }
   }
 
+  // Nuevo método específico para fuentes
+  applyFontStyles(fontStyles: {titleSize?: number, subtitleSize?: number, textSize?: number}): void {
+    const currentStyles = this.getCurrentStyles();
+    const newStyles = {
+      ...currentStyles,
+      ...fontStyles
+    };
+    this.applyStyles(newStyles);
+  }
+
   private setCssVariables(styles: any): void {
     const root = document.documentElement;
     root.style.setProperty('--primary-color', styles.color_one);
@@ -68,6 +77,14 @@ export class StyleManagerService {
     root.style.setProperty('--tertiary-color', styles.color_three);
     root.style.setProperty('--ligth-color', styles.color_four);
     root.style.setProperty('--dark-color', styles.color_five);
+  }
+
+  // Nuevo método para establecer variables CSS de fuentes
+  private setFontStyles(styles: any): void {
+    const root = document.documentElement;
+    root.style.setProperty('--title-font', `${styles.titleSize}px`);
+    root.style.setProperty('--subtitle-font', `${styles.subtitleSize}px`);
+    root.style.setProperty('--text-font', `${styles.textSize}px`);
   }
 
   resetToDefault(): void {
