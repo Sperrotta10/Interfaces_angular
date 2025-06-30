@@ -1263,14 +1263,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 /* Centrar el stepper y limitar el ancho */
+
+
 mat-horizontal-stepper {
   max-width: 100%;
   margin: auto;
-  background: var(--ligth-color);
+  background-color: var(--ligth-color);
   border-radius: 12px;
   box-shadow: 0 2px 16px var(--dark-color);
   padding: 24px 16px;
+  color: var(--dark-color);
+  font-family: var(--text-font);
 }
+
 
 /* Formularios más compactos */
 form {
@@ -1286,6 +1291,7 @@ form {
 mat-form-field {
   flex: 1 1 20%;
   min-width: 180px;
+  background-color: var(--ligth-color);
 }
 
 
@@ -1340,7 +1346,7 @@ button[mat-button]:hover {
   line-height: 1.2 !important;
 }
 
-.map-btn {
+map-btn {
   margin: 16px 0;
   padding: 12px 24px;
   font-size: var(--text-font);
@@ -1355,7 +1361,7 @@ button[mat-button]:hover {
     position: relative;
     width: 100%;
     background-color: var(--ligth-color);
-    height: 80vh;
+    height: 100vh;
     margin: 0 auto;
     border: 1px solid var(--ligth-color);
     border-radius: 4px;
@@ -1375,13 +1381,10 @@ button[mat-button]:hover {
 
 
 
-::ng-deep .mat-dialog-container.full-screen-modal {
-  padding: 0 !important;
-  margin: 0 !important;
-  width: 100vw !important;
-  max-width: 100vw !important;
-  height: 90vh !important;
-  max-height: 100vh !important;
-  border-radius: 0 !important;
+.step-label-red {
+  color: var(--primary-color) !important;
 }
+
+
+
 
