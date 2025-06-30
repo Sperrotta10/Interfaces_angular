@@ -1,7 +1,10 @@
-import { Component, ElementRef, ViewChild, OnInit, AfterViewInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, AfterViewInit, OnDestroy, Inject, PLATFORM_ID, effect } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService2 } from "../../../services/proyect2/api.service";
+import { ApiService1 } from '../../../services/proyect1/api.service';
+import { StyleManagerService } from '../../../services/style.service';
+import Swal from 'sweetalert2';
 
 // Declara jQuery globalmente para TypeScript
 declare var $: JQueryStatic;
@@ -16,6 +19,8 @@ declare var jQuery: JQueryStatic; // Algunos plugins de DataTables o versiones l
 })
 export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  // MODULO DE USUARIO
+
   @ViewChild('activeTable') activeTable!: ElementRef;
   @ViewChild('disabledTable') disabledTable!: ElementRef;
 
@@ -28,7 +33,6 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
   activeDataTable: any;
   disabledDataTable: any;
 
-  // Variables para modales personalizados (sin Bootstrap JS)
   showUserDetailsModal: boolean = false; // Controla la visibilidad del modal de detalles
   showConfirmModal: boolean = false;
   confirmAction: (() => Promise<void>) | null = null;
@@ -38,12 +42,22 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
   alertMessage: string = '';
   alertType: 'success' | 'error' | 'info' = 'info';
 
-  constructor(
-    private userService: ApiService2,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  constructor(private userService: ApiService2, private colorFontService : ApiService1, 
+    @Inject(PLATFORM_ID) private platformId: Object, private styleManager: StyleManagerService) {
+
+    effect(() => {
+      this.applyStylesToElements();
+    })
+  }
 
   async ngOnInit() {
+
+    // modulo de colores y fuentes
+    this.loadInitialStyles();
+    this.fetchSavedStyles();
+    this.fetchSavedStylesFont();
+
+    // modulo de usuario
     await this.reloadUsers();
     // Inicializar la tabla aquí después de que los datos estén disponibles
     // y solo si estamos en el navegador.
@@ -56,12 +70,7 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    // Este método se ejecutará DESPUÉS de ngOnInit y cuando la vista esté inicializada.
-    // Como ya llamamos a initDataTables en ngOnInit después de reloadUsers,
-    // este método podría ser más para configuraciones adicionales que requieran
-    // que los ViewChilds estén definitivamente listos.
-    // Para la inicialización de DataTables, ngOnInit con setTimeout(0) es más robusto
-    // porque se ejecuta después de la carga asíncrona de datos.
+    
   }
 
   ngOnDestroy(): void {
@@ -493,114 +502,449 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-  //Valores de colores defectos
-  headerBgColor = '#3498db';
-  titleColor = '#ffffff';
-  divBorderColor = '#95a5a6';
-  footerBgColor = '#2c3e50';
-  cardBgColor = '#ecf0f1';
 
-  titleFontSize = 36;
-  
+  // MODULO DE FUENTES y COLORES
 
-  //cambia modo de vista
+  saveMode: string = 'guardar';
+  isLoading: boolean = false;
+  error: any = null;
+  savedStylesColor: any[] = [];
+  savedStylesFont: any[] = [];
+  activeTab: string = 'colors';
+  editingItem: any = null;
+  editMode: boolean = false;
   vista_modo: 'colores' | 'letras' | 'usuarios' = 'colores';
 
+  //Valores de colores defectos
+  headerBgColor: string = '#3498db';
+  titleColor: string = '#ffffff';
+  divBorderColor: string = '#95a5a6';
+  footerBgColor: string = '#2c3e50';
+  cardBgColor: string = '#ecf0f1';
 
-  @ViewChild('fontPreview') fontPreview!: ElementRef<HTMLDivElement>;
-  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
-  
+  // Variables para tamaños de fuente
+  titleFontSize: number = 32;
+  subtitleFontSize: number = 24;
+  textFontSize: number = 16;
+
+  // Propiedades para manejo de fuentes
   fontName: string = '';
-  fontUrl: string | null = null;
-  previewText: string = 'OMG, nuevo estilo bang bang bang!';
-  customPreviewText: string = '';
   isFontLoaded: boolean = false;
+  customPreviewText: string = 'Texto de prueba';
+  previewText: string = this.customPreviewText;
+  fontURL: string = '';
+  
+  // Estilos por defecto
+  defaultStyles = {
+    primary_color: "#3498db",
+    secondary_color: "#ffffff",
+    tertiary_color: "#95a5a6",
+    dark_color: "#2c3e50",
+    ligth_color: "#ecf0f1",
+    titleSize: 32,
+    textSize: 16,
+    subtitleSize: 24
+  };
+
+  styleCounter: number = 0;
+  fontStyleCounter: number = 1;
+
+  private applyStylesImmediately(): void {
+    // Actualiza las variables CSS en el root
+    document.documentElement.style.setProperty('--primary-color', this.headerBgColor);
+    document.documentElement.style.setProperty('--secondary-color', this.titleColor);
+    document.documentElement.style.setProperty('--tertiary-color', this.divBorderColor);
+    document.documentElement.style.setProperty('--ligth-color', this.cardBgColor);
+    document.documentElement.style.setProperty('--dark-color', this.footerBgColor);
+    
+    // Guarda en localStorage
+    localStorage.setItem('CurrentStyles', JSON.stringify({
+      color_one: this.headerBgColor,
+      color_two: this.titleColor,
+      color_three: this.divBorderColor,
+      color_four: this.cardBgColor,
+      color_five: this.footerBgColor,
+      titleSize: this.titleFontSize,
+      subtitleSize: this.subtitleFontSize,
+      textSize: this.textFontSize
+    }));
+  }
+
+  applyFontStyle(font: any): void {
+    // Implementa la lógica para aplicar el estilo de fuente
+    this.fontName = font.name;
+    this.previewText = this.customPreviewText;
+    this.isFontLoaded = true;
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    
-    if (file && (file.type === 'font/ttf' || file?.name.endsWith('.ttf'))) {
-      this.fontName = file.name.replace('.ttf', '');
-      this.createFontUrl(file);
-    } else {
-      alert('Por favor sube archivo valido (ttf)');
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      if (file.name.endsWith(".ttf")) {
+        this.fontName = "UserFont";
+        this.fontURL = URL.createObjectURL(file);
+        this.isFontLoaded = true;
+      }
     }
-  }
-
-  private createFontUrl(file: File): void {
-    const reader = new FileReader();
-    
-    reader.onload = (e) => {
-      this.fontUrl = URL.createObjectURL(file);
-      this.loadFont();
-    };
-    
-    reader.readAsArrayBuffer(file);
-  }
-
-  private loadFont(): void {
-    if (!this.fontUrl || !this.fontName) return;
-
-    const fontFace = new FontFace(this.fontName, `url(${this.fontUrl})`);
-    
-    fontFace.load().then((loadedFace) => {
-      
-      if ('fonts' in document) {
-        
-        (document.fonts as any).add(loadedFace);
-      } else {
-        // Si anterior el codigo no se funciona, se usara esta
-        this.injectFontStyle(loadedFace);
-      }
-      
-      this.isFontLoaded = true;
-      this.updatePreview();
-    }).catch(err => {
-      console.error('Falla de carga ttf:', err);
-      alert('Falla de carga ttf, por favor buscar otro archivo de ttf');
-    });
-  }
-
-  private injectFontStyle(fontFace: FontFace): void {
-    const style = document.createElement('style');
-    style.textContent = `
-      @font-face {
-        font-family: '${fontFace.family}';
-        src: url(${this.fontUrl}) format('truetype');
-        font-display: swap;
-      }
-    `;
-    document.head.appendChild(style);
   }
 
   updatePreview(): void {
-    if (this.customPreviewText) {
-      this.previewText = this.customPreviewText;
-    }
-    
-    if (this.fontName && this.fontPreview) {
-      this.fontPreview.nativeElement.style.fontFamily = this.fontName;
-    }
+    this.previewText = this.customPreviewText;
   }
 
   applyFont(): void {
-    if (!this.fontName) return;
-    
-    // Aqui es un ejemplo para ver como se aplica el cambio de estilos
-    document.body.style.fontFamily = `'${this.fontName}', sans-serif`;
+    // Implementa la lógica para aplicar la fuente al documento
+    if (this.fontName && this.fontURL) {
+      const style = document.createElement('style');
+      style.innerHTML = `
+        @font-face {
+          font-family: '${this.fontName}';
+          src: url('${this.fontURL}') format('truetype');
+        }
+      `;
+      document.head.appendChild(style);
+    }
   }
 
   resetFont(): void {
-    this.fontUrl = null;
     this.fontName = '';
+    this.fontURL = '';
     this.isFontLoaded = false;
-    this.fileInput.nativeElement.value = '';
-    if (this.fontPreview) {
-      this.fontPreview.nativeElement.style.fontFamily = '';
+    this.customPreviewText = 'Texto de prueba';
+    this.previewText = this.customPreviewText;
+  }
+
+  private loadInitialStyles(): void {
+    const saved = localStorage.getItem('CurrentStyles');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      this.headerBgColor = parsed.color_one;
+      this.titleColor = parsed.color_two;
+      this.divBorderColor = parsed.color_three;
+      this.cardBgColor = parsed.color_four;
+      this.footerBgColor = parsed.color_five;
+      this.titleFontSize = parsed.titleSize || 32;
+      this.subtitleFontSize = parsed.subtitleSize || 24;
+      this.textFontSize = parsed.textSize || 16;
+    } else {
+      this.applyDefaultStyles();
     }
-    if (this.fontUrl) {
-      URL.revokeObjectURL(this.fontUrl);
+  }
+
+  private applyDefaultStyles(): void {
+    this.headerBgColor = this.defaultStyles.primary_color;
+    this.titleColor = this.defaultStyles.secondary_color;
+    this.divBorderColor = this.defaultStyles.tertiary_color;
+    this.cardBgColor = this.defaultStyles.ligth_color;
+    this.footerBgColor = this.defaultStyles.dark_color;
+    this.titleFontSize = this.defaultStyles.titleSize;
+    this.subtitleFontSize = this.defaultStyles.subtitleSize;
+    this.textFontSize = this.defaultStyles.textSize;
+  }
+
+  private applyStylesToElements(): void {
+    // Los estilos se aplican automáticamente mediante property binding en el template
+    // También actualizamos las variables CSS
+    document.documentElement.style.setProperty('--primary-color', this.headerBgColor);
+    document.documentElement.style.setProperty('--secondary-color', this.titleColor);
+    document.documentElement.style.setProperty('--tertiary-color', this.divBorderColor);
+    document.documentElement.style.setProperty('--ligth-color', this.cardBgColor);
+    document.documentElement.style.setProperty('--dark-color', this.footerBgColor);
+  }
+
+  async fetchSavedStyles(): Promise<void> {
+    try {
+      const response = await this.colorFontService.getStyles();
+      if (response) {
+        this.savedStylesColor = response.colors;
+        this.styleCounter = response.colors.length + 1;
+      }
+    } catch (error) {
+      console.error("Error al obtener los estilos guardados:", error);
     }
+  }
+
+  async fetchSavedStylesFont(): Promise<void> {
+    try {
+      const response = await this.colorFontService.getFontStyles();
+      if (response) {
+        this.savedStylesFont = response.fonts;
+      }
+    } catch (error) {
+      console.error("Error al obtener las fuentes guardadas:", error);
+    }
+  }
+
+  handleSaveOrEdit(): void {
+    if (this.saveMode === 'guardar') {
+      this.saveCurrentStyle();
+    } else {
+      // Pasar el editingItem actual al método de edición
+      if (this.editingItem) {
+        this.handleSaveEdit(this.editingItem);
+      } else {
+        console.error('No hay elemento seleccionado para editar');
+        Swal.fire({
+          title: 'Error',
+          text: 'No se ha seleccionado ninguna paleta para editar',
+          icon: 'error'
+        });
+      }
+    }
+  }
+
+  saveCurrentStyle(): void {
+    Swal.fire({
+      title: "¿Guardar paleta?",
+      text: "¿Quieres guardar esta paleta en la base de datos?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, guardar",
+      cancelButtonText: "No, cancelar"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const newStyle = {
+          moduleColor: {
+            name: `Paleta: ${this.styleCounter}`,
+            colors: {
+              color_one: this.headerBgColor,
+              color_two: this.titleColor,
+              color_three: this.divBorderColor,
+              color_four: this.cardBgColor,
+              color_five: this.footerBgColor
+            }
+          },
+        };
+
+        try {
+          await this.colorFontService.createStyles(newStyle);
+          this.styleCounter++;
+          this.fontStyleCounter++;
+
+          Swal.fire({
+            title: "¡Guardado!",
+            text: "La paleta ha sido guardada.",
+            icon: "success",
+            timer: 1200,
+            showConfirmButton: false
+          });
+          this.fetchSavedStyles();
+        } catch (error) {
+          Swal.fire({
+            title: "Error",
+            text: "No se pudo guardar la paleta.",
+            icon: "error"
+          });
+        }
+      }
+    });
+  }
+
+  resetStyles(): void {
+    Swal.fire({
+      title: "¿Restablecer estilos?",
+      text: "¿Quieres restablecer los estilos a los valores por defecto?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, restablecer",
+      cancelButtonText: "No, cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.applyDefaultStyles();
+        this.applyStylesImmediately();
+        localStorage.removeItem('CurrentStyles');
+        Swal.fire({
+          title: "¡Estilos restablecidos!",
+          icon: "success",
+          timer: 1200,
+          showConfirmButton: false
+        });
+      }
+    });
+  }
+
+  applyColorPalette(palette: any): void {
+    Swal.fire({
+      title: "¿Aplicar esta paleta?",
+      text: "¿Quieres aplicar estos colores a la interfaz?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, aplicar",
+      cancelButtonText: "No, cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.headerBgColor = palette.colors.color_one;
+        this.titleColor = palette.colors.color_two;
+        this.divBorderColor = palette.colors.color_three;
+        this.cardBgColor = palette.colors.color_four;
+        this.footerBgColor = palette.colors.color_five;
+
+        const newStyles = {
+          color_one : palette.colors.color_one,
+          color_two : palette.colors.color_two,
+          color_three : palette.colors.color_three,
+          color_four : palette.colors.color_four,
+          color_five : palette.colors.color_five
+        }
+
+        this.styleManager.updateStyles(newStyles);
+
+        this.applyStylesImmediately(); // Aplica los cambios inmediatamente
+
+        Swal.fire({
+          title: "¡Paleta aplicada!",
+          icon: "success",
+          timer: 1200,
+          showConfirmButton: false
+        });
+      }
+    });
+  }
+
+  async handleDeletePalette(colors_id: string): Promise<void> {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¡No podrás revertir esto!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "No, cancelar",
+      reverseButtons: true
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await this.colorFontService.deleteColors(colors_id);
+          this.styleCounter--;
+          this.fetchSavedStyles();
+          Swal.fire({
+            title: "¡Eliminado!",
+            text: "La paleta de colores ha sido eliminada.",
+            icon: "success"
+          });
+        } catch (error) {
+          console.error("Error al eliminar:", error);
+          Swal.fire({
+            title: "Error",
+            text: "No se pudo eliminar la paleta.",
+            icon: "error"
+          });
+        }
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire({
+          title: "Cancelado",
+          text: "Tu paleta está a salvo :)",
+          icon: "error"
+        });
+      }
+    });
+  }
+
+  async handleDeleteFontStyle(font_id: string): Promise<void> {
+    if (!window.confirm('¿Estás seguro de eliminar esta fuente?')) return;
+    try {
+      await this.colorFontService.deleteFonts(font_id);
+      this.fontStyleCounter--;
+      this.fetchSavedStylesFont();
+    } catch (error) {
+      console.error("Error al eliminar:", error);
+    }
+  }
+
+  handleEdit(item: any, type: string): void {
+    this.editingItem = item;
+    this.editMode = true;
+    this.saveMode = 'editar';
+    
+    if (type === 'color') {
+      this.headerBgColor = item.colors.color_one;
+      this.titleColor = item.colors.color_two;
+      this.divBorderColor = item.colors.color_three;
+      this.cardBgColor = item.colors.color_four;
+      this.footerBgColor = item.colors.color_five;
+    } else {
+      this.titleFontSize = item.title;
+      this.subtitleFontSize = item.sub_title;
+      this.textFontSize = item.paragraph;
+    }
+  }
+
+  async handleSaveEdit(item: any): Promise<void> {
+
+    console.log('handleSaveEdit called with item:', item);
+    if (!item) {
+      console.error('Item indefinido en handleSaveEdit');
+      return;
+    }
+
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás revertir esto!",    
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, editar!",
+      cancelButtonText: "No, cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          if (item.colors_id) {
+            const colors = {
+              color_one: this.headerBgColor,
+              color_two: this.titleColor,
+              color_three: this.divBorderColor,
+              color_four: this.cardBgColor,
+              color_five: this.footerBgColor
+            };
+            
+            // Actualiza en el backend
+            await this.colorFontService.updateColor(item.colors_id, colors);
+
+            // Actualiza en el frontend
+            this.savedStylesColor = this.savedStylesColor.map(c =>
+              c.colors_id === item.colors_id ? { 
+                ...c, 
+                colors,
+                name: `Paleta: ${item.colors_id}` 
+              } : c
+            );
+            
+            Swal.fire({
+              title: "¡Paleta Editada!",
+              icon: "success"
+            });
+          } else {
+            // Lógica para fuentes (similar)
+            const fontStyles = {
+              title: this.titleFontSize,
+              sub_title: this.subtitleFontSize,
+              paragraph: this.textFontSize
+            };
+
+            await this.colorFontService.updateFont(item.font_id, fontStyles);
+
+            this.savedStylesFont = this.savedStylesFont.map(f =>
+              f.font_id === item.font_id ? { ...f, ...fontStyles } : f
+            );
+          }
+
+          this.editMode = false;
+          this.editingItem = null;
+          this.saveMode = 'guardar';
+          
+          // No necesitamos incrementar los contadores en edición
+          this.fetchSavedStyles(); // Refrescar la lista
+          
+        } catch (error) {
+          console.error("Error al actualizar:", error);
+          Swal.fire({
+            title: "Error",
+            text: "No se pudo actualizar la paleta",
+            icon: "error"
+          });
+        }
+      }
+    });
   }
 }
