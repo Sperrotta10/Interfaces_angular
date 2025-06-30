@@ -9,18 +9,17 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--focus-border-color) 0%, #d9e2ec 100%);
   padding: 20px;
   box-sizing: border-box;
   font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  color: var(--text-color);
+  color: var(--secundary-color);
   -webkit-font-smoothing: antialiased; /* Mejorar la suavidad de las fuentes */
   -moz-osx-font-smoothing: grayscale;
 }
 
 /* Tarjeta de autenticación (login/registro) */
 .auth-card {
-  background-color: var(--card-bg-color);
+  background-color: var(--secundary-color);
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   padding: 40px;
@@ -47,12 +46,12 @@
 .auth-header {
   margin-bottom: 30px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--secundary-color);
 }
 
 .auth-header h1 {
   font-size: 2.2em;
-  color: var(--text-color);
+  color: var(--dark-color);
   margin: 0;
   font-weight: 700;
   letter-spacing: -0.5px;
@@ -80,7 +79,7 @@
   
   margin-bottom: 8px;
   font-weight: 600;
-  color: #000000;
+  color: var(--dark-color);
   font-size: 0.95em;
   line-height: 1.2; /* Mejora la legibilidad */
 }
@@ -88,13 +87,13 @@
 .form-input {
   width: 100%;
   padding: 12px 15px;
-  border: 1px solid #000000;
+  border: 1px solid var(--dark-color);
   border-radius: 8px;
   font-size: 1em;
   color: var(--text-color);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   box-sizing: border-box;
-  background-color: var(--card-bg-color);
+  background-color: var(--secundary-color);
   -webkit-appearance: none; /* Resetear estilos por defecto en Webkit */
   -moz-appearance: none; /* Resetear estilos por defecto en Firefox */
   appearance: none; /* Resetear estilos por defecto en otros navegadores */
@@ -102,7 +101,7 @@
 
 .form-input:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px var(--focus-shadow-color);
+  box-shadow: 0 0 0 3px var(--dark-color);
   outline: none;
 }
 
@@ -137,15 +136,15 @@
 
 /* Botón de envío */
 .auth-button {
-  background: #4a5fe8;
-  color: #ffffff; /* Cambiado a blanco para contraste con el degradado azul */
+  background: var(--primary-color);
+  color: var(--secundary-color); /* Cambiado a blanco para contraste con el degradado azul */
   padding: 15px 25px;
   border: none;
   border-radius: 8px;
   font-size: 1.1em;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px var(--dark-color);
   letter-spacing: 0.5px;
   width: 100%;
   margin-top: 10px;
@@ -162,7 +161,7 @@
   left: -75%;
   width: 50%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--ligth-color);
   transform: skewX(-20deg);
   transition: all 0.5s;
   z-index: -1;
@@ -173,14 +172,14 @@
 }
 
 .auth-button:hover {
-  background: linear-gradient(45deg, #4a5fe8, #1324bf);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(45deg, var(--primary-color), #1324bf);
+  box-shadow: 0 6px 20px var(--dark-color);
   transform: translateY(-2px);
 }
 
 .auth-button:active {
   transform: translateY(0);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px var(--dark-color);
 }
 
 /* Modo de alternancia (Login/Registro) */
@@ -188,10 +187,10 @@
   display: flex;
   justify-content: center;
   margin-bottom: 25px;
-  background-color: #e0e6ed;
+  background-color: var(--ligth-color);
   border-radius: 8px;
   padding: 5px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 1px 3px var(--dark-color);
 }
 
 .toggle-button {
@@ -200,7 +199,7 @@
   border: none;
   border-radius: 6px;
   background-color: transparent;
-  color: #000000;
+  color: var(--dark-color);
   font-size: 1em;
   font-weight: 600;
   cursor: pointer;
@@ -209,13 +208,13 @@
 }
 
 .toggle-button.active {
-  background: #4a5fe8;
-  color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  background: var(--primary-color);
+  color: var(--secundary-color);
+  box-shadow: 0 2px 8px var(--dark-color);
 }
 
 .toggle-button:not(.active):hover {
-  background-color: #c9d6e5;
+  background-color: var(--tertiary-color);
 }
 
 /* Media Queries para Responsividad */

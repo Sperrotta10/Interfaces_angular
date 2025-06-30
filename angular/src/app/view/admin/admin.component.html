@@ -136,26 +136,22 @@
             </div>
         </div>
 
-        <div class="row">
-            <fieldset class="control-panel">
-                <div class="saved-styles">
-                    <h3>Fuentes guardadas</h3>
-                    <div id="savedFontsList">
-                        <div class="saved-style-item" *ngFor="let font of savedStylesFont">
-                            <div class="font-preview">
-                                <p>Título: {{font.title}}px</p>
-                                <p>Subtítulo: {{font.sub_title}}px</p>
-                                <p>Texto: {{font.paragraph}}px</p>
-                            </div>
-                            <div class="style-actions">
-                                <button (click)="applyFontStyle(font)">Aplicar</button>
-                                <button (click)="handleEdit(font, 'font')">Editar</button>
-                                <button (click)="handleDeleteFontStyle(font.font_id)">Eliminar</button>
-                            </div>
-                        </div>
+        <div class="saved-styles">
+            <h3>Fuentes guardadas</h3>
+            <div id="savedFontsList">
+                <div class="saved-style-item" *ngFor="let font of savedStylesFont">
+                    <div class="font-preview">
+                        <p>Título: {{font.title}}px</p>
+                        <p>Subtítulo: {{font.sub_title}}px</p>
+                        <p>Texto: {{font.paragraph}}px</p>
+                    </div>
+                    <div class="style-actions">
+                        <button (click)="applyFontStyle(font)">Aplicar</button>
+                        <button (click)="handleEdit(font, 'font')">Editar</button>
+                        <button (click)="handleDeleteFontStyle(font.font_id)">Eliminar</button>
                     </div>
                 </div>
-            </fieldset>
+            </div>
         </div>
     </div>
 

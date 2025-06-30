@@ -46,14 +46,25 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object, private styleManager: StyleManagerService) {
 
     effect(() => {
-      this.applyStylesToElements();
+
+      if( isPlatformBrowser(this.platformId)) {
+        this.syncLocalStyles();
+      }
     })
   }
 
   async ngOnInit() {
 
     // modulo de colores y fuentes
-    this.loadInitialStyles();
+    if (isPlatformBrowser(this.platformId)) {
+      this.styleManager.styles$.subscribe(styles => {
+        this.syncLocalStyles();
+      });
+    
+      // Carga inicial
+      this.syncLocalStyles();
+    }
+
     this.fetchSavedStyles();
     this.fetchSavedStylesFont();
 
@@ -549,26 +560,6 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
   styleCounter: number = 0;
   fontStyleCounter: number = 1;
 
-  private applyStylesImmediately(): void {
-    // Actualiza las variables CSS en el root
-    document.documentElement.style.setProperty('--primary-color', this.headerBgColor);
-    document.documentElement.style.setProperty('--secondary-color', this.titleColor);
-    document.documentElement.style.setProperty('--tertiary-color', this.divBorderColor);
-    document.documentElement.style.setProperty('--ligth-color', this.cardBgColor);
-    document.documentElement.style.setProperty('--dark-color', this.footerBgColor);
-    
-    // Guarda en localStorage
-    localStorage.setItem('CurrentStyles', JSON.stringify({
-      color_one: this.headerBgColor,
-      color_two: this.titleColor,
-      color_three: this.divBorderColor,
-      color_four: this.cardBgColor,
-      color_five: this.footerBgColor,
-      titleSize: this.titleFontSize,
-      subtitleSize: this.subtitleFontSize,
-      textSize: this.textFontSize
-    }));
-  }
 
   applyFontStyle(font: any): void {
     // Implementa la lógica para aplicar el estilo de fuente
@@ -615,42 +606,22 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
     this.previewText = this.customPreviewText;
   }
 
-  private loadInitialStyles(): void {
-    const saved = localStorage.getItem('CurrentStyles');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      this.headerBgColor = parsed.color_one;
-      this.titleColor = parsed.color_two;
-      this.divBorderColor = parsed.color_three;
-      this.cardBgColor = parsed.color_four;
-      this.footerBgColor = parsed.color_five;
-      this.titleFontSize = parsed.titleSize || 32;
-      this.subtitleFontSize = parsed.subtitleSize || 24;
-      this.textFontSize = parsed.textSize || 16;
-    } else {
-      this.applyDefaultStyles();
-    }
-  }
 
   private applyDefaultStyles(): void {
-    this.headerBgColor = this.defaultStyles.primary_color;
-    this.titleColor = this.defaultStyles.secondary_color;
-    this.divBorderColor = this.defaultStyles.tertiary_color;
-    this.cardBgColor = this.defaultStyles.ligth_color;
-    this.footerBgColor = this.defaultStyles.dark_color;
-    this.titleFontSize = this.defaultStyles.titleSize;
-    this.subtitleFontSize = this.defaultStyles.subtitleSize;
-    this.textFontSize = this.defaultStyles.textSize;
+    // Ahora simplemente llama al reset del servicio
+    this.styleManager.resetToDefault();
   }
 
-  private applyStylesToElements(): void {
-    // Los estilos se aplican automáticamente mediante property binding en el template
-    // También actualizamos las variables CSS
-    document.documentElement.style.setProperty('--primary-color', this.headerBgColor);
-    document.documentElement.style.setProperty('--secondary-color', this.titleColor);
-    document.documentElement.style.setProperty('--tertiary-color', this.divBorderColor);
-    document.documentElement.style.setProperty('--ligth-color', this.cardBgColor);
-    document.documentElement.style.setProperty('--dark-color', this.footerBgColor);
+  private syncLocalStyles(): void {
+    // Sincroniza las propiedades del componente con los estilos actuales
+    const currentStyles = this.styleManager.getCurrentStyles();
+    this.headerBgColor = currentStyles.color_one;
+    this.titleColor = currentStyles.color_two;
+    this.divBorderColor = currentStyles.color_three;
+    this.cardBgColor = currentStyles.color_four;
+    this.footerBgColor = currentStyles.color_five;
+    
+    // Si necesitas hacer algo adicional con estos valores...
   }
 
   async fetchSavedStyles(): Promise<void> {
@@ -752,7 +723,6 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
     }).then((result) => {
       if (result.isConfirmed) {
         this.applyDefaultStyles();
-        this.applyStylesImmediately();
         localStorage.removeItem('CurrentStyles');
         Swal.fire({
           title: "¡Estilos restablecidos!",
@@ -774,24 +744,16 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
       cancelButtonText: "No, cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.headerBgColor = palette.colors.color_one;
-        this.titleColor = palette.colors.color_two;
-        this.divBorderColor = palette.colors.color_three;
-        this.cardBgColor = palette.colors.color_four;
-        this.footerBgColor = palette.colors.color_five;
-
         const newStyles = {
-          color_one : palette.colors.color_one,
-          color_two : palette.colors.color_two,
-          color_three : palette.colors.color_three,
-          color_four : palette.colors.color_four,
-          color_five : palette.colors.color_five
-        }
-
-        this.styleManager.updateStyles(newStyles);
-
-        this.applyStylesImmediately(); // Aplica los cambios inmediatamente
-
+          color_one: palette.colors.color_one,
+          color_two: palette.colors.color_two,
+          color_three: palette.colors.color_three,
+          color_four: palette.colors.color_four,
+          color_five: palette.colors.color_five
+        };
+        
+        this.styleManager.applyStyles(newStyles);
+        
         Swal.fire({
           title: "¡Paleta aplicada!",
           icon: "success",

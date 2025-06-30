@@ -1109,7 +1109,7 @@ h6 {
 #footer .copyright {
   text-align: center;
   padding-top: 30px;
-  color: var(--light-color)
+  color: var(--ligth-color)
 }
 
 #footer .credits {
@@ -1308,7 +1308,7 @@ button[mat-button] {
   min-width: 100px;
 }
 button[mat-button]:hover {
-  background: var(--light-color);
+  background: var(--ligth-color);
 }
 
 /* Responsive para móviles */

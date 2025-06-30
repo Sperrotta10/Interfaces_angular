@@ -16,7 +16,7 @@ body {
 .playground {
     background-color: #fff;
     border-radius: 8px;
-    min-height: 200px;
+    
 }
 
 .control-panel {
@@ -69,6 +69,41 @@ input[type="file"] {
 
 .saved-styles {
   margin-top: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#savedFontsList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* Estilo de scroll */
+#savedFontsList::-webkit-scrollbar {
+  width: 8px;
+}
+
+#savedFontsList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+#savedFontsList::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+#savedFontsList::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 .saved-style-item {
@@ -191,10 +226,19 @@ h1 {
     }
 }
 
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 300px;
+    min-height: 310px;
+    gap: 20px;
+}
+
 .font-section {
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 20px;
 }
 
 .color-section {
@@ -522,20 +566,6 @@ h1 {
 }
 
 /* Estilos para la sección de usuarios */
-/* Variables de color para fácil mantenimiento */
-:root {
-  --primary-color: #3b82f6; /* Azul fuerte para elementos principales */
-  --secondary-color: #6c757d; /* Gris para elementos secundarios */
-  --success-color: #10b981; /* Verde para éxito */
-  --danger-color: #ef4444; /* Rojo para peligro */
-  --info-color: #51c8ff; /* Azul cian para información */
-  --warning-color: #ffc107; /* Amarillo para advertencia */
-  --background-light: #f8f9fa; /* Fondo general claro */
-  --card-background: #ffffff; /* Fondo de tarjetas */
-  --border-color-light: #e2e8f0; /* Color de borde claro */
-  --text-dark: #2c3e50; /* Texto oscuro principal */
-  --text-light: #ffffff; /* Texto claro */
-}
 
 /* Estilos generales para la sección de usuarios */
 .usuario-section {
