@@ -59,7 +59,7 @@
             <fieldset class="control-panel">
                 <div class="saved-styles">
                     <h3>Estilos guardados</h3>
-                    <div id="savedStylesList" >
+                    <div id="savedStylesList" class="custom-scrollbar" >
                         <div class="saved-style-item" *ngFor="let style of savedStylesColor">
                             <span>{{style.name}}</span>
                             <div class="color-preview">
@@ -138,7 +138,7 @@
 
         <div class="saved-styles">
             <h3>Fuentes guardadas</h3>
-            <div id="savedFontsList">
+            <div id="savedFontsList" class="custom-scrollbar">
                 <div class="saved-style-item" *ngFor="let font of savedStylesFont">
                     <div class="font-preview">
                         <p>Título: {{font.title}}px</p>
@@ -153,6 +153,41 @@
                 </div>
             </div>
         </div>
+
+        <div>
+            <div class="font-upload-container">
+                <h2>Subir Fuentes de letras</h2>
+                
+                <div class="upload-section">
+                    <input #fileInput type="file" accept=".ttf, font/ttf" (change)="onFileSelected($event)" hidden>
+                    <button class="upload-btn" (click)="fileInput.click()">Elige .TTF Archivos</button>
+                    <span *ngIf="fontName">{{ fontName }} </span>
+                </div>
+            
+                <div class="preview-controls" *ngIf="isFontLoaded">
+                    <div class="form-group">
+                    <label for="previewText">Preview:</label>
+                    <input id="previewText" type="text" [(ngModel)]="customPreviewText" (input)="updatePreview()">
+                    </div>
+                    
+                    <div class="button-group">
+                    <button class="apply-btn" (click)="applyFont()">Aplica</button>
+                    </div>
+                </div>
+            
+                <div #fontPreview class="font-preview" [style.fontFamily]="fontName">
+                    {{ previewText }}
+                </div>
+
+                <div class="control_boton">
+                    <!--(Ver la etiqueta arriba, para ver como se cambia) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+                                <label for="titleFontSize">Tamaño de letras para Título (px): </label>
+                                <input type="number" id="titleFontSize" [(ngModel)]="titleFontSize" min="10" max="50">
+                </div>
+            </div>
+
+        </div>
+
     </div>
 
     <div class="usuario-section" *ngIf="vista_modo === 'usuarios'">
@@ -302,36 +337,3 @@
 
 
 <!-- Ejemplo para ver como se cambia las letras-->
-<div>
-    <div class="font-upload-container">
-        <h2>Subir Fuentes de letras</h2>
-        
-        <div class="upload-section">
-            <input #fileInput type="file" accept=".ttf, font/ttf" (change)="onFileSelected($event)" hidden>
-            <button class="upload-btn" (click)="fileInput.click()">Elige .TTF Archivos</button>
-            <span *ngIf="fontName">{{ fontName }} </span>
-        </div>
-    
-        <div class="preview-controls" *ngIf="isFontLoaded">
-            <div class="form-group">
-            <label for="previewText">Preview:</label>
-            <input id="previewText" type="text" [(ngModel)]="customPreviewText" (input)="updatePreview()">
-            </div>
-            
-            <div class="button-group">
-            <button class="apply-btn" (click)="applyFont()">Aplica</button>
-            </div>
-        </div>
-    
-        <div #fontPreview class="font-preview" [style.fontFamily]="fontName">
-            {{ previewText }}
-        </div>
-
-        <div class="control_boton">
-            <!--(Ver la etiqueta arriba, para ver como se cambia) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
-                        <label for="titleFontSize">Tamaño de letras para Título (px): </label>
-                        <input type="number" id="titleFontSize" [(ngModel)]="titleFontSize" min="10" max="50">
-        </div>
-    </div>
-
-</div>
