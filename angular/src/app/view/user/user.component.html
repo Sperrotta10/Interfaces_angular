@@ -3,11 +3,31 @@
   <mat-step [stepControl]="paso1Form">
     <form [formGroup]="paso1Form">
       <ng-template matStepLabel>Datos personales</ng-template>
-      <mat-form-field appearance="outline"><input matInput placeholder="Nombre" formControlName="firstName"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Apellido" formControlName="lastName"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Segundo apellido" formControlName="maidenName"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput type="number" placeholder="Edad" formControlName="age"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Género" formControlName="gender"></mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Nombre" formControlName="firstName">
+        <mat-error *ngIf="paso1Form.get('firstName')?.hasError('required')">El nombre es obligatorio</mat-error>
+        <mat-error *ngIf="paso1Form.get('firstName')?.hasError('pattern')">Solo letras permitidas</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Apellido" formControlName="lastName">
+        <mat-error *ngIf="paso1Form.get('lastName')?.hasError('required')">El apellido es obligatorio</mat-error>
+        <mat-error *ngIf="paso1Form.get('lastName')?.hasError('pattern')">Solo letras permitidas</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Segundo apellido" formControlName="maidenName">
+        <mat-error *ngIf="paso1Form.get('maidenName')?.hasError('pattern')">Solo letras permitidas</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput type="number" inputmode="numeric" pattern="[0-9]*" placeholder="Edad" formControlName="age">
+        <mat-error *ngIf="paso1Form.get('age')?.hasError('required')">La edad es obligatoria</mat-error>
+        <mat-error *ngIf="paso1Form.get('age')?.hasError('pattern')">Solo números permitidos</mat-error>
+        <mat-error *ngIf="paso1Form.get('age')?.hasError('min')">Edad mínima: 0</mat-error>
+        <mat-error *ngIf="paso1Form.get('age')?.hasError('max')">Edad máxima: 120</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Género" formControlName="gender">
+        <mat-error *ngIf="paso1Form.get('gender')?.hasError('pattern')">Solo letras permitidas</mat-error>
+      </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Choose a date</mat-label>
         <input matInput [matDatepicker]="picker" [max]="maxDate" formControlName="birthDate">
@@ -18,16 +38,17 @@
       <mat-form-field appearance="outline"><input matInput placeholder="Grupo sanguíneo" formControlName="bloodGroup"></mat-form-field>
       <mat-form-field appearance="outline">
         <input matInput type="number" placeholder="Altura (centímetros)" formControlName="height">
+        <mat-error *ngIf="paso1Form.get('height')?.hasError('pattern')">Solo números válidos</mat-error>
       </mat-form-field>
-      
       <mat-form-field appearance="outline">
         <input matInput type="number" placeholder="Peso (Kílogramos)" formControlName="weight">
+        <mat-error *ngIf="paso1Form.get('weight')?.hasError('pattern')">Solo números válidos</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Color de ojos" formControlName="eyeColor"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Color de cabello" formControlName="hair_color"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Tipo de cabello" formControlName="hair_type"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="URL de imagen" formControlName="image"></mat-form-field>
-      <div><button mat-button matStepperNext>Siguiente</button></div>
+      <div><button mat-button matStepperNext [disabled]="!paso1Form.valid">Siguiente</button></div>
     </form>
   </mat-step>
 
@@ -35,16 +56,31 @@
   <mat-step [stepControl]="paso2Form">
     <form [formGroup]="paso2Form">
       <ng-template matStepLabel>Contacto</ng-template>
-      <mat-form-field appearance="outline"><input matInput placeholder="Correo electrónico" formControlName="email"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Teléfono" formControlName="phone"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Usuario" formControlName="user_name"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput type="password" placeholder="Contraseña" formControlName="password"></mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Correo electrónico" formControlName="email">
+        <mat-error *ngIf="paso2Form.get('email')?.hasError('required')">El correo es obligatorio</mat-error>
+        <mat-error *ngIf="paso2Form.get('email')?.hasError('email')">Correo inválido</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Teléfono" formControlName="phone">
+        <mat-error *ngIf="paso2Form.get('phone')?.hasError('pattern')">Solo números permitidos</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Usuario" formControlName="user_name">
+        <mat-error *ngIf="paso2Form.get('user_name')?.hasError('required')">El usuario es obligatorio</mat-error>
+        <mat-error *ngIf="paso2Form.get('user_name')?.hasError('pattern')">Solo letras, números y guion bajo</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput type="password" placeholder="Contraseña" formControlName="password">
+        <mat-error *ngIf="paso2Form.get('password')?.hasError('required')">La contraseña es obligatoria</mat-error>
+        <mat-error *ngIf="paso2Form.get('password')?.hasError('minlength')">Mínimo 6 caracteres</mat-error>
+      </mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="IP" formControlName="ip"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="MAC Address" formControlName="macAddress"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="User Agent" formControlName="userAgent"></mat-form-field>
       <div>
         <button mat-button matStepperPrevious>Anterior</button>
-        <button mat-button matStepperNext>Siguiente</button>
+        <button mat-button matStepperNext [disabled]="!paso2Form.valid">Siguiente</button>
       </div>
     </form>
   </mat-step>
@@ -53,22 +89,38 @@
   <mat-step [stepControl]="paso3Form">
     <form [formGroup]="paso3Form">
       <ng-template matStepLabel>Dirección</ng-template>
-      <button mat-raised-button color="primary" (click)="openMapModal()">
+      <button mat-raised-button color="var(--primary-color)" (click)="openMapModal()">
         <mat-icon>place</mat-icon>
         Seleccionar ubicación en mapa
       </button>
-      <mat-form-field appearance="outline"><input matInput placeholder="Dirección" formControlName="address_address"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Ciudad" formControlName="address_city"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Estado" formControlName="address_state"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Código de estado" formControlName="address_stateCode"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Código postal" formControlName="address_postalCode"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput type="number" placeholder="Latitud" formControlName="address_coordinates_lat"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput type="number" placeholder="Longitud" formControlName="address_coordinates_lng"></mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Dirección" formControlName="address_address">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Ciudad" formControlName="address_city">
+        <mat-error *ngIf="paso3Form.get('address_city')?.hasError('pattern')">Solo letras permitidas</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Estado" formControlName="address_state">
+        <mat-error *ngIf="paso3Form.get('address_state')?.hasError('pattern')">Solo letras permitidas</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Código postal" formControlName="address_postalCode">
+        <mat-error *ngIf="paso3Form.get('address_postalCode')?.hasError('pattern')">Solo números permitidos</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput type="number" placeholder="Latitud" formControlName="address_coordinates_lat">
+        <mat-error *ngIf="paso3Form.get('address_coordinates_lat')?.hasError('pattern')">Formato inválido (ej: 19.4326)</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput type="number" placeholder="Longitud" formControlName="address_coordinates_lng">
+        <mat-error *ngIf="paso3Form.get('address_coordinates_lng')?.hasError('pattern')">Formato inválido (ej: -99.1332)</mat-error>
+      </mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="País" formControlName="address_country"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Universidad" formControlName="university"></mat-form-field>
       <div>
         <button mat-button matStepperPrevious>Anterior</button>
-        <button mat-button matStepperNext>Siguiente</button>
+        <button mat-button matStepperNext [disabled]="!paso3Form.valid">Siguiente</button>
       </div>
     </form>
   </mat-step>
@@ -77,7 +129,11 @@
   <mat-step [stepControl]="paso4Form">
     <form [formGroup]="paso4Form">
       <ng-template matStepLabel>Banco y Cripto</ng-template>
-      <mat-form-field appearance="outline"><input matInput placeholder="Vencimiento tarjeta" formControlName="bank_cardExpire"></mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput [matDatepicker]="cardExpirePicker" placeholder="Vencimiento tarjeta" formControlName="bank_cardExpire">
+        <mat-datepicker-toggle matSuffix [for]="cardExpirePicker"></mat-datepicker-toggle>
+        <mat-datepicker #cardExpirePicker></mat-datepicker>
+      </mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Número de tarjeta" formControlName="bank_cardNumber"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Tipo de tarjeta" formControlName="bank_cardType"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Moneda" formControlName="bank_currency"></mat-form-field>
@@ -87,7 +143,7 @@
       <mat-form-field appearance="outline"><input matInput placeholder="Red cripto" formControlName="crypto_network"></mat-form-field>
       <div>
         <button mat-button matStepperPrevious>Anterior</button>
-        <button mat-button matStepperNext>Siguiente</button>
+        <button mat-button matStepperNext [disabled]="!paso4Form.valid">Siguiente</button>
       </div>
     </form>
   </mat-step>
@@ -97,25 +153,45 @@
     <form [formGroup]="paso5Form">
       <ng-template matStepLabel>Datos Empresariales</ng-template>
       <mat-form-field appearance="outline"><input matInput placeholder="Departamento" formControlName="company_department"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Empresa" formControlName="company_name"></mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Empresa" formControlName="company_name">
+        <mat-error *ngIf="paso5Form.get('company_name')?.hasError('pattern')">Solo letras y números permitidos</mat-error>
+      </mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Cargo" formControlName="company_title"></mat-form-field>
-      <button mat-raised-button color="accent" class="map-btn" (click)="openCompanyMapModal()">
+      <button mat-raised-button color="var(--primary-color)" class="map-btn" (click)="openCompanyMapModal()">
         <mat-icon>map</mat-icon>
         Seleccionar ubicación en mapa
       </button>
       <mat-form-field appearance="outline"><input matInput placeholder="Dirección empresa" formControlName="company_address_address"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Ciudad empresa" formControlName="company_address_city"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Estado empresa" formControlName="company_address_state"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Código estado empresa" formControlName="company_address_stateCode"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Código postal empresa" formControlName="company_address_postalCode"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput type="number" placeholder="Latitud empresa" formControlName="company_address_coordinates_lat"></mat-form-field>
-      <mat-form-field appearance="outline"><input matInput type="number" placeholder="Longitud empresa" formControlName="company_address_coordinates_lng"></mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Ciudad empresa" formControlName="company_address_city">
+        <mat-error *ngIf="paso5Form.get('company_address_city')?.hasError('pattern')">Solo letras permitidas</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Estado empresa" formControlName="company_address_state">
+        <mat-error *ngIf="paso5Form.get('company_address_state')?.hasError('pattern')">Solo letras permitidas</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Código estado empresa" formControlName="company_address_stateCode">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Código postal empresa" formControlName="company_address_postalCode">
+        <mat-error *ngIf="paso5Form.get('company_address_postalCode')?.hasError('pattern')">Solo números permitidos</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput type="number" placeholder="Latitud empresa" formControlName="company_address_coordinates_lat">
+        <mat-error *ngIf="paso5Form.get('company_address_coordinates_lat')?.hasError('pattern')">Solo números válidos</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput type="number" placeholder="Longitud empresa" formControlName="company_address_coordinates_lng">
+        <mat-error *ngIf="paso5Form.get('company_address_coordinates_lng')?.hasError('pattern')">Solo números válidos</mat-error>
+      </mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="País empresa" formControlName="company_address_country"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="EIN" formControlName="ein"></mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="SSN" formControlName="ssn"></mat-form-field>
       <div>
         <button mat-button matStepperPrevious>Anterior</button>
-        <button mat-button matStepperNext>Siguiente</button>
+        <button mat-button matStepperNext [disabled]="!paso5Form.valid">Siguiente</button>
       </div>
     </form>
   </mat-step>
@@ -123,13 +199,16 @@
   <!-- Confirmación -->
   <mat-step>
     <ng-template matStepLabel>Confirmación</ng-template>
-    <pre>{{ formGrupo.value | json }}</pre>
+    <div *ngIf="getFormErrors().length > 0" style="color:var(--primary-color); margin-bottom: 1em;">
+      <strong><span class="step-label-red">Campos con errores:</span></strong>
+      <ul>
+        <li *ngFor="let err of getFormErrors()">{{ err }}</li>
+      </ul>
+    </div>
     <div>
       <button mat-button matStepperPrevious>Anterior</button>
-      <button mat-button (click)="confirmAndSubmit()"
-      >
+      <button mat-button (click)="confirmAndSubmit()" [disabled]="getFormErrors().length > 0">
         Enviar
-      
       </button>
     </div>
   </mat-step>

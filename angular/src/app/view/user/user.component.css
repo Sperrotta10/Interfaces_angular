@@ -1,0 +1,140 @@
+mat-horizontal-stepper {
+  max-width: 100%;
+  margin: auto;
+  background-color: var(--ligth-color);
+  border-radius: 12px;
+  box-shadow: 0 2px 16px var(--dark-color);
+  padding: 24px 16px;
+  color: var(--dark-color);
+  font-family: var(--text-font);
+}
+
+::ng-deep .mat-mdc-dialog-surface{
+    width: 70% !important;
+    height: 80% !important;
+}
+
+::ng-deep .mat-mdc-raised-button:not(:disabled){
+    background-color: var(--ligth-color) !important;
+    color: var(--dark-color) !important;
+    font-size: var(--text-font) !important;
+}
+
+::ng-deep .mat-step-icon-content, 
+::ng-deep .mat-step-icon, ::ng-deep .mat-step-icon-state-number,
+::ng-deep .mat-step-icon-selected,
+::ng-deep .mat-step-text-label{
+    background-color: var(--ligth-color) !important;
+    color: var(--dark-color) !important;
+    font-size: var(--text-font) !important;   
+    border-color: var(--primary-color);
+}
+
+::ng-deep .mat-stepper-horizontal-line{
+    background-color: var(--ligth-color) !important;
+    border-top-color: var(--dark-color) !important;
+}
+
+::ng-deep .mdc-text-field--outlined,
+::ng-deep .mat-mdc-form-field-infix,
+::ng-deep  .mdc-text-field--no-label,
+::ng-deep .mat-mdc-form-field-infix{ 
+    font-family: var(--text-font) !important;
+    color: var(--dark-color) !important;
+    border-color: var(--dark-color) !important;
+}
+
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input{
+    color: var(--dark-color) !important;
+    font-family: var(--text-font) !important;
+    caret-color: var(--dark-color) !important;
+}
+
+/* Responsive Stepper y Formulario */
+@media (max-width: 900px) {
+  mat-horizontal-stepper {
+    padding: 8px 0;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  ::ng-deep .mat-mdc-dialog-surface {
+    width: 98vw !important;
+    height: 90vh !important;
+    min-width: unset !important;
+    min-height: unset !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+  }
+}
+
+@media (max-width: 600px) {
+  mat-horizontal-stepper {
+    padding: 0;
+    box-shadow: none;
+    border-radius: 0;
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    max-height: 100dvh;
+    overflow-y: auto;
+    min-height: 0;
+  }
+  form {
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    gap: 8px;
+    padding: 0;
+    align-items: stretch;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    max-height: 100dvh;
+    overflow-y: auto;
+    min-height: 0;
+  }
+  mat-form-field {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 100% !important;
+    margin: 0 !important;
+  }
+  .step-buttons, form > div, div[mat-dialog-actions] {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin-top: 8px;
+    width: 100%;
+  }
+  button[mat-button] {
+    min-width: 80px;
+    width: 100%;
+    font-size: 15px;
+  }
+  .step-label-red {
+    font-size: 18px !important;
+  }
+  .mat-step-label {
+    font-size: 15px !important;
+  }
+  ::ng-deep .mat-horizontal-stepper-header-container {
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+  body {
+    overflow-y: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* Mejorar visualización de errores en móviles */
+@media (max-width: 600px) {
+  .mat-error, .mat-hint {
+    font-size: 13px !important;
+    line-height: 1.2;
+  }
+  ul, li {
+    font-size: 14px;
+  }
+}

@@ -62,16 +62,26 @@ export class MapComponent implements OnInit {
       if (this.currentMarker) {
         this.map.removeLayer(this.currentMarker);
       }
-      // Geocoding inverso usando Nominatim
-      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
-      const data = await response.json();
-      const adress = data.name ||  data.address.quarter || data.address.neighbourhood ||  data.address.suburb || '';
-      const state = data.address?.state || '';
-      const postcode = data.address?.postcode || '';
-      const country = data.address?.country || '';
-      const city = data.address?.city || data.address?.county ||'';
-      const university = data.address?.amenity || '';
-      // Crea el nuevo marcador
+      let adress = '', state = '', postcode = '', country = '', city = '', university = '';
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`,
+          {
+            headers: {
+              'Accept-Language': 'es'
+            }
+          }
+        );
+        if (!response.ok) throw new Error('Error en la respuesta de Nominatim');
+        const data = await response.json();
+        adress = data.name ||  data.address?.quarter || data.address?.neighbourhood ||  data.address?.suburb || '';
+        state = data.address?.state || '';
+        postcode = data.address?.postcode || '';
+        country = data.address?.country || '';
+        city = data.address?.city || data.address?.county ||'';
+        university = data.address?.amenity || '';
+
+        // Crea el nuevo marcador
       this.currentMarker = L.marker([lat, lng]).addTo(this.map)
         .bindPopup(`Marcador en:<br>Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}<br>País: ${country}<br>Ciudad: ${city}`)
         .openPopup();
@@ -87,6 +97,11 @@ export class MapComponent implements OnInit {
         university: university
       }
       this.ubicationSelected.emit(ubication_data);
+      } catch (error) {
+        console.error('Error al obtener datos de Nominatim:', error);
+        // Opcional: muestra un mensaje al usuario o emite un evento de error
+      }
+      
     });
 
     

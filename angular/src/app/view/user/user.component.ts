@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
@@ -37,8 +37,7 @@ import Swal from 'sweetalert2';
 export class UserComponent implements OnInit {
   formGrupo: FormGroup;
   result:any;
-  // Set the minimum to January 1st 20 years in the past and December 31st a year in the future.
-  private readonly _currentYear = new Date().getFullYear();
+  
   private readonly _today = new Date();
   readonly maxDate = new Date(this._today.getFullYear(), this._today.getMonth(), this._today.getDate());
 
@@ -46,64 +45,64 @@ export class UserComponent implements OnInit {
     
     this.formGrupo = this.fb.group({
       paso1: this.fb.group({
-        firstName: [''],
-        lastName: [''],
-        maidenName: [''],
-        age: [''],
-        gender: [''],
-        birthDate: [''],
-        bloodGroup: [''],
-        height: [''],
-        weight: [''],
-        eyeColor: [''],
-        hair_color: [''],
-        hair_type: [''],
+        firstName: ['', [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        lastName: ['', [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        maidenName: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        age: ['', [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(0), Validators.max(120)]],
+        gender: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        birthDate: ['', Validators.required],
+        bloodGroup: ['', [Validators.pattern('^[a-zA-Z0-9+-]+$')]],
+        height: ['', [Validators.pattern('^[0-9]+$')]],
+        weight: ['', [Validators.pattern('^[0-9]+$')]],
+        eyeColor: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        hair_color: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        hair_type: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
         image: ['']
       }),
       paso2: this.fb.group({
-        email: [''],
-        phone: [''],
-        user_name: [''],
-        password: [''],
-        ip: [''],
-        macAddress: [''],
+        email: ['', [Validators.required, Validators.email]],
+        phone: ['', [Validators.pattern('^[0-9]+$')]],
+        user_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9_]+$')]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        ip: ['', [Validators.pattern('^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$')]],
+        macAddress: ['', [Validators.pattern('^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$')]],
         userAgent: ['']
       }),
       paso3: this.fb.group({
         address_address: [''],
-        address_city: [''],
-        address_state: [''],
-        address_stateCode: [''],
-        address_postalCode: [''],
-        address_coordinates_lat: [''],
-        address_coordinates_lng: [''],
-        address_country: [''],
-        university: ['']
+        address_city: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        address_state: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        address_stateCode: ['', [Validators.pattern('^[a-zA-Z0-9]+$')]],
+        address_postalCode: ['', [Validators.pattern('^[0-9]+$')]],
+        address_coordinates_lat: ['', [Validators.pattern('^-?\\d{1,2}\\.\\d+$')]],
+        address_coordinates_lng: ['', [Validators.pattern('^-?\\d{1,3}\\.\\d+$')]],
+        address_country: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        university: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]]
       }),
       paso4: this.fb.group({
         bank_cardExpire: [''],
-        bank_cardNumber: [''],
-        bank_cardType: [''],
-        bank_currency: [''],
-        bank_iban: [''],
-        crypto_coin: [''],
+        bank_cardNumber: ['', [Validators.pattern('^[0-9]+$')]],
+        bank_cardType: ['', [Validators.pattern('^[a-zA-Z ]+$')]],
+        bank_currency: ['', [Validators.pattern('^[A-Z]{3}$')]],
+        bank_iban: ['', [Validators.pattern('^[A-Z0-9]+$')]],
+        crypto_coin: ['', [Validators.pattern('^[a-zA-Z0-9]+$')]],
         crypto_wallet: [''],
-        crypto_network: ['']
+        crypto_network: ['', [Validators.pattern('^[a-zA-Z0-9]+$')]]
       }),
       paso5: this.fb.group({
-        company_department: [''],
-        company_name: [''],
-        company_title: [''],
+        company_department: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        company_name: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]+$')]],
+        company_title: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
         company_address_address: [''],
-        company_address_city: [''],
-        company_address_state: [''],
-        company_address_stateCode: [''],
-        company_address_postalCode: [''],
-        company_address_coordinates_lat: [''],
-        company_address_coordinates_lng: [''],
-        company_address_country: [''],
-        ein: [''],
-        ssn: ['']
+        company_address_city: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        company_address_state: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        company_address_stateCode: ['', [Validators.pattern('^[a-zA-Z0-9]+$')]],
+        company_address_postalCode: ['', [Validators.pattern('^[0-9]+$')]],
+        company_address_coordinates_lat: ['', [Validators.pattern('^-?\\d{1,2}\\.\\d+$')]],
+        company_address_coordinates_lng: ['', [Validators.pattern('^-?\\d{1,3}\\.\\d+$')]],
+        company_address_country: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        ein: ['', [Validators.pattern('^[0-9]+$')]],
+        ssn: ['', [Validators.pattern('^[0-9]+$')]]
       })
     });
   }
@@ -126,7 +125,8 @@ export class UserComponent implements OnInit {
 
   ngOnInit() {
     console.log('UserComponent initialized');
-    this.getUserbyID('2').then(data => {
+    const UserID = this.getUserID()
+    this.getUserbyID(UserID).then(data => {
       console.log('User data fetched:', data);
       if (data) {
         this.paso1Form.patchValue(filterFormValues(this.paso1Form, data.data));
@@ -138,6 +138,20 @@ export class UserComponent implements OnInit {
     });
   }
 
+  getUserID() { //✅
+    try{
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        console.log(user.user_id);
+        return user.user_id || null; // Retorna el userId si existe, o null si no
+      }
+    }catch (error) {
+      console.log('Error fetching user ID:', error);
+      return null;
+    }
+  }
+
   
 
   async testUpdateUser(id:string,data:any) { //✅
@@ -145,19 +159,30 @@ export class UserComponent implements OnInit {
     
   }
 
-  onSubmit() {
-    const userdata = cleanObject({
-      ...this.paso1Form.value,
-      ...this.paso2Form.value,
-      ...this.paso3Form.value,
-      ...this.paso4Form.value,
-      ...this.paso5Form.value
-    });
-    this.testUpdateUser('2',userdata ).then(() => {
-      console.log('User updated successfully');
-    }).catch((error) => {
+  async onSubmit() {
+      const userdata = cleanObject({
+        ...this.paso1Form.value,
+        ...this.paso2Form.value,
+        ...this.paso3Form.value,
+        ...this.paso4Form.value,
+        ...this.paso5Form.value
+      });
+      try {
+
+        await this.testUpdateUser('2', userdata);
+        await Swal.fire({
+          icon: 'success',
+          title: '¡Datos actualizados!',
+          text: 'Tus datos han sido actualizados correctamente.'
+        });
+      } catch (error) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al actualizar los datos.'
+        });
       console.error('Error updating user:', error);
-    }); 
+    }
   }
 
   async confirmAndSubmit() {
@@ -177,16 +202,23 @@ export class UserComponent implements OnInit {
 
   openMapModal() {
       const dialogRef = this.dialog.open(MapModalComponent, {
-        width: '100vw',
+        width: '80vw',
         height: '90vh',
         maxWidth: '100vw',
         panelClass: 'full-screen-modal',
-        disableClose: false // Permite cerrar haciendo click fuera
+        disableClose: false, // Permite cerrar haciendo click fuera
+        autoFocus: true, // Fuerza el foco en el modal
+        restoreFocus: false // No devuelve el foco al botón de apertura
       });
 
-      setTimeout(() => {
-        (document.activeElement as HTMLElement)?.blur();
-      }, 0);
+      dialogRef.afterOpened().subscribe(() => {
+        // Si el mapa no es enfocable, enfoca el primer botón dentro del modal si existe
+        const modal = document.querySelector('.full-screen-modal');
+        if (modal) {
+          const btn = modal.querySelector('button, [tabindex]:not([tabindex="-1"])');
+          if (btn) (btn as HTMLElement).focus();
+        }
+      });
 
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
@@ -218,12 +250,18 @@ openCompanyMapModal() {
     height: '90vh',
     maxWidth: '100vw',
     panelClass: 'full-screen-modal',
-    disableClose: false
+    disableClose: false,
+    autoFocus: true,
+    restoreFocus: false
   });
 
-  setTimeout(() => {
-    (document.activeElement as HTMLElement)?.blur();
-  }, 0);
+  dialogRef.afterOpened().subscribe(() => {
+    const modal = document.querySelector('.full-screen-modal');
+    if (modal) {
+      const btn = modal.querySelector('button, [tabindex]:not([tabindex="-1"])');
+      if (btn) (btn as HTMLElement).focus();
+    }
+  });
 
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
@@ -255,6 +293,73 @@ onCompanyUbicationSelected(ubication: any) {
       console.error('Error fetching user by ID:', error);
       return null;
     }
+  }
+
+  private fieldNamesEs: { [key: string]: string } = {
+    firstName: 'Nombre',
+    lastName: 'Apellido',
+    maidenName: 'Segundo apellido',
+    age: 'Edad',
+    gender: 'Género',
+    birthDate: 'Fecha de nacimiento',
+    bloodGroup: 'Grupo sanguíneo',
+    height: 'Altura',
+    weight: 'Peso',
+    eyeColor: 'Color de ojos',
+    hair_color: 'Color de cabello',
+    hair_type: 'Tipo de cabello',
+    image: 'Imagen',
+    email: 'Correo electrónico',
+    phone: 'Teléfono',
+    user_name: 'Usuario',
+    password: 'Contraseña',
+    ip: 'IP',
+    macAddress: 'MAC Address',
+    userAgent: 'User Agent',
+    address_address: 'Dirección',
+    address_city: 'Ciudad',
+    address_state: 'Estado',
+    address_stateCode: 'Código de estado',
+    address_postalCode: 'Código postal',
+    address_coordinates_lat: 'Latitud',
+    address_coordinates_lng: 'Longitud',
+    address_country: 'País',
+    university: 'Universidad',
+    bank_cardExpire: 'Vencimiento tarjeta',
+    bank_cardNumber: 'Número de tarjeta',
+    bank_cardType: 'Tipo de tarjeta',
+    bank_currency: 'Moneda',
+    bank_iban: 'IBAN',
+    crypto_coin: 'Criptomoneda',
+    crypto_wallet: 'Wallet',
+    crypto_network: 'Red cripto',
+    company_department: 'Departamento',
+    company_name: 'Empresa',
+    company_title: 'Cargo',
+    company_address_address: 'Dirección empresa',
+    company_address_city: 'Ciudad empresa',
+    company_address_state: 'Estado empresa',
+    company_address_stateCode: 'Código estado empresa',
+    company_address_postalCode: 'Código postal empresa',
+    company_address_coordinates_lat: 'Latitud empresa',
+    company_address_coordinates_lng: 'Longitud empresa',
+    company_address_country: 'País empresa',
+    ein: 'EIN',
+    ssn: 'SSN'
+  };
+
+  getFormErrors(): string[] {
+    const errorFields: string[] = [];
+    const steps = [this.paso1Form, this.paso2Form, this.paso3Form, this.paso4Form, this.paso5Form];
+    steps.forEach((form, idx) => {
+      Object.keys(form.controls).forEach(key => {
+        const control = form.get(key);
+        if (control && control.invalid) {
+          errorFields.push(this.fieldNamesEs[key] || key);
+        }
+      });
+    });
+    return errorFields;
   }
 
 }
