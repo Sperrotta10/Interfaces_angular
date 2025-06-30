@@ -19,7 +19,7 @@ export const routes: Routes = [
                 m => m.AdminComponent
             )
         },
-        canActivate: [roleGuard('admin')] // Protege la ruta con el guard de autenticación y rol
+        canActivate: [authGuard ,roleGuard('admin')] // Protege la ruta con el guard de autenticación y rol
     },
     {
         path: 'user',
@@ -28,7 +28,7 @@ export const routes: Routes = [
                 m => m.UserComponent //la palabra m se refiere module
             )
         },
-        canActivate: [roleGuard('user')] // Protege la ruta con el guard de autenticación y rol
+        canActivate: [authGuard, roleGuard('user')] // Protege la ruta con el guard de autenticación y rol
     },
     {
         path: 'login',
