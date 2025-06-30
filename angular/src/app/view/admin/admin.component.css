@@ -14,22 +14,26 @@ body {
 
 .control-panel,
 .playground {
-    background-color: #fff;
+    background-color: #fafafa;
     border-radius: 8px;
-    min-height: 200px;
+    
 }
 
 .control-panel {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    justify-content: space-between;
     padding: 20px;
+    min-height: 400px;
+    max-height: 440px;
+    width: 400px;
 }
 
 .playground {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    padding: 15px;
     gap: 15px;
 }
 
@@ -68,7 +72,66 @@ input[type="file"] {
 }
 
 .saved-styles {
-  margin-top: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#savedFontsList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* Contenedor con scroll */
+.custom-scrollbar {
+  max-height: 40vh; /* 60% del viewport height */
+  overflow-y: auto;
+  padding-right: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+  
+  /* Para animación suave */
+  scroll-behavior: smooth;
+}
+
+/* WebKit scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+  border: 2px solid #f1f1f1;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .custom-scrollbar {
+    max-height: 50vh;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
 }
 
 .saved-style-item {
@@ -80,27 +143,31 @@ input[type="file"] {
 }
 
 .color-preview {
+  justify-content: center;
   display: flex;
   gap: 5px;
   margin-bottom: 5px;
 }
 
 .color-box {
-  width: 40px;
+  width: 60px;
   height: 30px;
   border-radius: 4px;
   border: 1px solid #ddd;
 }
 
 .style-actions {
+  align-items: center;
+  justify-content: center;
   display: flex;
-  gap: 5px;
+  gap: 10px;
   margin-top: 5px;
 }
 
 .style-actions button {
   padding: 4px 8px;
   font-size: 12px;
+  width: 90px;
 }
 
 
@@ -166,6 +233,7 @@ h1 {
 
 .playground-footer {
     background-color: none;
+    height: 60px;
     color: white;
     padding: 15px;
     text-align: center;
@@ -185,22 +253,27 @@ h1 {
     background-color: #ddd;
 }
 
-@media (max-width: 768px) {
-    .admin-panel {
-        grid-template-columns: 1fr;
-    }
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 300px;
+    min-height: 310px;
+    gap: 20px;
 }
 
 .font-section {
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 20px;
 }
 
 .color-section {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin: 30px;
 }
 
 .tab-nav {
@@ -309,13 +382,7 @@ h1 {
     min-width: 260px;
 }
 
-.controlPanel {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    justify-content: space-between;
-    padding: 20px;
-}
+
 
 .right {
     display: flex;
@@ -522,20 +589,6 @@ h1 {
 }
 
 /* Estilos para la sección de usuarios */
-/* Variables de color para fácil mantenimiento */
-:root {
-  --primary-color: #3b82f6; /* Azul fuerte para elementos principales */
-  --secondary-color: #6c757d; /* Gris para elementos secundarios */
-  --success-color: #10b981; /* Verde para éxito */
-  --danger-color: #ef4444; /* Rojo para peligro */
-  --info-color: #51c8ff; /* Azul cian para información */
-  --warning-color: #ffc107; /* Amarillo para advertencia */
-  --background-light: #f8f9fa; /* Fondo general claro */
-  --card-background: #ffffff; /* Fondo de tarjetas */
-  --border-color-light: #e2e8f0; /* Color de borde claro */
-  --text-dark: #2c3e50; /* Texto oscuro principal */
-  --text-light: #ffffff; /* Texto claro */
-}
 
 /* Estilos generales para la sección de usuarios */
 .usuario-section {
@@ -1010,6 +1063,29 @@ div.dt-buttons .custom-btn {
     gap: 10px;
   }
 
+  .tab-nav {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .tab {
+    flex: 1 1 100%; /* Permite que las pestañas ocupen todo el ancho en pantallas pequeñas */
+    text-align: center;
+    padding: 10px;
+  }
+
+  .font-section {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  
+  .control-panel{
+    min-height: 500px;
+    max-width: 550px;
+    max-height: 550px;
+  }
+  
   .tab-button {
     flex: 1 1 auto; /* Permite que los botones ocupen todo el ancho disponible */
     text-align: center;

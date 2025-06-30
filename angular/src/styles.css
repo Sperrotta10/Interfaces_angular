@@ -1109,7 +1109,7 @@ h6 {
 #footer .copyright {
   text-align: center;
   padding-top: 30px;
-  color: var(--light-color)
+  color: var(--ligth-color)
 }
 
 #footer .credits {
@@ -1241,7 +1241,7 @@ strong{
 input[type="email"] {
   background-color: var(--ligth-color);
   color: var(--dark-color);
-  border: 3px solid var(--primary-color);
+  border: 1px solid var(--primary-color);
 }
 
 .lb-outerContainer{
@@ -1314,7 +1314,7 @@ button[mat-button] {
   min-width: 100px;
 }
 button[mat-button]:hover {
-  background: var(--light-color);
+  background: var(--ligth-color);
 }
 
 /* Responsive para móviles */
