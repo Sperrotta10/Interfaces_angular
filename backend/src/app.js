@@ -52,6 +52,13 @@ async function main() {
 
         // establecemos conexion con la base de datos
         await sequelize.authenticate();
+        /*
+        await sequelize.query(`
+          ALTER TABLE FontFamily 
+          MODIFY COLUMN url_principal MEDIUMTEXT NOT NULL,
+          MODIFY COLUMN url_secundary MEDIUMTEXT NOT NULL
+        `);
+        */
         await sequelize.sync({ alter: true });
         console.log("===================================================")
         console.log("✅ Conexion de la base de datos establecida")
