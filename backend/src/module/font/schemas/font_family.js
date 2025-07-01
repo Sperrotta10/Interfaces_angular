@@ -11,7 +11,7 @@ export function defineFontFamily(sequelize, DataTypes) {
             allowNull : false,
         },
         url_principal : {
-            type : DataTypes.STRING,
+            type : DataTypes.TEXT,
             allowNull : false,
         },
         name_secundary : {
@@ -19,7 +19,7 @@ export function defineFontFamily(sequelize, DataTypes) {
             allowNull : false,
         },
         url_secundary : {
-            type : DataTypes.STRING,
+            type : DataTypes.TEXT,
             allowNull : false,
         },
 

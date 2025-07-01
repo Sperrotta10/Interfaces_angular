@@ -36,6 +36,7 @@ Font.belongsTo(FontFamily, {
 FontFamily.hasOne(Font, {
     foreignKey : 'fontFamily_id',
     as : 'font',
+    onDelete: 'CASCADE'
 })
 
 User.belongsTo(Role, {

@@ -5,6 +5,7 @@ import {sequelize} from "./config/dataBase.js";
 import { enviroment } from "./config/enviroment.js";
 import { routerApi } from "./api/v1/route.js";
 import dotenv from "dotenv";
+import { FontFamily, Font } from "./models/tables.js"
 dotenv.config()
 
 const app = express();
@@ -20,7 +21,10 @@ const allowedOrigins = [
 ];
 
 // middlewares
-app.use(express.json());
+// Aumentar el límite de tamaño para las solicitudes
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
 app.use(cookieParser());
 app.use(cors({
   origin: function (origin, callback) {
