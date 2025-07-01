@@ -138,3 +138,45 @@ mat-horizontal-stepper {
     font-size: 14px;
   }
 }
+
+/* --- Imagen y file input en una fila --- */
+.imagen-input-preview-row {
+  display: contents;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.imagen-input-preview-row label {
+  margin-bottom: 0;
+}
+.imagen-input-preview-row img {
+  max-width: 300px;
+  max-height: 200px;
+  image-rendering: optimizeSpeed;
+  border-radius: 8px;
+  border: 1px solid var(--tertiary-color);
+  background: var(--ligth-color);
+}
+
+
+
+/* Padding inferior para evitar que el footer tape el contenido */
+form {
+  padding-bottom: 80px;
+}
+
+@media (max-width: 900px) {
+  .imagen-input-preview-row {
+    gap: 8px;
+  }
+}
+@media (max-width: 600px) {
+  .imagen-input-preview-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  form {
+    padding-bottom: 100px;
+  }
+}

@@ -14,11 +14,14 @@ import { MapModalComponent } from '../../components/map/map-modal.component'; //
 import { MatIcon } from '@angular/material/icon';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import Swal from 'sweetalert2';
+import { MatSelectModule } from '@angular/material/select';
+
 
 @Component({
   selector: 'app-user',
   standalone: true,
   imports: [
+    MatSelectModule,
     SweetAlert2Module,
     MatIcon,
     MatNativeDateModule,
@@ -37,6 +40,7 @@ import Swal from 'sweetalert2';
 export class UserComponent implements OnInit {
   formGrupo: FormGroup;
   result:any;
+  imageFileDataUrl: string | null = null;
   
   private readonly _today = new Date();
   readonly maxDate = new Date(this._today.getFullYear(), this._today.getMonth(), this._today.getDate());
@@ -45,26 +49,25 @@ export class UserComponent implements OnInit {
     
     this.formGrupo = this.fb.group({
       paso1: this.fb.group({
-        firstName: ['', [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
-        lastName: ['', [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
-        maidenName: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        firstName: ['', [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$'), Validators.maxLength(15)]],
+        lastName: ['', [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$'), Validators.maxLength(15)]],
+        maidenName: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$'), Validators.maxLength(15)]],
         age: ['', [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(0), Validators.max(120)]],
         gender: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
-        birthDate: ['', Validators.required],
-        bloodGroup: ['', [Validators.pattern('^[a-zA-Z0-9+-]+$')]],
-        height: ['', [Validators.pattern('^[0-9]+$')]],
-        weight: ['', [Validators.pattern('^[0-9]+$')]],
-        eyeColor: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
-        hair_color: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
-        hair_type: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        birthDate: ['', Validators.required,],
+        bloodGroup: ['', [Validators.pattern('^[a-zA-Z0-9+-]+$'), Validators.maxLength(4)]],
+        height: ['', [Validators.pattern('^[0-9]+$'), Validators.maxLength(3)]],
+        weight: ['', [Validators.pattern('^[0-9]+$'), Validators.maxLength(3)]],
+        eyeColor: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$'), Validators.maxLength(10)]],
+        hair_color: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$'), Validators.maxLength(15)]],
+        hair_type: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$'), Validators.maxLength(15)]],
         image: ['']
       }),
       paso2: this.fb.group({
         email: ['', [Validators.required, Validators.email]],
-        phone: ['', [Validators.pattern('^[0-9]+$')]],
-        user_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9_]+$')]],
-        password: ['', [Validators.required, Validators.minLength(6)]],
-        ip: ['', [Validators.pattern('^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$')]],
+        phone: ['', [Validators.pattern('^[0-9]+$'), Validators.maxLength(15)]],
+        user_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9_]+$'), Validators.maxLength(15)]],
+        ip: ['', [Validators.pattern('^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$'), Validators.maxLength(15)]],
         macAddress: ['', [Validators.pattern('^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$')]],
         userAgent: ['']
       }),
@@ -123,11 +126,45 @@ export class UserComponent implements OnInit {
     return this.formGrupo.get('paso5') as FormGroup;
   }
 
+  get imagePreviewUrl(): string | null {
+    if (this.imageFileDataUrl) {
+      return this.imageFileDataUrl;
+    }
+    const url = this.paso1Form.get('image')?.value;
+    this.paso1Form.get('image')?.updateValueAndValidity(); // Asegura que el valor se valide correctamente
+    if (url && typeof url === 'string' && url.trim() !== '') {
+      return url;
+    }
+    return null;
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.imageFileDataUrl = e.target.result;
+        this.paso1Form.get('image')?.setValue(this.imageFileDataUrl); // Guarda el base64 en el campo image
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onImageError(event: Event) {
+    (event.target as HTMLImageElement).src = 'https://via.placeholder.com/120x120?text=Sin+imagen';
+  }
+
   ngOnInit() {
+    this.paso1Form.get('image')?.valueChanges.subscribe(val => {
+      // Si el valor cambia y no es por el input file, limpia el preview local
+      if (val && val !== this.imageFileDataUrl) {
+        this.imageFileDataUrl = null;
+      }
+    });
     console.log('UserComponent initialized');
     const UserID = this.getUserID()
     this.getUserbyID(UserID).then(data => {
-      console.log('User data fetched:', data);
       if (data) {
         this.paso1Form.patchValue(filterFormValues(this.paso1Form, data.data));
         this.paso2Form.patchValue(filterFormValues(this.paso2Form, data.data));
@@ -143,7 +180,6 @@ export class UserComponent implements OnInit {
       const storedUser = localStorage.getItem('user');
       if (storedUser) {
         const user = JSON.parse(storedUser);
-        console.log(user.user_id);
         return user.user_id || null; // Retorna el userId si existe, o null si no
       }
     }catch (error) {
@@ -168,8 +204,8 @@ export class UserComponent implements OnInit {
         ...this.paso5Form.value
       });
       try {
-
-        await this.testUpdateUser('2', userdata);
+        const userid = this.getUserID();
+        await this.testUpdateUser(userid, userdata);
         await Swal.fire({
           icon: 'success',
           title: '¡Datos actualizados!',
