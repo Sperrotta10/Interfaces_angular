@@ -65,6 +65,10 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
       this.syncLocalStyles();
     }
 
+    if (isPlatformBrowser(this.platformId)) {
+      this.styleManager.loadSavedFonts();
+    }
+
     this.fetchSavedStyles();
     this.fetchSavedStylesFont();
 
@@ -545,6 +549,14 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
   previewText: string = this.customPreviewText;
   fontURL: string = '';
   
+  // Nuevas propiedades para fuentes
+  principalFontFile: File | null = null;
+  secondaryFontFile: File | null = null;
+  principalFontName: string = '';
+  secondaryFontName: string = '';
+  principalFontURL: string = '';
+  secondaryFontURL: string = '';
+  
   // Estilos por defecto
   defaultStyles = {
     primary_color: "#3498db",
@@ -562,20 +574,24 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   applyFontStyle(font: any): void {
-    // Aplicar los tamaños de fuente
+    // Aplicar tamaños
     this.titleFontSize = font.title;
     this.subtitleFontSize = font.sub_title;
     this.textFontSize = font.paragraph;
     
-    // Aplicar los estilos al documento
+    // Aplicar fuentes
+    if (font.fontFamily) {
+      this.styleManager.applyCustomFonts(font.fontFamily);
+    }
+    
+    // Aplicar estilos de tamaño
     this.applyCurrentFontStyles();
     
-    // Mostrar confirmación
     Swal.fire({
-        title: "¡Fuente aplicada!",
-        icon: "success",
-        timer: 1200,
-        showConfirmButton: false
+      title: "¡Configuración aplicada!",
+      icon: "success",
+      timer: 1200,
+      showConfirmButton: false
     });
   }
 
@@ -587,6 +603,127 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
         textSize: this.textFontSize
     };
     this.styleManager.applyFontStyles(fontStyles);
+  }
+
+  // Método para guardar la configuración completa
+  async saveFullFontConfig(): Promise<void> {
+    Swal.fire({
+      title: "¿Guardar configuración completa?",
+      text: "¿Quieres guardar los tamaños y la fuente seleccionada?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, guardar",
+      cancelButtonText: "No, cancelar"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          // Convertir archivo a base64 si existe
+          let fontBase64 = '';
+          let secondaryFontBase64 = '';
+          if (this.principalFontFile) {
+            fontBase64 = await this.fileToBase64(this.principalFontFile);
+          }
+          if(this.secondaryFontFile) {
+            secondaryFontBase64 = await this.fileToBase64(this.secondaryFontFile);
+          }
+
+          const fontConfig = {
+            title: this.titleFontSize,
+            sub_title: this.subtitleFontSize,
+            paragraph: this.textFontSize,
+            fontFamily: {
+              name_principal: this.principalFontName || 'Arial',
+              url_principal: fontBase64,
+              name_secundary: this.secondaryFontName || 'Arial',
+              url_secundary: secondaryFontBase64
+            }
+          };
+
+          console.log("Guardando configuración de fuentes:", fontConfig);
+          await this.colorFontService.createFontStyles(fontConfig);
+          this.fontStyleCounter++;
+
+          Swal.fire({
+            title: "¡Configuración guardada!",
+            icon: "success",
+            timer: 1200,
+            showConfirmButton: false
+          });
+
+          this.fetchSavedStylesFont();
+        } catch (error) {
+          console.error("Error al guardar:", error);
+          Swal.fire({
+            title: "Error",
+            text: "No se pudo guardar la configuración",
+            icon: "error"
+          });
+        }
+      }
+    });
+  }
+
+  // Método para aplicar una configuración completa
+  applyFullFontStyle(font: any): void {
+    // Aplicar tamaños
+    this.titleFontSize = font.title;
+    this.subtitleFontSize = font.sub_title;
+    this.textFontSize = font.paragraph;
+    
+    // Aplicar fuente si existe
+    if (font.fontFamily && font.fontFamily.url_principal && font.fontFamily.url_secundary) {
+      this.principalFontName = font.fontFamily.name_principal;
+      this.secondaryFontName = font.fontFamily.name_secundary;
+      this.styleManager.applyCustomFonts(font.fontFamily);
+    }
+    
+    
+    // Aplicar estilos de tamaño
+    this.applyCurrentFontStyles();
+    
+    Swal.fire({
+      title: "¡Configuración aplicada!",
+      icon: "success",
+      timer: 1200,
+      showConfirmButton: false
+    });
+  }
+
+  // Método para resetear todo
+  resetFontStyles(): void {
+    Swal.fire({
+      title: "¿Restablecer todo?",
+      text: "¿Quieres restablecer tamaños y fuentes a los valores por defecto?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, restablecer",
+      cancelButtonText: "No, cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Resetear tamaños
+        this.titleFontSize = this.defaultStyles.titleSize;
+        this.subtitleFontSize = this.defaultStyles.subtitleSize;
+        this.textFontSize = this.defaultStyles.textSize;
+        
+        // Resetear fuentes
+        this.principalFontName = '';
+        this.secondaryFontName = '';
+        this.principalFontFile = null;
+        this.secondaryFontFile = null;
+        this.isFontLoaded = false;
+        
+        // Aplicar cambios
+        this.applyCurrentFontStyles();
+        this.styleManager.resetToDefault();
+        
+        Swal.fire({
+          title: "¡Todo restablecido!",
+          icon: "success",
+          timer: 1200,
+          showConfirmButton: false
+        });
+      }
+    });
   }
 
   saveCurrentFontStyle(): void {
@@ -629,64 +766,115 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  onFileSelected(event: Event): void {
+  // Método para manejar la selección de archivos principal
+  onPrincipalFontSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      if (file.name.endsWith(".ttf")) {
-        this.fontName = "UserFont";
-        this.fontURL = URL.createObjectURL(file);
-        this.isFontLoaded = true;
+      this.principalFontFile = input.files[0];
+      if (this.principalFontFile.name.endsWith('.ttf')) {
+        this.principalFontName = this.principalFontFile.name.replace('.ttf', '');
+        this.principalFontURL = URL.createObjectURL(this.principalFontFile);
+        this.updateFontPreview();
       }
     }
   }
 
-  updatePreview(): void {
-    this.previewText = this.customPreviewText;
-  }
-
-  applyFont(): void {
-    // Implementa la lógica para aplicar la fuente al documento
-    if (this.fontName && this.fontURL) {
-      const style = document.createElement('style');
-      style.innerHTML = `
-        @font-face {
-          font-family: '${this.fontName}';
-          src: url('${this.fontURL}') format('truetype');
-        }
-      `;
-      document.head.appendChild(style);
+  // Método para manejar la selección de archivos secundario
+  onSecondaryFontSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.secondaryFontFile = input.files[0];
+      if (this.secondaryFontFile.name.endsWith('.ttf')) {
+        this.secondaryFontName = this.secondaryFontFile.name.replace('.ttf', '');
+        this.secondaryFontURL = URL.createObjectURL(this.secondaryFontFile);
+        this.updateFontPreview();
+      }
     }
   }
 
-  resetFontStyles(): void {
-    Swal.fire({
-        title: "¿Restablecer fuentes?",
-        text: "¿Quieres restablecer los tamaños de fuente a los valores por defecto?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Sí, restablecer",
-        cancelButtonText: "No, cancelar"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Resetear los valores locales
-            this.titleFontSize = this.defaultStyles.titleSize;
-            this.subtitleFontSize = this.defaultStyles.subtitleSize;
-            this.textFontSize = this.defaultStyles.textSize;
-            
-            // Aplicar los estilos reseteados
-            this.applyCurrentFontStyles();
-            
-            Swal.fire({
-                title: "¡Fuentes restablecidas!",
-                icon: "success",
-                timer: 1200,
-                showConfirmButton: false
-            });
-        }
-    });
+  updateFontPreview(): void {
+    if (this.principalFontName || this.secondaryFontName) {
+      this.isFontLoaded = true;
+    }
   }
 
+  // Método para aplicar las fuentes
+  applyFonts(): void {
+    if (this.principalFontName && this.principalFontURL) {
+      const fontData = {
+        name_principal: this.principalFontName,
+        url_principal: this.principalFontURL,
+        name_secundary: this.secondaryFontName || 'Arial', // Valor por defecto si no hay secundaria
+        url_secundary: this.secondaryFontURL || ''
+      };
+      
+      this.styleManager.applyCustomFonts(fontData);
+      this.saveFontsToDatabase();
+    }
+  }
+
+  // Método para guardar las fuentes en la base de datos
+  private async saveFontsToDatabase(): Promise<void> {
+    // Verificar que el archivo principal existe
+    if (!this.principalFontFile) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Debes seleccionar al menos la fuente principal',
+        icon: 'error'
+      });
+      return;
+    }
+
+    try {
+      // Convertir archivos a base64 (con verificación de tipo)
+      const principalBase64 = await this.fileToBase64(this.principalFontFile as File);
+      
+      let secondaryBase64 = '';
+      if (this.secondaryFontFile) {
+        secondaryBase64 = await this.fileToBase64(this.secondaryFontFile as File);
+      }
+
+      const fontConfig = {
+        title: this.titleFontSize,
+        sub_title: this.subtitleFontSize,
+        paragraph: this.textFontSize,
+        fontFamily: {
+          name_principal: this.principalFontName,
+          url_principal: principalBase64,
+          name_secundary: this.secondaryFontName,
+          url_secundary: secondaryBase64
+        }
+      };
+
+      await this.colorFontService.createFontStyles(fontConfig);
+
+      Swal.fire({
+        title: '¡Configuración guardada!',
+        icon: 'success',
+        timer: 1200,
+        showConfirmButton: false
+      });
+
+      this.fetchSavedStylesFont();
+    } catch (error) {
+      console.error('Error al guardar las fuentes:', error);
+      Swal.fire({
+        title: 'Error',
+        text: 'No se pudo guardar la configuración',
+        icon: 'error'
+      });
+    }
+  }
+
+  // Helper para convertir archivo a base64
+  private fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
+  }
 
   private applyDefaultStyles(): void {
     // Ahora simplemente llama al reset del servicio
@@ -721,10 +909,16 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
     try {
       const response = await this.colorFontService.getFontStyles();
       if (response) {
-        this.savedStylesFont = response.fonts;
+        this.savedStylesFont = response.fonts.map((config: any) => ({
+          font_id : config.font_id,
+          title: config.title,
+          sub_title: config.sub_title,
+          paragraph: config.paragraph,
+          fontFamily: config.fontFamily
+        }));
       }
     } catch (error) {
-      console.error("Error al obtener las fuentes guardadas:", error);
+      console.error("Error al obtener las configuraciones de fuentes:", error);
     }
   }
 
@@ -896,6 +1090,7 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
+          console.log("Eliminando fuente con ID:", font_id);
           await this.colorFontService.deleteFonts(font_id);
           this.fontStyleCounter--;
           this.fetchSavedStylesFont();
@@ -987,10 +1182,27 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
             });
           } else {
             // Lógica para fuentes (similar)
+
+            // Convertir archivo a base64 si existe
+            let fontBase64 = '';
+            let secondaryFontBase64 = '';
+            if (this.principalFontFile) {
+              fontBase64 = await this.fileToBase64(this.principalFontFile);
+            }
+            if(this.secondaryFontFile) {
+              secondaryFontBase64 = await this.fileToBase64(this.secondaryFontFile);
+            }
+
             const fontStyles = {
               title: this.titleFontSize,
               sub_title: this.subtitleFontSize,
-              paragraph: this.textFontSize
+              paragraph: this.textFontSize,
+              fontFamily: {
+                name_principal: this.principalFontName || 'Arial',
+                url_principal: fontBase64,
+                name_secundary: this.secondaryFontName || 'Arial',
+                url_secundary: secondaryFontBase64
+              }
             };
 
             await this.colorFontService.updateFont(item.font_id, fontStyles);

@@ -101,93 +101,85 @@
     </div>
 
     <div class="font-section" *ngIf="vista_modo === 'letras'">
-        <!-- Sección de fuentes (similar a la de colores) -->
-        <div class="control-panel">
+        <div class="control-panel font-panel">
             <div class="control-group">
-                <h2>🔤 Fuentes</h2>
+                <h2>🔤 Configuración de Fuentes</h2>
             </div>
 
+            <!-- Controles de tamaño de fuente -->
             <div class="control-group">
                 <label for="titleFontSize">Tamaño Título:</label>
                 <input type="range" id="titleFontSize" name="titleFontSize" 
-                    [(ngModel)]="titleFontSize" min="12" max="72" (input)="applyCurrentFontStyles()">
+                    [(ngModel)]="titleFontSize" min="12" max="72">
                 <span>{{titleFontSize}}px</span>
             </div>
 
             <div class="control-group">
                 <label for="subtitleFontSize">Tamaño Subtítulo:</label>
                 <input type="range" id="subtitleFontSize" name="subtitleFontSize" 
-                    [(ngModel)]="subtitleFontSize" min="10" max="48" (input)="applyCurrentFontStyles()">
+                    [(ngModel)]="subtitleFontSize" min="10" max="48">
                 <span>{{subtitleFontSize}}px</span>
             </div>
 
             <div class="control-group">
                 <label for="textFontSize">Tamaño Texto:</label>
                 <input type="range" id="textFontSize" name="textFontSize" 
-                    [(ngModel)]="textFontSize" min="8" max="24" (input)="applyCurrentFontStyles()">
+                    [(ngModel)]="textFontSize" min="8" max="24">
                 <span>{{textFontSize}}px</span>
             </div>
 
+            <!-- Sección de subida de fuentes TTF -->
+            <div class="font-upload-container">
+                <div class="upload-section">
+                    <h4>Fuente Principal</h4>
+                    <input #principalFontInput type="file" accept=".ttf" 
+                        (change)="onPrincipalFontSelected($event)" hidden>
+                    <button class="upload-btn" (click)="principalFontInput.click()">
+                        Seleccionar Fuente (.TTF)
+                    </button>
+                    <span *ngIf="principalFontName" class="font-name">{{ principalFontName }}</span>
+                </div>
+
+                <div class="upload-section">
+                    <h4>Fuente Secundaria</h4>
+                    <input #secondaryFontInput type="file" accept=".ttf" 
+                        (change)="onSecondaryFontSelected($event)" hidden>
+                    <button class="upload-btn" (click)="secondaryFontInput.click()">
+                        Seleccionar Fuente (.TTF)
+                    </button>
+                    <span *ngIf="secondaryFontName" class="font-name">{{ secondaryFontName }}</span>
+                </div>
+            </div>
+
+            <!-- Botones de acción unificados -->
             <div class="save-section">
-                <button id="saveBtn" (click)="saveMode === 'guardar' ? saveCurrentFontStyle() : handleSaveEdit(editingItem)">
-                {{saveMode === 'guardar' ? 'Guardar' : 'Editar'}}
+                <button id="saveBtn" (click)="saveMode === 'guardar' ? saveFullFontConfig() : handleSaveEdit(editingItem)">
+                    {{saveMode === 'guardar' ? 'Guardar Configuración' : 'Editar Configuración'}}
                 </button>
-                <button class='saveBtn' (click)="resetFontStyles()">Restablecer fuentes</button>
+                <button class='saveBtn' (click)="resetFontStyles()">Restablecer todo</button>
             </div>
         </div>
 
+        <!-- Lista de configuraciones guardadas -->
         <div class="saved-styles">
-            <h3>Fuentes guardadas</h3>
+            <h3>Configuraciones guardadas</h3>
             <div id="savedFontsList" class="custom-scrollbar">
                 <div class="saved-style-item" *ngFor="let font of savedStylesFont">
                     <div class="font-preview">
                         <p>Título: {{font.title}}px</p>
                         <p>Subtítulo: {{font.sub_title}}px</p>
                         <p>Texto: {{font.paragraph}}px</p>
+                        <p *ngIf="font.fontFamily">Fuente: {{font.fontFamily.name_principal}}</p>
+                        <p *ngIf="font.fontFamily">Fuente: {{font.fontFamily.name_secundary}}</p>
                     </div>
                     <div class="style-actions">
-                        <button (click)="applyFontStyle(font)">Aplicar</button>
+                        <button (click)="applyFullFontStyle(font)">Aplicar</button>
                         <button (click)="handleEdit(font, 'font')">Editar</button>
                         <button (click)="handleDeleteFontStyle(font.font_id)">Eliminar</button>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div>
-            <div class="font-upload-container">
-                <h2>Subir Fuentes de letras</h2>
-                
-                <div class="upload-section">
-                    <input #fileInput type="file" accept=".ttf, font/ttf" (change)="onFileSelected($event)" hidden>
-                    <button class="upload-btn" (click)="fileInput.click()">Elige .TTF Archivos</button>
-                    <span *ngIf="fontName">{{ fontName }} </span>
-                </div>
-            
-                <div class="preview-controls" *ngIf="isFontLoaded">
-                    <div class="form-group">
-                    <label for="previewText">Preview:</label>
-                    <input id="previewText" type="text" [(ngModel)]="customPreviewText" (input)="updatePreview()">
-                    </div>
-                    
-                    <div class="button-group">
-                    <button class="apply-btn" (click)="applyFont()">Aplica</button>
-                    </div>
-                </div>
-            
-                <div #fontPreview class="font-preview" [style.fontFamily]="fontName">
-                    {{ previewText }}
-                </div>
-
-                <div class="control_boton">
-                    <!--(Ver la etiqueta arriba, para ver como se cambia) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
-                                <label for="titleFontSize">Tamaño de letras para Título (px): </label>
-                                <input type="number" id="titleFontSize" [(ngModel)]="titleFontSize" min="10" max="50">
-                </div>
-            </div>
-
-        </div>
-
     </div>
 
     <div class="usuario-section" *ngIf="vista_modo === 'usuarios'">
