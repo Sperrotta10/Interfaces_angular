@@ -11,7 +11,7 @@
   min-height: 100vh;
   padding: 20px;
   box-sizing: border-box;
-  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-secundaria); /* Fuente secundaria para todo el componente */
   color: var(--secundary-color);
   -webkit-font-smoothing: antialiased; /* Mejorar la suavidad de las fuentes */
   -moz-osx-font-smoothing: grayscale;

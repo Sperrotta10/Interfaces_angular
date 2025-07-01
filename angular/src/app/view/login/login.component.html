@@ -1,23 +1,23 @@
 <div class="auth-container">
   <div class="auth-card">
     <div class="auth-header">
-      <h1>{{ isLoginMode ? 'Iniciar Sesión' : 'Registrarse' }}</h1>
+      <h1 style="font-family: var(--font-principal);">{{ isLoginMode ? 'Iniciar Sesión' : 'Registrarse' }}</h1>
     </div>
 
     <form class="auth-form" #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
       <!-- Modo de Alternancia -->
       <div class="mode-toggle">
-        <button type="button" class="toggle-button" [class.active]="isLoginMode" (click)="toggleMode()">
+        <button type="button" class="toggle-button" [class.active]="isLoginMode" (click)="toggleMode()" style="font-family: var(--font-secundary);">
           Iniciar Sesión
         </button>
-        <button type="button" class="toggle-button" [class.active]="!isLoginMode" (click)="toggleMode()">
+        <button type="button" class="toggle-button" [class.active]="!isLoginMode" (click)="toggleMode()" style="font-family: var(--font-secundary);">
           Registrarse
         </button>
       </div>
 
       <ng-container *ngIf="!isLoginMode">
         <div class="form-field">
-          <label for="userName">UserName</label>
+          <label for="userName" style="font-family: var(--font-secundary);">UserName</label>
           <input
             type="text"
             id="userName"
@@ -30,14 +30,14 @@
             [class.ng-valid]="userNameField.valid && (userNameField.dirty || userNameField.touched)"
           />
           <div *ngIf="userNameField.invalid && (userNameField.dirty || userNameField.touched)" class="error-message">
-            <span *ngIf="userNameField.errors?.['required']">El nombre es requerido.</span>
+            <span *ngIf="userNameField.errors?.['required']" style="font-family: var(--font-secundary);">El nombre es requerido.</span>
           </div>
         </div>
       </ng-container>
 
       <!-- Campos Comunes (Email, Contraseña) -->
       <div class="form-field">
-        <label for="email">Email</label>
+        <label for="email" style="font-family: var(--font-secundary);">Email</label>
         <input
           type="email"
           id="email"
@@ -51,13 +51,13 @@
           [class.ng-valid]="emailField.valid && (emailField.dirty || emailField.touched)"
         />
         <div *ngIf="emailField.invalid && (emailField.dirty || emailField.touched)" class="error-message">
-          <span *ngIf="emailField.errors?.['required']">El correo es requerido.</span>
-          <span *ngIf="emailField.errors?.['email']">Formato de correo inválido.</span>
+          <span *ngIf="emailField.errors?.['required']" style="font-family: var(--font-secundary);">El correo es requerido.</span>
+          <span *ngIf="emailField.errors?.['email']" style="font-family: var(--font-secundary);">Formato de correo inválido.</span>
         </div>
       </div>
 
       <div class="form-field">
-        <label for="password">Password</label>
+        <label for="password" style="font-family: var(--font-secundary);">Password</label>
         <input
           type="password"
           id="password"
@@ -71,15 +71,15 @@
           [class.ng-valid]="passwordField.valid && (passwordField.dirty || passwordField.touched)"
         />
         <div *ngIf="passwordField.invalid && (passwordField.dirty || passwordField.touched)" class="error-message">
-          <span *ngIf="passwordField.errors?.['required']">La contraseña es requerida.</span>
-          <span *ngIf="passwordField.errors?.['minlength']">La contraseña debe tener al menos 6 caracteres.</span>
+          <span *ngIf="passwordField.errors?.['required']" style="font-family: var(--font-secundary);">La contraseña es requerida.</span>
+          <span *ngIf="passwordField.errors?.['minlength']" style="font-family: var(--font-secundary);">La contraseña debe tener al menos 6 caracteres.</span>
         </div>
       </div>
 
       <!-- Campos Específicos para Registro -->
       <ng-container *ngIf="!isLoginMode">
         <div class="form-field">
-          <label for="confirmPassword">Confirmar</label>
+          <label for="confirmPassword" style="font-family: var(--font-secundary);">Confirmar</label>
           <input
             type="password"
             id="confirmPassword"
@@ -92,10 +92,10 @@
             [class.ng-valid]="confirmPasswordField.valid && (confirmPasswordField.dirty || confirmPasswordField.touched) && passwordsMatch()"
           />
           <div *ngIf="confirmPasswordField.invalid && (confirmPasswordField.dirty || confirmPasswordField.touched)" class="error-message">
-            <span *ngIf="confirmPasswordField.errors?.['required']">La confirmación de contraseña es requerida.</span>
+            <span *ngIf="confirmPasswordField.errors?.['required']" style="font-family: var(--font-secundary);">La confirmación de contraseña es requerida.</span>
           </div>
           <div *ngIf="confirmPasswordField.valid && (confirmPasswordField.dirty || confirmPasswordField.touched) && !passwordsMatch()" class="error-message">
-            <span>Las contraseñas no coinciden.</span>
+            <span style="font-family: var(--font-secundary);">Las contraseñas no coinciden.</span>
           </div>
         </div>
       </ng-container>
