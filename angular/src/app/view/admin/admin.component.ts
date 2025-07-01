@@ -28,6 +28,58 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
   usersDesactive: any[] = [];
   vista_modo2: 'activos' | 'deshabilitados' = 'activos';
 
+  userFields = [
+    { key: 'firstName', label: 'Nombre' },
+    { key: 'lastName', label: 'Apellido' },
+    { key: 'maidenName', label: 'Segundo Apellido' },
+    { key: 'age', label: 'Edad' },
+    { key: 'gender', label: 'Género' },
+    { key: 'birthDate', label: 'Fecha de nacimiento' },
+    { key: 'bloodGroup', label: 'Grupo sanguíneo' },
+    { key: 'height', label: 'Altura' },
+    { key: 'weight', label: 'Peso' },
+    { key: 'eyeColor', label: 'Color de ojos' },
+    { key: 'hair_color', label: 'Color de cabello' },
+    { key: 'hair_type', label: 'Tipo de cabello' },
+    { key: 'image', label: 'Imagen' },
+    { key: 'email', label: 'Correo electrónico' },
+    { key: 'phone', label: 'Teléfono' },
+    { key: 'user_name', label: 'Usuario' },
+    { key: 'ip', label: 'IP' },
+    { key: 'macAddress', label: 'MAC Address' },
+    { key: 'userAgent', label: 'User Agent' },
+    { key: 'address_address', label: 'Dirección' },
+    { key: 'address_city', label: 'Ciudad' },
+    { key: 'address_state', label: 'Estado' },
+    { key: 'address_stateCode', label: 'Código de estado' },
+    { key: 'address_postalCode', label: 'Código postal' },
+    { key: 'address_coordinates_lat', label: 'Latitud' },
+    { key: 'address_coordinates_lng', label: 'Longitud' },
+    { key: 'address_country', label: 'País' },
+    { key: 'university', label: 'Universidad' },
+    { key: 'bank_cardExpire', label: 'Vencimiento tarjeta' },
+    { key: 'bank_cardNumber', label: 'Número de tarjeta' },
+    { key: 'bank_cardType', label: 'Tipo de tarjeta' },
+    { key: 'bank_currency', label: 'Moneda' },
+    { key: 'bank_iban', label: 'IBAN' },
+    { key: 'crypto_coin', label: 'Criptomoneda' },
+    { key: 'crypto_wallet', label: 'Wallet' },
+    { key: 'crypto_network', label: 'Red cripto' },
+    { key: 'company_department', label: 'Departamento' },
+    { key: 'company_name', label: 'Empresa' },
+    { key: 'company_title', label: 'Cargo' },
+    { key: 'company_address_address', label: 'Dirección empresa' },
+    { key: 'company_address_city', label: 'Ciudad empresa' },
+    { key: 'company_address_state', label: 'Estado empresa' },
+    { key: 'company_address_stateCode', label: 'Código estado empresa' },
+    { key: 'company_address_postalCode', label: 'Código postal empresa' },
+    { key: 'company_address_coordinates_lat', label: 'Latitud empresa' },
+    { key: 'company_address_coordinates_lng', label: 'Longitud empresa' },
+    { key: 'company_address_country', label: 'País empresa' },
+    { key: 'ein', label: 'EIN' },
+    { key: 'ssn', label: 'SSN' }
+  ];
+
   usuarioSeleccionado: any = null; // Para el modal de detalles
 
   activeDataTable: any;
@@ -109,10 +161,11 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
   async reloadUsers() {
     try {
       const users = await this.userService.getUsers();
+      console.log('Usuarios cargados:', users);
       if (!users) {
         throw new Error('No se recibieron datos de usuarios del servicio.');
       }
-      this.usersActive = users.active || [];
+      this.usersActive = (users.active || []).filter((user: any) => user.role_id === 1);      this.usersDesactive = users.desactive || [];
       this.usersDesactive = users.desactive || [];
 
       // Si las tablas ya están inicializadas, refrescar sus datos
@@ -1134,6 +1187,23 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
       this.textFontSize = item.paragraph;
     }
   }
+
+
+  //Modal
+  // Agrega estas propiedades
+    currentPage = 1;
+    itemsPerPage = 8;
+
+    // Calcula los campos a mostrar en la página actual
+    get paginatedUserFields() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      return this.userFields.slice(start, start + this.itemsPerPage);
+    }
+
+    // Calcula el número total de páginas
+    get totalPages() {
+      return Math.ceil(this.userFields.length / this.itemsPerPage);
+    }
 
   async handleSaveEdit(item: any): Promise<void> {
 

@@ -250,33 +250,35 @@
         <!-- Modal para Detalles del Usuario (sin Bootstrap JS) -->
         <div class="custom-modal-overlay" *ngIf="showUserDetailsModal">
             <div class="custom-modal-dialog custom-modal-large">
-            <div class="custom-modal-content">
-                <div class="custom-modal-header custom-bg-primary">
-                <h5 class="custom-modal-title">Detalles del Usuario</h5>
-                <button type="button" class="custom-modal-close-btn" (click)="closeUserDetailsModal()" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                <div class="custom-modal-body" *ngIf="usuarioSeleccionado">
-                <div class="custom-row">
-                    <div class="custom-col-half">
-                    <p><strong>Nombre:</strong> {{ usuarioSeleccionado.firstName }} {{ usuarioSeleccionado.lastName }}</p>
-                    <p><strong>Email:</strong> {{ usuarioSeleccionado.email }}</p>
-                    <p><strong>Teléfono:</strong> {{ usuarioSeleccionado.phone }}</p>
+                <div class="custom-modal-content">
+                    <div class="custom-modal-header custom-bg-primary">
+                    <h5 class="custom-modal-title">Detalles del Usuario</h5>
+                    <button type="button" class="custom-modal-close-btn" (click)="closeUserDetailsModal()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                     </div>
-                    <div class="custom-col-half">
-                    <p><strong>Dirección:</strong> {{ usuarioSeleccionado.address_address }}</p>
-                    <p><strong>Rol:</strong> {{ usuarioSeleccionado.role_id }}</p>
-                    <p><strong>Fecha de Registro:</strong> {{ usuarioSeleccionado.createdAt | date:'mediumDate' }}</p>
-                    <p><strong>Fecha de Actualizacion:</strong> {{ usuarioSeleccionado.updatedAt | date:'mediumDate' }}</p>
+                        <div class="fields_container">
+                            <div  *ngFor="let field of paginatedUserFields">
+                                <p>
+                                    <strong>{{ field.label }}:</strong>
+                                    <ng-container *ngIf="field.key === 'image'; else normalField">
+                                    {{ usuarioSeleccionado[field.key] ? (usuarioSeleccionado[field.key] | slice:0:15) + '...' : '' }}
+                                    </ng-container>
+                                    <ng-template #normalField>
+                                    {{ usuarioSeleccionado[field.key] }}
+                                    </ng-template>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="pagination-controls" *ngIf="totalPages > 1">
+                            <button (click)="currentPage = currentPage - 1" [disabled]="currentPage === 1">Anterior</button>
+                            <span>Página {{currentPage}} de {{totalPages}}</span>
+                            <button (click)="currentPage = currentPage + 1" [disabled]="currentPage === totalPages">Siguiente</button>
+                        </div>
+                    <div class="custom-modal-footer">
+                    <button type="button" class="custom-btn custom-btn-secondary" (click)="closeUserDetailsModal()">Cerrar</button>
                     </div>
                 </div>
-                <!-- Puedes añadir más detalles aquí según la estructura de tu objeto de usuario -->
-                </div>
-                <div class="custom-modal-footer">
-                <button type="button" class="custom-btn custom-btn-secondary" (click)="closeUserDetailsModal()">Cerrar</button>
-                </div>
-            </div>
             </div>
         </div>
 
