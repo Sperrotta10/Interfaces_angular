@@ -119,6 +119,29 @@ export class StyleManagerService {
     }
   }
 
+  private ensureFontStyles(): void {
+    const savedFonts = localStorage.getItem('CustomFonts');
+    if (savedFonts) {
+      const fonts = JSON.parse(savedFonts);
+      this.setFontFamilyVariables(fonts);
+      
+      // Recrear los @font-face dinámicamente
+      const style = document.createElement('style');
+      style.id = 'global-font-styles';
+      style.innerHTML = `
+        @font-face {
+          font-family: '${fonts.name_principal}';
+          src: url('${this.formatFontUrl(fonts.url_principal)}') format('truetype');
+        }
+        @font-face {
+          font-family: '${fonts.name_secundary}';
+          src: url('${this.formatFontUrl(fonts.url_secundary)}') format('truetype');
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }
+
   applyStyles(styles: any, saveToStorage: boolean = true): void {
     const completeStyles = {
       ...this.defaultStyles,
@@ -130,6 +153,7 @@ export class StyleManagerService {
     if (isPlatformBrowser(this.platformId)) {
       this.setCssVariables(completeStyles);
       this.setFontStyles(completeStyles); // Añadido para manejar fuentes
+      this.ensureFontStyles(); // Asegura que las fuentes se apliquen correctamente
       if (saveToStorage) {
         try {
           localStorage.setItem('CurrentStyles', JSON.stringify(completeStyles));
