@@ -15,7 +15,7 @@ import { MatIcon } from '@angular/material/icon';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import Swal from 'sweetalert2';
 import { MatSelectModule } from '@angular/material/select';
-
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'app-user',
@@ -54,7 +54,16 @@ export class UserComponent implements OnInit {
         maidenName: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$'), Validators.maxLength(15)]],
         age: ['', [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(0), Validators.max(120)]],
         gender: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
-        birthDate: ['', Validators.required,],
+        birthDate: [
+          '',
+          [
+            Validators.required,
+            Validators.maxLength(8),
+            Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[0-2])\d{4}$/),
+            this.birthDateNotInFutureValidator,
+
+          ]
+        ],
         bloodGroup: ['', [Validators.pattern('^[a-zA-Z0-9+-]+$'), Validators.maxLength(4)]],
         height: ['', [Validators.pattern('^[0-9]+$'), Validators.maxLength(3)]],
         weight: ['', [Validators.pattern('^[0-9]+$'), Validators.maxLength(3)]],
@@ -83,7 +92,14 @@ export class UserComponent implements OnInit {
         university: ['', [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]]
       }),
       paso4: this.fb.group({
-        bank_cardExpire: [''],
+        bank_cardExpire: [
+          '',
+          [
+            Validators.required,
+            Validators.maxLength(8),
+            Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[0-2])\d{4}$/)
+          ]
+        ],
         bank_cardNumber: ['', [Validators.pattern('^[0-9]+$')]],
         bank_cardType: ['', [Validators.pattern('^[a-zA-Z ]+$')]],
         bank_currency: ['', [Validators.pattern('^[A-Z]{3}$')]],
@@ -175,6 +191,8 @@ export class UserComponent implements OnInit {
     });
   }
 
+  
+
   getUserID() { //✅
     try{
       const storedUser = localStorage.getItem('user');
@@ -234,6 +252,25 @@ export class UserComponent implements OnInit {
     if (result.isConfirmed) {
       this.onSubmit();
     }
+  }
+
+  birthDateNotInFutureValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (!value || value.length !== 8) return null; // Solo valida si hay valor y tiene 8 dígitos
+
+    // Extrae día, mes, año del string ddMMyyyy
+    const day = parseInt(value.substring(0, 2), 10);
+    const month = parseInt(value.substring(2, 4), 10) - 1; // Mes en JS es 0-based
+    const year = parseInt(value.substring(4, 8), 10);
+
+    const inputDate = new Date(year, month, day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (inputDate > today) {
+      return { futureDate: true };
+    }
+    return null;
   }
 
   openMapModal() {

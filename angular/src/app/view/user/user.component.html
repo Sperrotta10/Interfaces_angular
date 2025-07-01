@@ -4,26 +4,27 @@
     <form [formGroup]="paso1Form">
       <ng-template matStepLabel>Datos personales</ng-template>
       <mat-form-field appearance="outline">
-        <input matInput placeholder="Nombre" formControlName="firstName" maxlength="20">
+        <input matInput placeholder="Nombre" formControlName="firstName" minlength="2" maxlength="20">
         <mat-error *ngIf="paso1Form.get('firstName')?.hasError('required')">El nombre es obligatorio</mat-error>
         <mat-error *ngIf="paso1Form.get('firstName')?.hasError('pattern')">Solo letras permitidas</mat-error>
         <mat-error *ngIf="paso1Form.get('firstName')?.hasError('maxlength')">Máximo 20 caracteres</mat-error>
         <mat-error *ngIf="paso1Form.get('firstName')?.hasError('minlength')">Mínimo 2 caracteres</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput placeholder="Apellido" formControlName="lastName" maxlength="20">
+        <input matInput placeholder="Apellido" formControlName="lastName" minlength="2" maxlength="20">
         <mat-error *ngIf="paso1Form.get('lastName')?.hasError('required')">El apellido es obligatorio</mat-error>
         <mat-error *ngIf="paso1Form.get('lastName')?.hasError('pattern')">Solo letras permitidas</mat-error>
         <mat-error *ngIf="paso1Form.get('lastName')?.hasError('maxlength')">Máximo 20 caracteres</mat-error>
         <mat-error *ngIf="paso1Form.get('lastName')?.hasError('minlength')">Mínimo 2 caracteres</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput placeholder="Segundo apellido" formControlName="maidenName" maxlength="20">
+        <input matInput placeholder="Segundo apellido" formControlName="maidenName" minlength="2" maxlength="20">
         <mat-error *ngIf="paso1Form.get('maidenName')?.hasError('pattern')">Solo letras permitidas</mat-error>
         <mat-error *ngIf="paso1Form.get('maidenName')?.hasError('maxlength')">Máximo 20 caracteres</mat-error>
+        <mat-error *ngIf="paso1Form.get('maidenName')?.hasError('minlength')">Mínimo 2 caracteres</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput type="number" inputmode="numeric"  pattern="[0-9]*" placeholder="Edad" formControlName="age" maxlength="3">
+        <input matInput type="number" inputmode="numeric"  pattern="[0-9]*" placeholder="Edad" formControlName="age" minlength="1" maxlength="3">
         <mat-error *ngIf="paso1Form.get('age')?.hasError('required')">La edad es obligatoria</mat-error>
         <mat-error *ngIf="paso1Form.get('age')?.hasError('pattern')">Solo números permitidos</mat-error>
         <mat-error *ngIf="paso1Form.get('age')?.hasError('min')">Edad mínima: 0</mat-error>
@@ -41,12 +42,27 @@
         <mat-error *ngIf="paso1Form.get('gender')?.hasError('required')">El género es obligatorio</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Choose a date</mat-label>
-        <input matInput [matDatepicker]="picker" readonly [max]="maxDate" formControlName="birthDate" maxlength="10">
-        <mat-hint>MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
+        <mat-label>Fecha de nacimiento</mat-label>
+        <input matInput
+              placeholder="Ej: 01072005"
+              formControlName="birthDate"
+              maxlength="8"
+              pattern="^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[0-2])\d{4}$"
+              autocomplete="off">
+              <mat-hint>Formato: ddMMyyyy</mat-hint>
+              <mat-error *ngIf="paso1Form.get('birthDate')?.hasError('pattern')">
+                Formato inválido. Usa ddMMyyyy (ej: 01072005)
+              </mat-error>
+              <mat-error *ngIf="paso1Form.get('birthDate')?.hasError('maxlength')">
+                Máximo 8 caracteres
+              </mat-error>
+              <mat-error *ngIf="paso1Form.get('birthDate')?.hasError('required')">
+                La fecha es obligatoria
+              </mat-error>
+              <mat-error *ngIf="paso1Form.get('birthDate')?.hasError('futureDate')">
+                La fecha no puede ser mayor al día de hoy
+              </mat-error>
+            </mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Grupo sanguíneo" formControlName="bloodGroup" maxlength="4">
         <mat-error *ngIf="paso1Form.get('bloodGroup')?.hasError('maxlength')">Máximo 4 caracteres</mat-error>
       </mat-form-field>
@@ -91,9 +107,9 @@
         <mat-error *ngIf="paso2Form.get('email')?.hasError('maxlength')">Máximo 50 caracteres</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput placeholder="Teléfono" formControlName="phone" maxlength="15">
+        <input matInput placeholder="Teléfono"  formControlName="phone" maxlength="11" pattern="[0-9]*">
         <mat-error *ngIf="paso2Form.get('phone')?.hasError('pattern')">Solo números permitidos</mat-error>
-        <mat-error *ngIf="paso2Form.get('phone')?.hasError('maxlength')">Máximo 15 caracteres</mat-error>
+        <mat-error *ngIf="paso2Form.get('phone')?.hasError('maxlength')">Máximo 11 caracteres</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <input matInput placeholder="Usuario" formControlName="user_name" maxlength="20">
@@ -105,9 +121,13 @@
       
       <mat-form-field appearance="outline"><input matInput placeholder="IP" formControlName="ip" maxlength="15">
         <mat-error *ngIf="paso2Form.get('ip')?.hasError('maxlength')">Máximo 15 caracteres</mat-error>
+        <mat-error *ngIf="paso2Form.get('ip')?.hasError('pattern')">Introduzca una dirección IP válida</mat-error>
+
       </mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="MAC Address" formControlName="macAddress" maxlength="17">
         <mat-error *ngIf="paso2Form.get('macAddress')?.hasError('maxlength')">Máximo 17 caracteres</mat-error>
+        <mat-error *ngIf="paso2Form.get('macAddress')?.hasError('pattern')">Introduzca una dirección MAC válida</mat-error>
+
       </mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="User Agent" formControlName="userAgent" maxlength="100">
         <mat-error *ngIf="paso2Form.get('userAgent')?.hasError('maxlength')">Máximo 100 caracteres</mat-error>
@@ -174,12 +194,28 @@
     <form [formGroup]="paso4Form">
       <ng-template matStepLabel>Banco y Cripto</ng-template>
       <mat-form-field appearance="outline">
-        <input matInput [matDatepicker]="cardExpirePicker" readonly placeholder="Vencimiento tarjeta" formControlName="bank_cardExpire" maxlength="10">
-        <mat-datepicker-toggle matSuffix [for]="cardExpirePicker"></mat-datepicker-toggle>
-        <mat-datepicker #cardExpirePicker></mat-datepicker>
+        <mat-label>Vencimiento tarjeta</mat-label>
+        <input matInput
+              placeholder="Ej: 01072025"
+              formControlName="bank_cardExpire"
+              maxlength="8"
+              pattern="^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[0-2])\d{4}$"
+              autocomplete="off">
+        <mat-hint>Formato: ddMMyyyy</mat-hint>
+        <mat-error *ngIf="paso4Form.get('bank_cardExpire')?.hasError('pattern')">
+          Formato inválido. Usa ddMMyyyy (ej: 01072025)
+        </mat-error>
+        <mat-error *ngIf="paso4Form.get('bank_cardExpire')?.hasError('maxlength')">
+          Máximo 8 caracteres
+        </mat-error>
+        <mat-error *ngIf="paso4Form.get('bank_cardExpire')?.hasError('required')">
+          El vencimiento es obligatorio
+        </mat-error>
       </mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Número de tarjeta" formControlName="bank_cardNumber" maxlength="20">
-        <mat-error *ngIf="paso4Form.get('bank_cardNumber')?.hasError('maxlength')">Máximo 20 caracteres</mat-error>
+      <mat-form-field appearance="outline"><input matInput pattern="^[0-9]*$" placeholder="Número de tarjeta" formControlName="bank_cardNumber" maxlength="16">
+        <mat-error *ngIf="paso4Form.get('bank_cardNumber')?.hasError('maxlength')">Máximo 16 caracteres</mat-error>
+        <mat-error *ngIf="paso4Form.get('bank_cardNumber')?.hasError('pattern')">Introduzca solo números</mat-error>
+
       </mat-form-field>
       <mat-form-field appearance="outline"><input matInput placeholder="Tipo de tarjeta" formControlName="bank_cardType" maxlength="15">
         <mat-error *ngIf="paso4Form.get('bank_cardType')?.hasError('maxlength')">Máximo 15 caracteres</mat-error>
