@@ -1,12 +1,20 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
+import { url } from 'node:inspector';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StyleManagerService {
   private currentStyles = new BehaviorSubject<any>(null);
+  private currentFonts = new BehaviorSubject<any>({
+    name_principal: 'Arial',
+    url_principal: '',
+    name_secondary: 'Times New Roman',
+    url_secondary: ''
+  });
+  font$ = this.currentFonts.asObservable();
   styles$ = this.currentStyles.asObservable();
   
   private defaultStyles = {
@@ -18,6 +26,13 @@ export class StyleManagerService {
     titleSize: 32,
     subtitleSize: 24,
     textSize: 16
+  };
+
+  private defaultFonts = {
+    name_principal: 'Arial',
+    url_principal: '',
+    name_secundary: 'Times New Roman',
+    url_secundary: ''
   };
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
@@ -36,6 +51,71 @@ export class StyleManagerService {
       }
     } else {
       this.currentStyles.next(this.defaultStyles);
+    }
+  }
+
+  applyCustomFonts(fontData: {
+    name_principal: string,
+    url_principal: string,
+    name_secundary: string,
+    url_secundary: string
+  }): void {
+    if (isPlatformBrowser(this.platformId)) {
+
+      // Eliminar estilos previos
+      const existingStyle = document.getElementById('global-font-styles');
+      if (existingStyle) existingStyle.remove();
+
+      // Crear estilos para ambas fuentes
+      const style = document.createElement('style');
+      style.innerHTML = `
+        @font-face {
+          font-family: '${fontData.name_principal}';
+          src: url('${this.formatFontUrl(fontData.url_principal)}') format('truetype');
+        }
+        @font-face {
+          font-family: '${fontData.name_secundary}';
+          src: url('${this.formatFontUrl(fontData.url_secundary)}') format('truetype');
+        }
+      `;
+      document.head.appendChild(style);
+      
+      this.currentFonts.next(fontData);
+      this.setFontFamilyVariables(fontData);
+      
+      // Guardar en localStorage
+      localStorage.setItem('CustomFonts', JSON.stringify(fontData));
+    }
+  }
+
+  private formatFontUrl(base64String: string): string {
+    // Verificar si ya tiene el prefijo data:
+    if (base64String.startsWith('data:')) {
+      return base64String;
+    }
+    // Formatear como URL de datos si es necesario
+    return `data:font/truetype;charset=utf-8;base64,${base64String}`;
+  }
+
+  private setFontFamilyVariables(fonts: any): void {
+    const root = document.documentElement;
+
+    if (fonts.name_principal) {
+      root.style.setProperty('--font-principal', `'${fonts.name_principal}'`);
+    }
+  
+    if (fonts.name_secundary) {
+      root.style.setProperty('--font-secundaria', `'${fonts.name_secundary}'`);
+    }
+  }
+
+  loadSavedFonts(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const savedFonts = localStorage.getItem('CustomFonts');
+      if (savedFonts) {
+        this.currentFonts.next(JSON.parse(savedFonts));
+        this.applyCustomFonts(JSON.parse(savedFonts));
+      }
     }
   }
 
@@ -89,6 +169,25 @@ export class StyleManagerService {
 
   resetToDefault(): void {
     this.applyStyles(this.defaultStyles);
+    // Restablecer fuentes
+    this.resetFonts();
+  }
+
+  resetFonts(): void {
+    // Eliminar estilos de fuentes personalizadas
+    const fontStyle = document.getElementById('global-font-styles');
+    if (fontStyle) {
+      document.head.removeChild(fontStyle);
+    }
+
+    // Restablecer variables CSS
+    const root = document.documentElement;
+    root.style.setProperty('--font-principal', this.defaultFonts.name_principal);
+    root.style.setProperty('--font-secundaria', this.defaultFonts.name_secundary);
+
+    // Limpiar localStorage
+    localStorage.removeItem('CustomFonts');
+    this.currentFonts.next(this.defaultFonts);
   }
 
   getCurrentStyles(): any {

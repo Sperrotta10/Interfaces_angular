@@ -26,5 +26,8 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     // Esto fuerza la aplicación de estilos al inicio
     this.styleManager.styles$.subscribe();
+    this.styleManager.font$.subscribe(fonts => {
+      
+    });
   }
 }

@@ -20,12 +20,14 @@
   --title-font: 32px;
   --text-font: 16px;
   --subtitle-font: 24px;
+  --font-principal: 'Arial, sans-serif';
+  --font-secundaria: 'Times New Roman, serif';
 }
 
 body {
   background: var(--ligth-color);
   color: var(--dark-color); 
-  font-family: "Open Sans", sans-serif;
+  font-family: var(--font-secundaria);
   padding-top: 5em;
 }
 
@@ -57,7 +59,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--font-principal);
   font-weight: 400;
   margin: 0 0 20px 0;
   padding: 0;
@@ -220,7 +222,7 @@ h6 {
 
 #intro .intro-info .btn-get-started,
 #intro .intro-info .btn-services {
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--font-secundaria);
   font-size: var(--text-font);
   font-weight: 600;
   letter-spacing: 1px;
@@ -282,7 +284,7 @@ h6 {
   padding: 10px 15px;
   transition: 0.3s;
   font-size: var(--text-font);
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--font-secundaria);
   font-weight: 500;
 }
 
@@ -331,7 +333,7 @@ h6 {
 
 .main-nav .drop-down > a:after {
   content: "\f107";
-  font-family: FontAwesome;
+  font-family: var(--font-secundaria);
   padding-left: 10px;
 }
 
@@ -394,7 +396,7 @@ h6 {
 
 .mobile-nav .drop-down > a:after {
   content: "\f078";
-  font-family: FontAwesome;
+  font-family: var(--font-secundaria);
   padding-left: 10px;
   position: absolute;
   right: 15px;
@@ -867,7 +869,7 @@ h6 {
   margin: 0 0 10px 0;
   padding: 0;
   line-height: 1;
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--font-secundaria);
   font-weight: 300;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -877,7 +879,7 @@ h6 {
 #contact .contact-about p {
   font-size: var(--text-font);
   line-height: 24px;
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--font-secundaria);
   color: var(--dark-color);
 }
 
@@ -1003,7 +1005,7 @@ h6 {
   margin: 0 0 20px 0;
   padding: 2px 0 2px 0;
   line-height: 1;
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--font-secundaria);
   color: var(--ligth-color);
   font-weight: 400;
   letter-spacing: 3px;
@@ -1014,7 +1016,7 @@ h6 {
   font-size: var(--text-font);
   line-height: 24px;
   margin-bottom: 0;
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--font-secundaria);
   color: var(--ligth-color);
 }
 
@@ -1254,7 +1256,7 @@ input[type="email"] {
   border: 4px solid var(--ligth-color);
 }
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: var(--font-secundaria); }
 
 .user-panel{
     display: flex;
@@ -1273,13 +1275,13 @@ mat-horizontal-stepper {
   box-shadow: 0 2px 16px var(--dark-color);
   padding: 24px 16px;
   color: var(--dark-color);
-  font-family: var(--text-font);
+  font-family: var(--font-secundaria);
 }
 
 
 /* Formularios más compactos */
 form {
-  font-family: var(--text-font);
+  font-family: var(--font-secundaria);
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
