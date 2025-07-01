@@ -57,7 +57,7 @@ export class ApiService1 {
   async createFontStyles(data: any) {
     try {
 
-        const font = data.moduleFont;
+        const font = data;
         const res = await firstValueFrom(this.http.post<any>(`${this.baseURL}/font/`, font, { withCredentials: true }));
         if (res) {
             console.log("Fuentes creadas:", res);
