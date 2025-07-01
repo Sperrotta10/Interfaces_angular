@@ -1385,6 +1385,79 @@ map-btn {
   color: var(--primary-color) !important;
 }
 
+.dt-button.buttons-excel.buttons-html5.custom-btn.custom-btn-excel {
+  background-color: #1d6f42 !important; /* Verde Excel real */
+  color: white !important;
+  border-radius: 6px !important;
+  border: none !important;
+  padding: 8px 15px 8px 15px !important; /* Espacio para ícono */
+  position: relative !important;
+  font-weight: bold !important;
+  transition: all 0.3s !important;
+}
 
+/* Efecto hover */
+.dt-button.buttons-excel.buttons-html5.custom-btn.custom-btn-excel:hover {
+  background-color: #165a32 !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2) !important;
+}
 
+/* Estado deshabilitado */
+.dt-button.buttons-excel.buttons-html5.custom-btn.custom-btn-excel[disabled] {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+/* Estilo base del botón PDF */
+.dt-button.buttons-pdf.buttons-html5.custom-btn.custom-btn-pdf {
+  background-color: #e74c3c !important; /* Rojo PDF típico */
+  color: white !important;
+  border-radius: 6px !important;
+  border: none !important;
+  padding: 8px 15px 8px 15px !important; /* Espacio para ícono */
+  position: relative !important;
+  font-weight: bold !important;
+  transition: all 0.3s !important;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Efecto hover */
+.dt-button.buttons-pdf.buttons-html5.custom-btn.custom-btn-pdf:hover {
+  background-color: #c0392b !important; /* Rojo más oscuro */
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Estado deshabilitado */
+.dt-button.buttons-pdf.buttons-html5.custom-btn.custom-btn-pdf[disabled] {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+}
+
+.custom-btn.custom-btn-info.custom-btn-sm.custom-me-1.view-details-btn{
+  background-color: #4B97F5 !important; /* Rojo PDF típico */
+  color: white !important;
+  border-radius: 6px !important;
+  border: none !important;
+  padding: 8px 15px !important; /* Espacio para ícono */
+  position: relative !important;
+  font-weight: bold !important;
+  transition: all 0.3s !important;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1) !important;
+  margin-right: 10px;
+}
+
+.custom-btn.custom-btn-danger.custom-btn-sm.disable-user-btn{
+  background-color: #c0392b !important; /* Rojo PDF típico */
+  color: white !important;
+  border-radius: 6px !important;
+  border: none !important;
+  padding: 8px 15px !important; /* Espacio para ícono */
+  position: relative !important;
+  font-weight: bold !important;
+  transition: all 0.3s !important;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1) !important;
+  margin-right: 10px;
+}
 
