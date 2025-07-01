@@ -28,6 +28,8 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
   usersDesactive: any[] = [];
   vista_modo2: 'activos' | 'deshabilitados' = 'activos';
 
+  logoBase64: string | undefined;
+
   usuarioSeleccionado: any = null; // Para el modal de detalles
 
   activeDataTable: any;
@@ -72,6 +74,7 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
     this.fetchSavedStyles();
     this.fetchSavedStylesFont();
 
+    this.loadImage(); // Cargar logo en base64
     // modulo de usuario
     await this.reloadUsers();
     // Inicializar la tabla aquí después de que los datos estén disponibles
@@ -128,6 +131,27 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  private async loadImage() {
+    const logoPath = 'img/logo.png';
+    try {
+      const response = await fetch(logoPath);
+      if (response.ok) {
+        const blob = await response.blob();
+        this.logoBase64 = await this.blobToBase64(blob);
+      }
+    } catch (error) {
+      console.error('Error loading logo:', error);
+    }
+  }
+
+  private blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.readAsDataURL(blob);
+    });
+  }
+
   /**
    * Inicializa la tabla de DataTables según la vista actual.
    * Se encarga de destruir instancias previas para evitar conflictos.
@@ -149,6 +173,8 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Inicializar la tabla correspondiente a la vista_modo2
     if (this.vista_modo2 === 'activos' && this.activeTable) {
+      // Captura el valor de logoBase64 en una variable local para usarlo en customize
+      const logoBase64 = this.logoBase64;
       this.activeDataTable = $(this.activeTable.nativeElement).DataTable({
         data: this.usersActive.map(user => [
           `${user.firstName} ${user.lastName}`,
@@ -172,6 +198,27 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
             className: 'custom-btn custom-btn-excel', // Clases CSS personalizadas
             exportOptions: {
               columns: [0, 1, 2, 3]
+            },
+            customize: function (xlsx: { xl: { worksheets: { [x: string]: any; }; }; }) {
+              
+              var sheet = xlsx.xl.worksheets['sheet1.xml'];
+              $('row:first', sheet).before(`
+                <row>
+                  <c t="inlineStr" s="2" r="A1">
+                    <is>
+                      <t>▼▼▼ COPIE ESTE TEXTO Y PEGUE SU LOGO ▼▼▼</t>
+                    </is>
+                  </c>
+                </row>
+                <row>
+                  <c t="inlineStr" s="1" r="A2">
+                    <is>
+                      <t>img/logo.png</t>
+                    </is>
+                  </c>
+                </row>
+              `);
+                
             }
           },
           {
@@ -181,8 +228,24 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
             exportOptions: {
               columns: [0, 1, 2, 3]
             },
+            customize: function (doc: { content: any[]; }) {
+
+              doc.content.splice(0, 1, {
+                image: logoBase64,
+                width: 100,
+                alignment: 'center',
+                margin: [0, 0, 0, 20]
+              });
+              
+              // Personalizar título
+              doc.content[1].text = 'Listado de Usuarios\n\n',
+              doc.content[1].alignment = 'center',
+              doc.content[1].fontSize = 15,
+              doc.content[1].margin = [0, 0, 0, 20];
+              
+            },
             orientation: 'portrait',
-            pageSize: 'A4'
+            pageSize: 'A4',
           }
         ],
         responsive: true,
@@ -234,6 +297,8 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
     } else if (this.vista_modo2 === 'deshabilitados' && this.disabledTable) {
+      // Captura el valor de logoBase64 en una variable local para usarlo en customize
+      const logoBase64 = this.logoBase64;
       this.disabledDataTable = $(this.disabledTable.nativeElement).DataTable({
         data: this.usersDesactive.map(user => [
           `${user.firstName} ${user.lastName}`,
@@ -265,6 +330,22 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
             className: 'custom-btn custom-btn-pdf',
             exportOptions: {
               columns: [0, 1, 2, 3]
+            },
+            customize: function (doc: { content: any[]; }) {
+
+              doc.content.splice(0, 1, {
+                image: logoBase64,
+                width: 100,
+                alignment: 'center',
+                margin: [0, 0, 0, 20]
+              });
+              
+              // Personalizar título
+              doc.content[1].text = 'Listado de Usuarios\n\n',
+              doc.content[1].alignment = 'center',
+              doc.content[1].fontSize = 15,
+              doc.content[1].margin = [0, 0, 0, 20];
+              
             },
             orientation: 'portrait',
             pageSize: 'A4'
@@ -1121,6 +1202,7 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
     this.editingItem = item;
     this.editMode = true;
     this.saveMode = 'editar';
+    console.log('handleEdit called with item:', item);
     
     if (type === 'color') {
       this.headerBgColor = item.colors.color_one;
@@ -1132,6 +1214,8 @@ export class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
       this.titleFontSize = item.title;
       this.subtitleFontSize = item.sub_title;
       this.textFontSize = item.paragraph;
+      this.principalFontName = item.fontFamily.name_principal;
+      this.secondaryFontName = item.fontFamily.name_secundary;
     }
   }
 
