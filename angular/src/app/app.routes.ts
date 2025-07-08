@@ -22,7 +22,16 @@ export const routes: Routes = [
         canActivate: [authGuard ,roleGuard('admin')] // Protege la ruta con el guard de autenticación y rol
     },
     {
-        path: 'user',
+        path: 'user-profile',
+        loadComponent: () => {
+            return import('./view/perfil-personal/perfil-personal.component').then(
+                m => m.PerfilPersonalComponent //la palabra m se refiere module
+            )
+        },
+        canActivate: [authGuard, roleGuard('user')] // Protege la ruta con el guard de autenticación y rol
+    },
+    {
+        path: 'user-form',
         loadComponent: () => {
             return import('./view/user/user.component').then(
                 m => m.UserComponent //la palabra m se refiere module

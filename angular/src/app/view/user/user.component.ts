@@ -16,6 +16,8 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import Swal from 'sweetalert2';
 import { MatSelectModule } from '@angular/material/select';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-user',
@@ -45,7 +47,7 @@ export class UserComponent implements OnInit {
   private readonly _today = new Date();
   readonly maxDate = new Date(this._today.getFullYear(), this._today.getMonth(), this._today.getDate());
 
-  constructor(private fb: FormBuilder, private apiService: ApiService2, private dialog: MatDialog) {
+  constructor(private fb: FormBuilder, private apiService: ApiService2, private dialog: MatDialog, private router: Router) {
     
     this.formGrupo = this.fb.group({
       paso1: this.fb.group({
@@ -95,7 +97,6 @@ export class UserComponent implements OnInit {
         bank_cardExpire: [
           '',
           [
-            Validators.required,
             Validators.maxLength(8),
             Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[0-2])\d{4}$/)
           ]
@@ -154,10 +155,26 @@ export class UserComponent implements OnInit {
     return null;
   }
 
+  triggerFileInput() {
+  document.getElementById('fileInput')?.click();
+}
+
+selectedFileName: string = '';
+
+
+  onFileSelecteddd(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files.length > 0) {
+    this.selectedFileName = input.files[0].name;
+    // Aquí puedes manejar el archivo seleccionado
+  }
+}
+
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
+      this.selectedFileName = input.files[0].name;
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.imageFileDataUrl = e.target.result;
@@ -229,6 +246,7 @@ export class UserComponent implements OnInit {
           title: '¡Datos actualizados!',
           text: 'Tus datos han sido actualizados correctamente.'
         });
+        this.router.navigate(['/user-profile']); // Redirige al perfil de usuario después de actualizar
       } catch (error) {
         await Swal.fire({
           icon: 'error',

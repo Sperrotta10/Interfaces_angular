@@ -63,16 +63,16 @@
                 La fecha no puede ser mayor al día de hoy
               </mat-error>
             </mat-form-field>
-      <mat-form-field appearance="outline"><input matInput placeholder="Grupo sanguíneo" formControlName="bloodGroup" maxlength="4">
+      <mat-form-field appearance="outline"><input matInput placeholder="Grupo sanguíneo" formControlName="bloodGroup" maxlength="3">
         <mat-error *ngIf="paso1Form.get('bloodGroup')?.hasError('maxlength')">Máximo 4 caracteres</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput type="number" placeholder="Altura (centímetros)" formControlName="height" maxlength="3">
+        <input matInput placeholder="Altura (centímetros)" formControlName="height" maxlength="3">
         <mat-error *ngIf="paso1Form.get('height')?.hasError('pattern')">Solo números válidos</mat-error>
         <mat-error *ngIf="paso1Form.get('height')?.hasError('maxlength')">Máximo 3 dígitos</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput type="number" placeholder="Peso (Kílogramos)" formControlName="weight" maxlength="3">
+        <input matInput placeholder="Peso (Kílogramos)" formControlName="weight" maxlength="3">
         <mat-error *ngIf="paso1Form.get('weight')?.hasError('pattern')">Solo números válidos</mat-error>
         <mat-error *ngIf="paso1Form.get('weight')?.hasError('maxlength')">Máximo 3 dígitos</mat-error>
       </mat-form-field>
@@ -88,8 +88,17 @@
       <mat-form-field appearance="outline"><input matInput placeholder="URL de imagen" formControlName="image">
       </mat-form-field>
       <div class="imagen-input-preview-row">
-        <label for="fileInput" style="font-size: 0.95em;">Cargar imagen:</label>
-        <input id="fileInput" type="file" accept="image/*" (change)="onFileSelected($event)" style="display: inline-block;">
+        <div>
+          <label for="fileInput" style="font-size: 0.95em;">Cargar imagen:</label>
+          <span>{{selectedFileName}}</span>
+        </div>
+
+        <input id="fileInput" type="file" accept="image/*" (change)="onFileSelected($event)" style="display: none;">
+        <button type="button" class="custom-file-button" (click)="triggerFileInput()">
+          <i class="upload-icon"></i> <!-- Opcional: ícono de subida -->
+          Seleccionar imagen
+        </button>
+
         <img id="profile_img" loading="lazy" *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Preview" (error)="onImageError($event)">
       </div>
       <div><button mat-button matStepperNext [disabled]="!paso1Form.valid">Siguiente</button></div>
@@ -165,6 +174,10 @@
         <input matInput placeholder="Código postal" formControlName="address_postalCode" maxlength="10">
         <mat-error *ngIf="paso3Form.get('address_postalCode')?.hasError('pattern')">Solo números permitidos</mat-error>
         <mat-error *ngIf="paso3Form.get('address_postalCode')?.hasError('maxlength')">Máximo 10 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Código estado" formControlName="address_stateCode" maxlength="10">
+        <mat-error *ngIf="paso5Form.get('address_stateCode')?.hasError('maxlength')">Máximo 10 caracteres</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <input matInput type="number" placeholder="Latitud" formControlName="address_coordinates_lat" maxlength="10">

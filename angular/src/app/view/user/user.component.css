@@ -14,6 +14,8 @@ mat-horizontal-stepper {
     height: 80% !important;
 }
 
+
+
 ::ng-deep .mat-mdc-raised-button:not(:disabled){
     background-color: var(--ligth-color) !important;
     color: var(--dark-color) !important;
@@ -106,10 +108,18 @@ mat-horizontal-stepper {
     margin-top: 8px;
     width: 100%;
   }
-  button[mat-button] {
+  
+  ::ng-deep button[mat-button],
+  ::ng-deep mat-stepper-next,
+  ::ng-deep mdc-button,
+  ::ng-deep mat-mdc-button,
+  ::ng-deep mat-unthemed,
+  ::ng-deep mat-mdc-button-base{
     min-width: 80px;
     width: 100%;
     font-size: 15px;
+    background-color: #fc0000 !important;
+    color: #fc0000 !important;
   }
   .step-label-red {
     font-size: 18px !important;
@@ -179,4 +189,9 @@ form {
   form {
     padding-bottom: 100px;
   }
+}
+
+::ng-deep .mat-mdc-button:not(:disabled){
+  background-color:var(--ligth-color) !important;
+  color:var(--primary-color) !important;
 }

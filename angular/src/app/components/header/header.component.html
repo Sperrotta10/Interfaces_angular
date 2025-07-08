@@ -30,6 +30,7 @@
         <li><a href="#contact">Contact Us</a></li>
         <li><a routerLink="/login">Login</a></li>
         <li *ngIf="isAdmin$ | async"><a routerLink="/admin">Admin</a></li>
+        <li *ngIf="isUser$ | async"><a routerLink="/user-profile">Perfil</a></li>
         <li *ngIf="isAuthenticated$ | async">
           <a href="#logout" (click)="logout()">Logout</a>
         </li>
@@ -68,6 +69,8 @@
         <li><a href="#contact">Contact Us</a></li>
         <li><a routerLink="/login">Login</a></li>
         <li *ngIf="isAdmin$ | async"><a routerLink="/admin">Admin</a></li>
+        <li *ngIf="isUser$ | async"><a routerLink="/user-profile">Perfil</a></li>
+
         <li *ngIf="isAuthenticated$ | async">
           <a href="#logout" (click)="logout()">Logout ({{ (currentUser$ | async)?.email }})</a>
         </li>

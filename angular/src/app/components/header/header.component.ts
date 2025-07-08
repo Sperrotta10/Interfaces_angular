@@ -16,6 +16,7 @@ export class HeaderComponent implements AfterViewInit{
   mobileNavActive = false;
   isAuthenticated$: Observable<boolean>;
   isAdmin$: Observable<boolean>;
+  isUser$: Observable<boolean>;
   currentUser$: Observable<User | null>;
 
   constructor(private renderer: Renderer2, private el: ElementRef, private authService: AuthService) {
@@ -25,6 +26,9 @@ export class HeaderComponent implements AfterViewInit{
     this.isAdmin$ = this.authService.currentUser.pipe(
       map(user => user?.role === 'admin') // Emite true si el rol es 'admin'
     );
+    this.isUser$ = this.authService.currentUser.pipe(
+      map(user => user?.role === 'user')
+    )
     this.currentUser$ = this.authService.currentUser;
   }
 

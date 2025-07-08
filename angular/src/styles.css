@@ -1463,3 +1463,35 @@ map-btn {
   margin-right: 10px;
 }
 
+
+.custom-file-button {
+  padding: 10px 16px;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 90px;
+  width: auto;
+}
+
+.custom-file-button:hover {
+  background-color: var(--primary-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.custom-file-button:active {
+  background-color: var(--primary-color);
+}
+
+.file-name {
+  font-size: 14px;
+  color: #555;
+  margin-left: 8px;
+}
