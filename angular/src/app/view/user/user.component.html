@@ -1,0 +1,342 @@
+<mat-horizontal-stepper [linear]="false" #stepper>
+  <!-- Paso 1: Datos personales -->
+  <mat-step [stepControl]="paso1Form">
+    <form [formGroup]="paso1Form">
+      <ng-template matStepLabel>Datos personales</ng-template>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Nombre" formControlName="firstName" minlength="2" maxlength="20">
+        <mat-error *ngIf="paso1Form.get('firstName')?.hasError('required')">El nombre es obligatorio</mat-error>
+        <mat-error *ngIf="paso1Form.get('firstName')?.hasError('pattern')">Solo letras permitidas</mat-error>
+        <mat-error *ngIf="paso1Form.get('firstName')?.hasError('maxlength')">Máximo 20 caracteres</mat-error>
+        <mat-error *ngIf="paso1Form.get('firstName')?.hasError('minlength')">Mínimo 2 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Apellido" formControlName="lastName" minlength="2" maxlength="20">
+        <mat-error *ngIf="paso1Form.get('lastName')?.hasError('required')">El apellido es obligatorio</mat-error>
+        <mat-error *ngIf="paso1Form.get('lastName')?.hasError('pattern')">Solo letras permitidas</mat-error>
+        <mat-error *ngIf="paso1Form.get('lastName')?.hasError('maxlength')">Máximo 20 caracteres</mat-error>
+        <mat-error *ngIf="paso1Form.get('lastName')?.hasError('minlength')">Mínimo 2 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Segundo apellido" formControlName="maidenName" minlength="2" maxlength="20">
+        <mat-error *ngIf="paso1Form.get('maidenName')?.hasError('pattern')">Solo letras permitidas</mat-error>
+        <mat-error *ngIf="paso1Form.get('maidenName')?.hasError('maxlength')">Máximo 20 caracteres</mat-error>
+        <mat-error *ngIf="paso1Form.get('maidenName')?.hasError('minlength')">Mínimo 2 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput type="number" inputmode="numeric"  pattern="[0-9]*" placeholder="Edad" formControlName="age" minlength="1" maxlength="3">
+        <mat-error *ngIf="paso1Form.get('age')?.hasError('required')">La edad es obligatoria</mat-error>
+        <mat-error *ngIf="paso1Form.get('age')?.hasError('pattern')">Solo números permitidos</mat-error>
+        <mat-error *ngIf="paso1Form.get('age')?.hasError('min')">Edad mínima: 0</mat-error>
+        <mat-error *ngIf="paso1Form.get('age')?.hasError('max')">Edad máxima: 120</mat-error>
+        <mat-error *ngIf="paso1Form.get('age')?.hasError('maxlength')">Máximo 3 dígitos</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-select placeholder="Género" formControlName="gender">
+          <mat-option value="">Seleccione género</mat-option>
+          <mat-option value="Masculino">Masculino</mat-option>
+          <mat-option value="Femenino">Femenino</mat-option>
+          <mat-option value="Otro">Otro</mat-option>
+          <mat-option value="NoEspecificar">No Especificar</mat-option>
+        </mat-select>
+        <mat-error *ngIf="paso1Form.get('gender')?.hasError('required')">El género es obligatorio</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de nacimiento</mat-label>
+        <input matInput
+              placeholder="Ej: 01072005"
+              formControlName="birthDate"
+              maxlength="8"
+              pattern="^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[0-2])\d{4}$"
+              autocomplete="off">
+              <mat-hint>Formato: ddMMyyyy</mat-hint>
+              <mat-error *ngIf="paso1Form.get('birthDate')?.hasError('pattern')">
+                Formato inválido. Usa ddMMyyyy (ej: 01072005)
+              </mat-error>
+              <mat-error *ngIf="paso1Form.get('birthDate')?.hasError('maxlength')">
+                Máximo 8 caracteres
+              </mat-error>
+              <mat-error *ngIf="paso1Form.get('birthDate')?.hasError('required')">
+                La fecha es obligatoria
+              </mat-error>
+              <mat-error *ngIf="paso1Form.get('birthDate')?.hasError('futureDate')">
+                La fecha no puede ser mayor al día de hoy
+              </mat-error>
+            </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="Grupo sanguíneo" formControlName="bloodGroup" maxlength="3">
+        <mat-error *ngIf="paso1Form.get('bloodGroup')?.hasError('maxlength')">Máximo 4 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Altura (centímetros)" formControlName="height" maxlength="3">
+        <mat-error *ngIf="paso1Form.get('height')?.hasError('pattern')">Solo números válidos</mat-error>
+        <mat-error *ngIf="paso1Form.get('height')?.hasError('maxlength')">Máximo 3 dígitos</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Peso (Kílogramos)" formControlName="weight" maxlength="3">
+        <mat-error *ngIf="paso1Form.get('weight')?.hasError('pattern')">Solo números válidos</mat-error>
+        <mat-error *ngIf="paso1Form.get('weight')?.hasError('maxlength')">Máximo 3 dígitos</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="Color de ojos" formControlName="eyeColor" maxlength="15">
+        <mat-error *ngIf="paso1Form.get('eyeColor')?.hasError('maxlength')">Máximo 15 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="Color de cabello" formControlName="hair_color" maxlength="15">
+        <mat-error *ngIf="paso1Form.get('hair_color')?.hasError('maxlength')">Máximo 15 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="Tipo de cabello" formControlName="hair_type" maxlength="15">
+        <mat-error *ngIf="paso1Form.get('hair_type')?.hasError('maxlength')">Máximo 15 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="URL de imagen" formControlName="image">
+      </mat-form-field>
+      <div class="imagen-input-preview-row">
+        <div>
+          <label for="fileInput" style="font-size: 0.95em;">Cargar imagen:</label>
+          <span>{{selectedFileName}}</span>
+        </div>
+
+        <input id="fileInput" type="file" accept="image/*" (change)="onFileSelected($event)" style="display: none;">
+        <button type="button" class="custom-file-button" (click)="triggerFileInput()">
+          <i class="upload-icon"></i> <!-- Opcional: ícono de subida -->
+          Seleccionar imagen
+        </button>
+
+        <img id="profile_img" loading="lazy" *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Preview" (error)="onImageError($event)">
+      </div>
+      <div><button mat-button matStepperNext [disabled]="!paso1Form.valid">Siguiente</button></div>
+    </form>
+  </mat-step>
+
+  <!-- Paso 2: Contacto y acceso -->
+  <mat-step [stepControl]="paso2Form">
+    <form [formGroup]="paso2Form">
+      <ng-template matStepLabel>Contacto</ng-template>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Correo electrónico" formControlName="email" maxlength="50">
+        <mat-error *ngIf="paso2Form.get('email')?.hasError('required')">El correo es obligatorio</mat-error>
+        <mat-error *ngIf="paso2Form.get('email')?.hasError('email')">Correo inválido</mat-error>
+        <mat-error *ngIf="paso2Form.get('email')?.hasError('maxlength')">Máximo 50 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Teléfono"  formControlName="phone" maxlength="11" pattern="[0-9]*">
+        <mat-error *ngIf="paso2Form.get('phone')?.hasError('pattern')">Solo números permitidos</mat-error>
+        <mat-error *ngIf="paso2Form.get('phone')?.hasError('maxlength')">Máximo 11 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Usuario" formControlName="user_name" maxlength="20">
+        <mat-error *ngIf="paso2Form.get('user_name')?.hasError('required')">El usuario es obligatorio</mat-error>
+        <mat-error *ngIf="paso2Form.get('user_name')?.hasError('pattern')">Solo letras, números y guion bajo</mat-error>
+        <mat-error *ngIf="paso2Form.get('user_name')?.hasError('maxlength')">Máximo 20 caracteres</mat-error>
+        <mat-error *ngIf="paso2Form.get('user_name')?.hasError('minlength')">Mínimo 4 caracteres</mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline"><input matInput placeholder="IP" formControlName="ip" maxlength="15">
+        <mat-error *ngIf="paso2Form.get('ip')?.hasError('maxlength')">Máximo 15 caracteres</mat-error>
+        <mat-error *ngIf="paso2Form.get('ip')?.hasError('pattern')">Introduzca una dirección IP válida</mat-error>
+
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="MAC Address" formControlName="macAddress" maxlength="17">
+        <mat-error *ngIf="paso2Form.get('macAddress')?.hasError('maxlength')">Máximo 17 caracteres</mat-error>
+        <mat-error *ngIf="paso2Form.get('macAddress')?.hasError('pattern')">Introduzca una dirección MAC válida</mat-error>
+
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="User Agent" formControlName="userAgent" maxlength="100">
+        <mat-error *ngIf="paso2Form.get('userAgent')?.hasError('maxlength')">Máximo 100 caracteres</mat-error>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Anterior</button>
+        <button mat-button matStepperNext [disabled]="!paso2Form.valid">Siguiente</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- Paso 3: Dirección y universidad -->
+  <mat-step [stepControl]="paso3Form">
+    <form [formGroup]="paso3Form">
+      <ng-template matStepLabel>Dirección</ng-template>
+      <button mat-raised-button color="var(--primary-color)" (click)="openMapModal()">
+        <mat-icon>place</mat-icon>
+        Seleccionar ubicación en mapa
+      </button>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Dirección" formControlName="address_address" maxlength="50">
+        <mat-error *ngIf="paso3Form.get('address_address')?.hasError('maxlength')">Máximo 50 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Ciudad" formControlName="address_city" maxlength="30">
+        <mat-error *ngIf="paso3Form.get('address_city')?.hasError('pattern')">Solo letras permitidas</mat-error>
+        <mat-error *ngIf="paso3Form.get('address_city')?.hasError('maxlength')">Máximo 30 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Estado" formControlName="address_state" maxlength="30">
+        <mat-error *ngIf="paso3Form.get('address_state')?.hasError('pattern')">Solo letras permitidas</mat-error>
+        <mat-error *ngIf="paso3Form.get('address_state')?.hasError('maxlength')">Máximo 30 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Código postal" formControlName="address_postalCode" maxlength="10">
+        <mat-error *ngIf="paso3Form.get('address_postalCode')?.hasError('pattern')">Solo números permitidos</mat-error>
+        <mat-error *ngIf="paso3Form.get('address_postalCode')?.hasError('maxlength')">Máximo 10 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Código estado" formControlName="address_stateCode" maxlength="10">
+        <mat-error *ngIf="paso5Form.get('address_stateCode')?.hasError('maxlength')">Máximo 10 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput type="number" placeholder="Latitud" formControlName="address_coordinates_lat" maxlength="10">
+        <mat-error *ngIf="paso3Form.get('address_coordinates_lat')?.hasError('pattern')">Formato inválido (ej: 19.4326)</mat-error>
+        <mat-error *ngIf="paso3Form.get('address_coordinates_lat')?.hasError('maxlength')">Máximo 10 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput type="number" placeholder="Longitud" formControlName="address_coordinates_lng" maxlength="10">
+        <mat-error *ngIf="paso3Form.get('address_coordinates_lng')?.hasError('pattern')">Formato inválido (ej: -99.1332)</mat-error>
+        <mat-error *ngIf="paso3Form.get('address_coordinates_lng')?.hasError('maxlength')">Máximo 10 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="País" formControlName="address_country" maxlength="30">
+        <mat-error *ngIf="paso3Form.get('address_country')?.hasError('maxlength')">Máximo 30 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="Universidad" formControlName="university" maxlength="50">
+        <mat-error *ngIf="paso3Form.get('university')?.hasError('maxlength')">Máximo 50 caracteres</mat-error>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Anterior</button>
+        <button mat-button matStepperNext [disabled]="!paso3Form.valid">Siguiente</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- Paso 4: Información bancaria y cripto -->
+  <mat-step [stepControl]="paso4Form">
+    <form [formGroup]="paso4Form">
+      <ng-template matStepLabel>Banco y Cripto</ng-template>
+      <mat-form-field appearance="outline">
+        <mat-label>Vencimiento tarjeta</mat-label>
+        <input matInput
+              placeholder="Ej: 01072025"
+              formControlName="bank_cardExpire"
+              maxlength="8"
+              pattern="^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[0-2])\d{4}$"
+              autocomplete="off">
+        <mat-hint>Formato: ddMMyyyy</mat-hint>
+        <mat-error *ngIf="paso4Form.get('bank_cardExpire')?.hasError('pattern')">
+          Formato inválido. Usa ddMMyyyy (ej: 01072025)
+        </mat-error>
+        <mat-error *ngIf="paso4Form.get('bank_cardExpire')?.hasError('maxlength')">
+          Máximo 8 caracteres
+        </mat-error>
+        <mat-error *ngIf="paso4Form.get('bank_cardExpire')?.hasError('required')">
+          El vencimiento es obligatorio
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput pattern="^[0-9]*$" placeholder="Número de tarjeta" formControlName="bank_cardNumber" maxlength="16">
+        <mat-error *ngIf="paso4Form.get('bank_cardNumber')?.hasError('maxlength')">Máximo 16 caracteres</mat-error>
+        <mat-error *ngIf="paso4Form.get('bank_cardNumber')?.hasError('pattern')">Introduzca solo números</mat-error>
+
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="Tipo de tarjeta" formControlName="bank_cardType" maxlength="15">
+        <mat-error *ngIf="paso4Form.get('bank_cardType')?.hasError('maxlength')">Máximo 15 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="Moneda" formControlName="bank_currency" maxlength="10">
+        <mat-error *ngIf="paso4Form.get('bank_currency')?.hasError('maxlength')">Máximo 10 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="IBAN" formControlName="bank_iban" maxlength="34">
+        <mat-error *ngIf="paso4Form.get('bank_iban')?.hasError('maxlength')">Máximo 34 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="Criptomoneda" formControlName="crypto_coin" maxlength="20">
+        <mat-error *ngIf="paso4Form.get('crypto_coin')?.hasError('maxlength')">Máximo 20 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="Wallet" formControlName="crypto_wallet" maxlength="50">
+        <mat-error *ngIf="paso4Form.get('crypto_wallet')?.hasError('maxlength')">Máximo 50 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="Red cripto" formControlName="crypto_network" maxlength="20">
+        <mat-error *ngIf="paso4Form.get('crypto_network')?.hasError('maxlength')">Máximo 20 caracteres</mat-error>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Anterior</button>
+        <button mat-button matStepperNext [disabled]="!paso4Form.valid">Siguiente</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- Paso 5: Empresa y documentos -->
+  <mat-step [stepControl]="paso5Form">
+    <form [formGroup]="paso5Form">
+      <ng-template matStepLabel>Datos Empresariales</ng-template>
+      <mat-form-field appearance="outline"><input matInput placeholder="Departamento" formControlName="company_department" maxlength="30">
+        <mat-error *ngIf="paso5Form.get('company_department')?.hasError('maxlength')">Máximo 30 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Empresa" formControlName="company_name" maxlength="30">
+        <mat-error *ngIf="paso5Form.get('company_name')?.hasError('pattern')">Solo letras y números permitidos</mat-error>
+        <mat-error *ngIf="paso5Form.get('company_name')?.hasError('maxlength')">Máximo 30 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="Cargo" formControlName="company_title" maxlength="30">
+        <mat-error *ngIf="paso5Form.get('company_title')?.hasError('maxlength')">Máximo 30 caracteres</mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="var(--primary-color)" class="map-btn" (click)="openCompanyMapModal()">
+        <mat-icon>map</mat-icon>
+        Seleccionar ubicación en mapa
+      </button>
+      <mat-form-field appearance="outline"><input matInput placeholder="Dirección empresa" formControlName="company_address_address" maxlength="50">
+        <mat-error *ngIf="paso5Form.get('company_address_address')?.hasError('maxlength')">Máximo 50 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Ciudad empresa" formControlName="company_address_city" maxlength="30">
+        <mat-error *ngIf="paso5Form.get('company_address_city')?.hasError('pattern')">Solo letras permitidas</mat-error>
+        <mat-error *ngIf="paso5Form.get('company_address_city')?.hasError('maxlength')">Máximo 30 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Estado empresa" formControlName="company_address_state" maxlength="30">
+        <mat-error *ngIf="paso5Form.get('company_address_state')?.hasError('pattern')">Solo letras permitidas</mat-error>
+        <mat-error *ngIf="paso5Form.get('company_address_state')?.hasError('maxlength')">Máximo 30 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Código estado empresa" formControlName="company_address_stateCode" maxlength="10">
+        <mat-error *ngIf="paso5Form.get('company_address_stateCode')?.hasError('maxlength')">Máximo 10 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Código postal empresa" formControlName="company_address_postalCode" maxlength="10">
+        <mat-error *ngIf="paso5Form.get('company_address_postalCode')?.hasError('pattern')">Solo números permitidos</mat-error>
+        <mat-error *ngIf="paso5Form.get('company_address_postalCode')?.hasError('maxlength')">Máximo 10 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput type="number" placeholder="Latitud empresa" formControlName="company_address_coordinates_lat" maxlength="10">
+        <mat-error *ngIf="paso5Form.get('company_address_coordinates_lat')?.hasError('pattern')">Solo números válidos</mat-error>
+        <mat-error *ngIf="paso5Form.get('company_address_coordinates_lat')?.hasError('maxlength')">Máximo 10 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput type="number" placeholder="Longitud empresa" formControlName="company_address_coordinates_lng" maxlength="10">
+        <mat-error *ngIf="paso5Form.get('company_address_coordinates_lng')?.hasError('pattern')">Solo números válidos</mat-error>
+        <mat-error *ngIf="paso5Form.get('company_address_coordinates_lng')?.hasError('maxlength')">Máximo 10 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="País empresa" formControlName="company_address_country" maxlength="30">
+        <mat-error *ngIf="paso5Form.get('company_address_country')?.hasError('maxlength')">Máximo 30 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="EIN" formControlName="ein" maxlength="15">
+        <mat-error *ngIf="paso5Form.get('ein')?.hasError('maxlength')">Máximo 15 caracteres</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><input matInput placeholder="SSN" formControlName="ssn" maxlength="15">
+        <mat-error *ngIf="paso5Form.get('ssn')?.hasError('maxlength')">Máximo 15 caracteres</mat-error>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Anterior</button>
+        <button mat-button matStepperNext [disabled]="!paso5Form.valid">Siguiente</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- Confirmación -->
+  <mat-step>
+    <ng-template matStepLabel>Confirmación</ng-template>
+    <div *ngIf="getFormErrors().length > 0" style="color:var(--primary-color); margin-bottom: 1em;">
+      <strong><span class="step-label-red">Campos con errores:</span></strong>
+      <ul>
+        <li *ngFor="let err of getFormErrors()">{{ err }}</li>
+      </ul>
+    </div>
+    <div>
+      <button mat-button matStepperPrevious>Anterior</button>
+      <button mat-button (click)="confirmAndSubmit()" [disabled]="getFormErrors().length > 0">
+        Enviar
+      </button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
+

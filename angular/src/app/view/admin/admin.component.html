@@ -1,0 +1,333 @@
+<div class="admin-panel">
+
+    <div class="tab-nav">
+        <button (click)="vista_modo = 'colores'" class="tab" [class.active]="vista_modo === 'colores'">
+            🎨 Colores
+        </button>
+        <button (click)="vista_modo = 'letras'" class="tab" [class.active]="vista_modo === 'letras'">
+            🔤 Tipografía
+        </button>
+        <button (click)="vista_modo = 'usuarios'" class="tab" [class.active]="vista_modo === 'usuarios'">
+            👤 Usuarios
+        </button>
+    </div>
+
+    <div class="row color-section" *ngIf="vista_modo === 'colores'">
+        <div class="control-panel">
+            <div class="control-group">
+                <h2>🎨 Colores</h2>
+            </div>
+
+            <div class="control-group">
+                <label for="primary_color">Color Primario:</label>
+                <input type="color" id="primary_color" name="primary_color" [(ngModel)]="headerBgColor" />
+                <span class="color-hex">{{headerBgColor}}</span>
+            </div>
+
+            <div class="control-group">
+                <label for="secondary_colorColor">Color Secundario:</label>
+                <input type="color" id="secondary_colorColor" name="secondary_color" [(ngModel)]="titleColor" />
+                <span class="color-hex">{{titleColor}}</span>
+            </div>
+
+            <div class="control-group">
+                <label for="tertiary_colorColor">Color Terciario:</label>
+                <input type="color" id="tertiary_colorColor" name="tertiary_color" [(ngModel)]="divBorderColor" />
+                <span class="color-hex">{{divBorderColor}}</span>
+            </div>
+
+            <div class="control-group">
+                <label for="ligth_colorColor">Color Neutro 1:</label>
+                <input type="color" id="ligth_colorColor" name="ligth_color" [(ngModel)]="cardBgColor" />
+                <span class="color-hex">{{cardBgColor}}</span>
+            </div>
+            <div class="control-group">
+                <label for="dark_color">Color Neutro 2:</label>
+                <input type="color" id="dark_color" name="dark_color" [(ngModel)]="footerBgColor" />
+                <span class="color-hex">{{footerBgColor}}</span>
+            </div>
+
+            <div class="save-section">
+                <button id="saveBtn" (click)="handleSaveOrEdit()">
+                {{saveMode === 'guardar' ? 'Guardar' : 'Editar'}}
+                </button>
+                <button class='saveBtn' (click)="resetStyles()">Restablecer paleta</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <fieldset class="control-panel">
+                <div class="saved-styles">
+                    <h3>Estilos guardados</h3>
+                    <div id="savedStylesList" class="custom-scrollbar" >
+                        <div class="saved-style-item" *ngFor="let style of savedStylesColor">
+                            <span>{{style.name}}</span>
+                            <div class="color-preview">
+                                <div class="color-box" [style.background-color]="style.colors.color_one"></div>
+                                <div class="color-box" [style.background-color]="style.colors.color_two"></div>
+                                <div class="color-box" [style.background-color]="style.colors.color_three"></div>
+                                <div class="color-box" [style.background-color]="style.colors.color_four"></div>
+                                <div class="color-box" [style.background-color]="style.colors.color_five"></div>
+                            </div>
+                            <div class="style-actions">
+                                <button (click)="applyColorPalette(style)">✅ Aplicar</button>
+                                <button (click)="handleEdit(style, 'color')">✏️ Editar</button>
+                                <button (click)="handleDeletePalette(style.colors_id)">🗑️ Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="playground">
+            <header [style.background-color]="headerBgColor" id='playground-header'>
+                <h1 [style.color]="titleColor" id="mainTitle" [style.font-size.px]="titleFontSize">Título</h1>
+            </header>
+
+            <div [style.border-color]="divBorderColor" class="div-with-border">
+                Hola Mundo
+            </div>
+
+            <div class="card" [style.background-color]="cardBgColor">
+                <h2>Título de Carta</h2>
+                <p class="content">Hola, aquí donde hace las pruebas para cambio de letras.</p>
+            </div>
+
+            <footer id='playground-footer' [style.background-color]="footerBgColor">
+                <p>Footer © MJS</p>
+            </footer>
+        </div>
+    </div>
+
+    <div class="font-section" *ngIf="vista_modo === 'letras'">
+        <div class="control-panel font-panel">
+            <div class="control-group">
+                <h2>🔤 Configuración de Fuentes</h2>
+            </div>
+
+            <!-- Controles de tamaño de fuente -->
+            <div class="control-group">
+                <label for="titleFontSize">Tamaño Título:</label>
+                <input type="range" id="titleFontSize" name="titleFontSize" 
+                    [(ngModel)]="titleFontSize" min="12" max="72">
+                <span>{{titleFontSize}}px</span>
+            </div>
+
+            <div class="control-group">
+                <label for="subtitleFontSize">Tamaño Subtítulo:</label>
+                <input type="range" id="subtitleFontSize" name="subtitleFontSize" 
+                    [(ngModel)]="subtitleFontSize" min="10" max="48">
+                <span>{{subtitleFontSize}}px</span>
+            </div>
+
+            <div class="control-group">
+                <label for="textFontSize">Tamaño Texto:</label>
+                <input type="range" id="textFontSize" name="textFontSize" 
+                    [(ngModel)]="textFontSize" min="8" max="24">
+                <span>{{textFontSize}}px</span>
+            </div>
+
+            <!-- Sección de subida de fuentes TTF -->
+            <div class="font-upload-container">
+                <div class="upload-section">
+                    <h4>Fuente Principal</h4>
+                    <input #principalFontInput type="file" accept=".ttf" 
+                        (change)="onPrincipalFontSelected($event)" hidden>
+                    <button class="upload-btn" (click)="principalFontInput.click()">
+                        Seleccionar Fuente (.TTF)
+                    </button>
+                    <span *ngIf="principalFontName" class="font-name">{{ principalFontName }}</span>
+                </div>
+
+                <div class="upload-section">
+                    <h4>Fuente Secundaria</h4>
+                    <input #secondaryFontInput type="file" accept=".ttf" 
+                        (change)="onSecondaryFontSelected($event)" hidden>
+                    <button class="upload-btn" (click)="secondaryFontInput.click()">
+                        Seleccionar Fuente (.TTF)
+                    </button>
+                    <span *ngIf="secondaryFontName" class="font-name">{{ secondaryFontName }}</span>
+                </div>
+            </div>
+
+            <!-- Botones de acción unificados -->
+            <div class="save-section">
+                <button id="saveBtn" (click)="saveMode === 'guardar' ? saveFullFontConfig() : handleSaveEdit(editingItem)">
+                    {{saveMode === 'guardar' ? 'Guardar Configuración' : 'Editar Configuración'}}
+                </button>
+                <button class='saveBtn' (click)="resetFontStyles()">Restablecer todo</button>
+            </div>
+        </div>
+
+        <!-- Lista de configuraciones guardadas -->
+        <div class="saved-styles">
+            <h3>Configuraciones guardadas</h3>
+            <div id="savedFontsList" class="custom-scrollbar">
+                <div class="saved-style-item" *ngFor="let font of savedStylesFont">
+                    <div class="font-preview">
+                        <p>Título: {{font.title}}px</p>
+                        <p>Subtítulo: {{font.sub_title}}px</p>
+                        <p>Texto: {{font.paragraph}}px</p>
+                        <p *ngIf="font.fontFamily">Fuente: {{font.fontFamily.name_principal}}</p>
+                        <p *ngIf="font.fontFamily">Fuente: {{font.fontFamily.name_secundary}}</p>
+                    </div>
+                    <div class="style-actions">
+                        <button (click)="applyFullFontStyle(font)">Aplicar</button>
+                        <button (click)="handleEdit(font, 'font')">Editar</button>
+                        <button (click)="handleDeleteFontStyle(font.font_id)">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="usuario-section" *ngIf="vista_modo === 'usuarios'">
+        <h2 class="section-title">👤 Gestión de Usuarios</h2>
+
+        <div class="tab-nav-container">
+            <button (click)="changeView('activos')" class="tab-button" [class.active]="vista_modo2 === 'activos'">
+            <span class="emoji">👤✅</span> Usuarios Activos
+            </button>
+            <button (click)="changeView('deshabilitados')" class="tab-button" [class.active]="vista_modo2 === 'deshabilitados'">
+            <span class="emoji">👤❌</span> Usuarios Deshabilitados
+            </button>
+        </div>
+
+        <!-- Contenedor para las tablas -->
+        <div class="table-card">
+            <!-- Tabla de Usuarios Activos -->
+            <div *ngIf="vista_modo2 === 'activos'">
+            <div class="card-header-custom card-header-success">
+                <h4 class="card-title-custom">Usuarios Activos</h4>
+            </div>
+            <div class="card-body-custom">
+                <div class="table-responsive">
+                <table #activeTable id="activeUserTable" class="display nowrap data-table-custom" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- DataTables llenará este tbody dinámicamente -->
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            </div>
+
+            <!-- Tabla de Usuarios Deshabilitados -->
+            <div *ngIf="vista_modo2 === 'deshabilitados'">
+            <div class="card-header-custom card-header-danger">
+                <h4 class="card-title-custom">Usuarios Deshabilitados</h4>
+            </div>
+            <div class="card-body-custom">
+                <div class="table-responsive">
+                <table #disabledTable id="disabledUserTable" class="display nowrap data-table-custom" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- DataTables llenará este tbody dinámicamente -->
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Modal para Detalles del Usuario (sin Bootstrap JS) -->
+        <div class="custom-modal-overlay" *ngIf="showUserDetailsModal">
+            <div class="custom-modal-dialog custom-modal-large">
+                <div class="custom-modal-content">
+                    <div class="custom-modal-header custom-bg-primary">
+                    <h5 class="custom-modal-title">Detalles del Usuario</h5>
+                    <button type="button" class="custom-modal-close-btn" (click)="closeUserDetailsModal()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                        <div class="fields_container">
+                            <div  *ngFor="let field of paginatedUserFields">
+                                <p>
+                                    <strong>{{ field.label }}:</strong>
+                                    <ng-container *ngIf="field.key === 'image'; else normalField">
+                                    {{ usuarioSeleccionado[field.key] ? (usuarioSeleccionado[field.key] | slice:0:15) + '...' : '' }}
+                                    </ng-container>
+                                    <ng-template #normalField>
+                                    {{ usuarioSeleccionado[field.key] }}
+                                    </ng-template>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="pagination-controls" *ngIf="totalPages > 1">
+                            <button (click)="currentPage = currentPage - 1" [disabled]="currentPage === 1">Anterior</button>
+                            <span>Página {{currentPage}} de {{totalPages}}</span>
+                            <button (click)="currentPage = currentPage + 1" [disabled]="currentPage === totalPages">Siguiente</button>
+                        </div>
+                    <div class="custom-modal-footer">
+                    <button type="button" class="custom-btn custom-btn-secondary" (click)="closeUserDetailsModal()">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Confirmación Personalizado (sin Bootstrap JS) -->
+        <div class="custom-modal-overlay" *ngIf="showConfirmModal">
+            <div class="custom-modal-dialog custom-modal-small">
+            <div class="custom-modal-content">
+                <div class="custom-modal-header custom-bg-warning">
+                <h5 class="custom-modal-title">Confirmación</h5>
+                <button type="button" class="custom-modal-close-btn" (click)="closeConfirmModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="custom-modal-body">
+                <p>{{ confirmMessage }}</p>
+                </div>
+                <div class="custom-modal-footer">
+                <button type="button" class="custom-btn custom-btn-secondary" (click)="closeConfirmModal()">Cancelar</button>
+                <button type="button" class="custom-btn custom-btn-warning" (click)="executeConfirmAction()">Confirmar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Modal de Alerta/Notificación Personalizado (sin Bootstrap JS) -->
+        <div class="custom-modal-overlay" *ngIf="showAlertModal">
+            <div class="custom-modal-dialog custom-modal-small">
+            <div class="custom-modal-content">
+                <div class="custom-modal-header" [ngClass]="{
+                'custom-bg-success': alertType === 'success',
+                'custom-bg-danger': alertType === 'error',
+                'custom-bg-info': alertType === 'info'
+                }">
+                <h5 class="custom-modal-title">Mensaje</h5>
+                <button type="button" class="custom-modal-close-btn" (click)="closeAlertModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="custom-modal-body">
+                <p>{{ alertMessage }}</p>
+                </div>
+                <div class="custom-modal-footer">
+                <button type="button" class="custom-btn custom-btn-secondary" (click)="closeAlertModal()">Cerrar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Ejemplo para ver como se cambia las letras-->

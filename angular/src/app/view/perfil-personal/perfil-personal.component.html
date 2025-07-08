@@ -1,0 +1,31 @@
+<main class="main-content">
+        <section class="profile-section">
+            <div class="avatar-container">
+                <img *ngIf="image; else defaultImg" [src]="image.startsWith('data:image') ? image : 'data:image/png;base64,' + image" alt="eu" class="avatar">
+                <ng-template #defaultImg>
+                  <img src="img/logo.png" alt="eu" class="avatar">
+                </ng-template>
+            </div>
+            
+            <div class="info-card">
+                <h2 class="info-title">Información perfil personal</h2>
+                
+                <div class="info-item">
+                    <span class="info-label">Nombre: </span>
+                    <span class="info-value">{{ firstName }}</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Teléfono: </span>
+                    <span class="info-value">{{ phone }}</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Correo: </span>
+                    <span class="info-value">{{ email }}</span>
+                </div>
+                
+                <button class="edit-btn" (click)="goToEdit()">Editar</button>
+            </div>
+    </section>
+</main>
